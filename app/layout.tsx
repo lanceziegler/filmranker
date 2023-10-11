@@ -23,10 +23,8 @@ export default function RootLayout({ children }: { children: any }) {
       </head>
       <body>
         <MantineProvider theme={theme}>
-          <div className='m-5'>
-            <Nav />
-            {children}
-          </div>
+          <Nav />
+          {children}
         </MantineProvider>
       </body>
     </html>

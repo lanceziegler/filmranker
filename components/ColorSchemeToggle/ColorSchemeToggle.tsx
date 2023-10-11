@@ -28,7 +28,7 @@ export default function ColorSchemeToggle() {
             ? setColorScheme('light')
             : setColorScheme('dark')
         }
-        color={colorScheme === 'dark' ? 'blue' : 'yellow'}
+        color={colorScheme === 'dark' ? 'rgba(0, 79, 227, 1)' : 'yellow'}
       >
         <span className={colorScheme === 'dark' ? 'text-white' : 'text-black'}>
           {colorScheme}
