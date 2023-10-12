@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@dnd-kit/core": "^6.0.8",
     "@mantine/carousel": "^7.1.2",
     "@mantine/core": "^7.1.2",
     "@mantine/dates": "^7.1.2",
@@ -20,6 +21,7 @@
     "@tabler/icons-react": "^2.38.0",
     "dayjs": "^1.11.10",
     "embla-carousel-react": "^7.1.0",
+    "framer-motion": "^10.16.4",
     "next": "13.5.4",
     "react": "^18",
     "react-dom": "^18"

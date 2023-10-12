@@ -74,7 +74,7 @@ export function UserButton() {
       </Group>
       {showMenu ? (
         <Group className='flex items-center justify-center content-center'>
-          <Button color='green'>Sign In</Button>
+          {/* <Button color='green'>Sign In</Button> CANNOT HAVE BUTTON AS CHILD OF BUTTON - USE LINK*/}
           <ColorSchemeToggle />
         </Group>
       ) : null}
