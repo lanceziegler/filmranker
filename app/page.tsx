@@ -6,7 +6,7 @@ import Nav from '@/components/Nav';
 export default function HomePage() {
   return (
     <>
-      <Nav btnLink='/recently-released' text='Recently Released' />
+      <Nav btnLink='/popular/1' text='Popular' />
       <main>
         <div className='min-h-screen flex items-center'>
           <div className='flex justify-center flex-1'>
