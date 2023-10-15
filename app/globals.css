@@ -1,3 +1,79 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+.main {
+  display: flex;
+  flex-wrap: wrap;
+  margin-left: 10px;
+  margin-right: 10px;
+  margin-top: 80px;
+  animation: fadeIn 2s cubic-bezier(0.4, 0.01, 0.4, 0.04);
+}
+
+.movie {
+  background-color: #1021d690;
+  border: 1px solid rgba(255, 255, 0, 0.466);
+  border-radius: 10px;
+  box-shadow: 0 4px 5px rgba(0, 0, 0, 0.2);
+  overflow: hidden;
+  position: relative;
+  margin: 0.2rem;
+  width: 230px;
+}
+
+.overview {
+  font-family: Arial, Helvetica, sans-serif;
+  background-color: #fff;
+  padding: 2rem;
+  position: absolute;
+  max-height: 100%;
+  overflow: auto; /* changed from auto */
+  left: 0;
+  bottom: 0;
+  right: 0;
+  transform: translateY(101%);
+  /* transform: translateX(101%); */
+  transition: transform 0.15s ease-in;
+  color: black;
+}
+
+.overview h3 {
+  margin-top: 0;
+}
+
+.movie:hover .overview {
+  transform: translateY(0);
+  /* transform: translateX(0); */
+}
+
+.movie-info {
+  color: #eee;
+  font-family: 'Cabin', sans-serif;
+  display: flex;
+  align-items: center;
+  /* justify-content: space-between; */
+  padding: 0.2rem 0.5rem;
+  letter-spacing: 0.5px;
+}
+
+.movie-info h3 {
+  margin: 0;
+}
+
+.movie-info span {
+  /* background-color: #141e91bc; */
+  background-color: black;
+  border-bottom-right-radius: 10px;
+  font-weight: bold;
+  padding: 0.25rem 0.5rem;
+}

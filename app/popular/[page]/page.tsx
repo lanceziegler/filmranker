@@ -15,20 +15,20 @@ async function MoreMovies({ params: { page } }: any) {
   return (
     <>
       <Nav btnLink='/' text='Home' />
-      <div className='main'>
+      <div className='main flex fadeIn justify-center'>
         {pageData.results.map((movie: any, i: number) => (
-          <div key={i} className='movie'>
+          <div key={i} className='movie flex flex-col'>
             <Image
               alt={movie.title}
               src={`https://image.tmdb.org/t/p/w1280${movie.poster_path}`}
-              width={50}
-              height={50}
-              //   sizes='100vw'
-              style={{ width: 'auto', height: 'auto' }}
+              width={0}
+              height={0}
+              sizes='100vw'
+              style={{ width: '100%', height: 'auto' }}
               placeholder='empty'
               priority
             />
-            <div className='movie-info'>
+            <div className='movie-info flex items-center justify-center content-center text-center'>
               <h3>{movie.title}</h3>
               {/* <span className= {`vote ${this.props.imdbColor}`}>{this.props.vote}</span> */}
             </div>

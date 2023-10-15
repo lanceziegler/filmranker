@@ -1,30 +1,51 @@
 'use client';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { TextInput, Button } from '@mantine/core';
 import { IconSearch } from '@tabler/icons-react';
 import { useFocusWithin } from '@mantine/hooks';
 import Image from 'next/image';
 import { Waypoint } from 'react-waypoint';
 
-function SearchResults({ results }: any) {
+function SearchResults({ results, show }: any) {
   return (
-    <div className='search-results absolute overflow-y-scroll max-h-96 bg-black'>
-      {results.map((result: any, i: number) => (
-        <div key={i} className='flex hover:bg-gray-800'>
-          <Image
-            alt={result.title}
-            src={`https://image.tmdb.org/t/p/w1280${result.poster_path}`}
-            width={50}
-            height={50}
-            //   sizes='100vw'
-            style={{ width: 'auto', height: 'auto' }}
-            placeholder='empty'
-            priority
-          />
-          {result.title}
+    <>
+      {show ? (
+        <div className='search-results absolute overflow-y-scroll max-h-96 bg-black z-30 border-2 border-white'>
+          {results.map((result: any, i: number) => (
+            <div
+              key={i}
+              className='flex hover:bg-gray-800 border-gray-300 items-center gap-4'
+            >
+              {result.poster_path === null ? (
+                <Image
+                  alt={result.title}
+                  src='/noImage.jpeg'
+                  width={50}
+                  height={50}
+                  //   sizes='100vw'
+                  style={{ width: 'auto', height: 'auto' }}
+                  // placeholder='empty'
+                  // priority
+                />
+              ) : (
+                <Image
+                  alt={result.title}
+                  src={`https://image.tmdb.org/t/p/w1280${result.poster_path}`}
+                  width={50}
+                  height={50}
+                  //   sizes='100vw'
+                  style={{ width: 'auto', height: 'auto' }}
+                  placeholder='empty'
+                  priority
+                />
+              )}
+
+              {result.title}
+            </div>
+          ))}
         </div>
-      ))}
-    </div>
+      ) : null}
+    </>
   );
 }
 
@@ -74,7 +95,9 @@ function Search() {
         onChange={(event) => setQuery(event.target.value)}
         className={focused ? 'drop-shadow-glow' : ''}
       />
-      <SearchResults results={searchResults} />
+      {searchResults[0] !== undefined && (
+        <SearchResults results={searchResults} show={focused} />
+      )}
     </div>
   );
 }
