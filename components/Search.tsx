@@ -16,7 +16,17 @@ function SearchResults({ results, show }: any) {
               key={i}
               className='flex hover:bg-gray-800 border-gray-300 items-center gap-4'
             >
-              {result.poster_path === null ? (
+              {result.poster_path !== null ? (
+                <Image
+                  alt={result.title}
+                  src={`https://image.tmdb.org/t/p/w500${result.poster_path}`}
+                  width={50}
+                  height={50}
+                  //   sizes='100vw'
+                  style={{ width: 'auto', height: 'auto' }}
+                  loading='lazy'
+                />
+              ) : (
                 <Image
                   alt={result.title}
                   src='/noImage.jpeg'
@@ -24,19 +34,6 @@ function SearchResults({ results, show }: any) {
                   height={50}
                   //   sizes='100vw'
                   style={{ width: 'auto', height: 'auto' }}
-                  // placeholder='empty'
-                  // priority
-                />
-              ) : (
-                <Image
-                  alt={result.title}
-                  src={`https://image.tmdb.org/t/p/w1280${result.poster_path}`}
-                  width={50}
-                  height={50}
-                  //   sizes='100vw'
-                  style={{ width: 'auto', height: 'auto' }}
-                  placeholder='empty'
-                  priority
                 />
               )}
 
@@ -54,6 +51,7 @@ function Search() {
   const [query, setQuery] = useState('');
   const [searchResults, setSearchResults] = useState([]);
   const [page, setPage] = useState<null | number>(null);
+  // const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const handleSearch = async () => {
@@ -63,6 +61,7 @@ function Search() {
       }
 
       try {
+        // setLoading(true);
         const response = await fetch(
           `https://api.themoviedb.org/3/search/movie?api_key=${process.env.NEXT_PUBLIC_API_KEY}&query=${query}`
         );
@@ -75,8 +74,10 @@ function Search() {
         console.log('TMDB API Response:', data);
         setSearchResults(data.results);
         setPage(data.page);
+        // setLoading(false);
       } catch (error) {
         console.error('Error fetching data:', error);
+        // setLoading(false);
       }
     };
 
