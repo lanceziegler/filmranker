@@ -18,7 +18,7 @@ function MoreMovies({ params: { page } }: pageProps) {
   const [movies, setMovies] = useState<any>([]);
   const [isLoading, setIsLoading] = useState(false);
   // const [localList, setLocalList] = useState<any>([]);
-  const [array, setArray] = useState([]);
+  const [array, setArray] = useState<any>([]);
   const [buttonBg, setButtonBg] = useState('bg-green-600');
 
   const loadMoreMovies = useCallback(async () => {
@@ -57,6 +57,13 @@ function MoreMovies({ params: { page } }: pageProps) {
 
   // const handleClickLocal = (movie: any) => {
   //   // setLocalList((prevList: any) => [...prevList, movie]);
+
+  useEffect(() => {
+    //@ts-ignore
+    const parsedArray = JSON.parse(localStorage.getItem('myArray1')) || [];
+    setArray(parsedArray);
+    console.log('THIS IS STATE: ', parsedArray);
+  }, []);
 
   //   //@ts-ignore
   //   const existingArray = JSON.parse(localStorage.getItem('myArray')) || [];
