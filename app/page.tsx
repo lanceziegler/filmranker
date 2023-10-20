@@ -1,9 +1,11 @@
+
 import { Title } from '@mantine/core';
 import TierList from '@/components/TierList';
 import WatchList from '@/components/WatchList';
 import Nav from '@/components/Nav';
 
 export default function HomePage() {
+
   return (
     <>
       <Nav btnLink='/popular/0' text='Popular' />

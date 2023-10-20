@@ -21,8 +21,8 @@ export function UserButton() {
   //   const { ref, focused } = useFocusWithin();
 
   return (
-    <UnstyledButton
-      className='fixed top-2 right-0 block rounded-xl'
+    <div
+      className='fixed top-2 right-0 block rounded-xl select-none cursor-default'
       //   ref={ref}
       onMouseEnter={() => setShowMenu(true)}
       onMouseLeave={() => setShowMenu(false)}
@@ -73,11 +73,14 @@ export function UserButton() {
         )}
       </Group>
       {showMenu ? (
-        <Group className='flex items-center justify-center content-center'>
+        <div className='flex items-end gap-2'>
           {/* <Button color='green'>Sign In</Button> CANNOT HAVE BUTTON AS CHILD OF BUTTON - USE LINK*/}
           <ColorSchemeToggle />
-        </Group>
+          <Group>
+            <Button>Log In</Button>
+          </Group>
+        </div>
       ) : null}
-    </UnstyledButton>
+    </div>
   );
 }

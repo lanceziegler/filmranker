@@ -6,19 +6,31 @@ import { useFocusWithin } from '@mantine/hooks';
 import Image from 'next/image';
 import { Waypoint } from 'react-waypoint';
 import { Tooltip } from '@mantine/core';
+import { useMantineColorScheme } from '@mantine/core';
 
 function SearchResults({ results, show }: any) {
+  //Check what current color scheme is
+  const colorScheme = useMantineColorScheme();
+  let theme = colorScheme.colorScheme;
+  let bgColor = theme === 'dark' ? 'black' : 'white';
+  let textColor = theme === 'dark' ? 'white' : 'black';
+  let hover = theme === 'dark' ? 'hover:bg-gray-900' : 'hover:bg-gray-100';
+
   return (
     <>
       {show ? (
-        <div className='search-results absolute overflow-y-scroll max-h-96 bg-black z-30 border-2 border-white'>
+        <div
+          className={`search-results absolute overflow-y-scroll max-h-96 z-30 bg-${bgColor} border-2 border-${textColor} text-${textColor} rounded-b-3xl no-scrollbar`}
+        >
           {results.map((result: any, i: number) => (
             <div
               key={i}
-              className='flex hover:bg-gray-800 border-gray-300 items-center gap-4 relative'
+              className={`flex ${hover} transition-colors duration-50 border-gray-300 items-center gap-4 relative select-none cursor-default`}
             >
               <Tooltip label='Add to Library'>
-                <button className='absolute top-2 right-3 z-20 bg-green-600 px-2 rounded-full border-black border-2 box-border text-black'>
+                <button
+                  className={`absolute top-2 right-3 z-20 bg-green-600 px-2 rounded-full border-${textColor} border-2 box-border text-black`}
+                >
                   +
                 </button>
               </Tooltip>
