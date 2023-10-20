@@ -5,12 +5,15 @@ import getMoviesPage from '@/app/libs/getMoviesPage';
 import Image from 'next/image';
 import Nav from '@/components/Nav';
 import { IconLoaderQuarter } from '@tabler/icons-react';
+import { Button, Tooltip } from '@mantine/core';
+import { Suspense } from 'react';
 
+//TODO: Initial page of popular loads twice
 interface pageProps {
-  page: number;
+  params: { page: number };
 }
 
-function MoreMovies({ params: { page } }: any) {
+function MoreMovies({ params: { page } }: pageProps) {
   const [currentPage, setCurrentPage] = useState(page);
   const [movies, setMovies] = useState<any>([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -33,14 +36,11 @@ function MoreMovies({ params: { page } }: any) {
     }
   }, [isLoading, currentPage]);
 
-  // useEffect(() => {
-  //   loadMoreMovies();
-  // }, [loadMoreMovies]);
-
   const handleEnter = useCallback(() => {
-    loadMoreMovies();
-  }, [loadMoreMovies]);
+    if (movies.length > 20) loadMoreMovies();
+  }, [loadMoreMovies, movies]);
 
+  //! Need conditional check or else everything loads at once
   useEffect(() => {
     // Load movies on initial render
     if (movies.length === 0) {
@@ -51,9 +51,14 @@ function MoreMovies({ params: { page } }: any) {
   return (
     <div className='relative'>
       <Nav btnLink='/' text='Home' />
-      <div className='main flex fadeIn justify-center gap-2'>
+      <div className='main flex justify-center gap-2'>
         {movies.map((movie: any, i: number) => (
           <div key={i} className='movie flex flex-col'>
+            <Tooltip label='Add to Library'>
+              <button className='absolute top-2 right-3 z-20 bg-green-600 px-2 rounded-full border-black border-2 box-border text-black'>
+                +
+              </button>
+            </Tooltip>
             <Image
               alt={movie.title}
               src={`https://image.tmdb.org/t/p/w780${movie.poster_path}`}
@@ -63,21 +68,16 @@ function MoreMovies({ params: { page } }: any) {
               style={{ width: '100%', height: 'auto' }}
               loading='lazy'
             />
-            <div className='movie-info flex items-center justify-center content-center text-center'>
-              <h3>{movie.title}</h3>
+            <div className='movie-info flex text-center m-auto'>
+              <h3 className='font-inter tracking-wider'>{movie.title}</h3>
               {/* <span className= {`vote ${this.props.imdbColor}`}>{this.props.vote}</span> */}
             </div>
-            <div className='overview'>
+            <div className='overview no-scrollbar'>
               <h3>Overview:</h3>
               {movie.overview}
             </div>
           </div>
         ))}
-        {isLoading && (
-          <div className='absolute top-0 right-0'>
-            <IconLoaderQuarter className='animate-spin' />
-          </div>
-        )}
         <Waypoint onEnter={handleEnter} />
       </div>
     </div>

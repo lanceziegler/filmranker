@@ -5,6 +5,7 @@ import { IconSearch } from '@tabler/icons-react';
 import { useFocusWithin } from '@mantine/hooks';
 import Image from 'next/image';
 import { Waypoint } from 'react-waypoint';
+import { Tooltip } from '@mantine/core';
 
 function SearchResults({ results, show }: any) {
   return (
@@ -14,8 +15,13 @@ function SearchResults({ results, show }: any) {
           {results.map((result: any, i: number) => (
             <div
               key={i}
-              className='flex hover:bg-gray-800 border-gray-300 items-center gap-4'
+              className='flex hover:bg-gray-800 border-gray-300 items-center gap-4 relative'
             >
+              <Tooltip label='Add to Library'>
+                <button className='absolute top-2 right-3 z-20 bg-green-600 px-2 rounded-full border-black border-2 box-border text-black'>
+                  +
+                </button>
+              </Tooltip>
               {result.poster_path !== null ? (
                 <Image
                   alt={result.title}
