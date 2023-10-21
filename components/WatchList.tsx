@@ -24,21 +24,20 @@ function WatchList() {
         Your Movies:
       </h1>
       <div className='flex flex-wrap justify-center'>
-
-          {array.map((movie: any, i: number) => {
-            return (
+        {array.map((movie: any, i: number) => {
+          return (
+            <div key={i} className='hover:scale-105 transition-transform'>
               <LocalMovie
                 title={movie.title}
                 key={i}
                 poster={movie.poster_path}
               />
-            );
-          })}
-
+            </div>
+          );
+        })}
       </div>
     </div>
   );
-
 }
 
 export default WatchList;
