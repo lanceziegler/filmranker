@@ -1,7 +1,7 @@
 'use client';
 //! May not need use client in this component
 import { IconUser } from '@tabler/icons-react';
-import { Title, Button } from '@mantine/core';
+import { Title, Button, Paper, Box } from '@mantine/core';
 import Search from './Search';
 import { UserButton } from './UserMenu';
 import { useEffect } from 'react';

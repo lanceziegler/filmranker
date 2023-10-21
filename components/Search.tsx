@@ -16,12 +16,30 @@ function SearchResults({ results, show }: any) {
   let textColor = theme === 'dark' ? 'white' : 'black';
   let hover = theme === 'dark' ? 'hover:bg-gray-900' : 'hover:bg-gray-100';
 
+  //* LocalStorage button handler
+  const handleClickLocal = (movie: any) => {
+    //@ts-ignore
+    const existingArray = JSON.parse(localStorage.getItem('myArray1')) || []; //TODO Alter this one
+    const isItemInLocalStorage = existingArray.some(
+      (item: any) => item.id === movie.id
+    );
+
+    if (isItemInLocalStorage) {
+      console.error('Movie already in localStorage');
+      alert('Movie is already in local storage!');
+    } else {
+      existingArray.push(movie);
+      localStorage.setItem('myArray1', JSON.stringify(existingArray)); //TODO AND Alter this one
+      console.log('ExistingArray', existingArray);
+    }
+  };
+
   //! Temporarily set bg-black because colorScheme not working
   return (
     <>
       {show ? (
         <div
-          className={`search-results absolute overflow-y-scroll max-h-96 z-30 bg-black border-2 border-${textColor} text-${textColor} rounded-b-3xl no-scrollbar`}
+          className={`search-results absolute overflow-y-scroll max-h-96 z-30 bg-black border-2 border-${textColor} text-${textColor} rounded-b-3xl rounded-tr-3xl no-scrollbar`}
         >
           {results.map((result: any, i: number) => (
             <div
@@ -31,6 +49,7 @@ function SearchResults({ results, show }: any) {
               <Tooltip label='Add to Library'>
                 <button
                   className={`absolute top-2 right-3 z-20 bg-green-600 px-2 rounded-full border-${textColor} border-2 box-border text-black`}
+                  onClick={() => handleClickLocal(result)}
                 >
                   +
                 </button>

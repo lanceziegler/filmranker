@@ -84,14 +84,14 @@ function MoreMovies({ params: { page } }: pageProps) {
 
     if (isItemInLocalStorage) {
       console.error('Movie already in localStorage');
-      alert('no');
+      alert('Movie already added to local storage!');
     } else {
       existingArray.push(movie);
       localStorage.setItem('myArray1', JSON.stringify(existingArray)); //TODO AND Alter this one
       console.log('ExistingArray', existingArray);
     }
   };
-
+  //! HANDLE NO IMAGE
   return (
     <div className='relative'>
       <Nav btnLink='/' text='Home' />
