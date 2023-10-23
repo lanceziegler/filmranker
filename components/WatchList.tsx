@@ -5,7 +5,7 @@ import { Tooltip } from '@mantine/core';
 import { DndContext } from '@dnd-kit/core';
 import LocalMovie from './LocalMovie';
 
-// DnDKit + Auto animate
+// DnDKit STAGGER IMPORT
 function WatchList() {
   const [array, setArray] = useState<any>([]);
   const [parent, setParent] = useState(null);
