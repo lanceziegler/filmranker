@@ -8,7 +8,6 @@ import { IconLoaderQuarter } from '@tabler/icons-react';
 import { Button, Tooltip } from '@mantine/core';
 import { Suspense } from 'react';
 
-//TODO: Initial page of popular loads twice
 interface pageProps {
   params: { page: number };
 }
@@ -17,7 +16,6 @@ function MoreMovies({ params: { page } }: pageProps) {
   const [currentPage, setCurrentPage] = useState(page);
   const [movies, setMovies] = useState<any>([]);
   const [isLoading, setIsLoading] = useState(false);
-  // const [localList, setLocalList] = useState<any>([]);
   const [array, setArray] = useState<any>([]);
   const [buttonBg, setButtonBg] = useState('bg-green-600');
 
@@ -40,23 +38,26 @@ function MoreMovies({ params: { page } }: pageProps) {
   }, [isLoading, currentPage]);
 
   const handleEnter = useCallback(() => {
-    if (movies.length > 20) loadMoreMovies();
-  }, [loadMoreMovies, movies]);
+    // if (movies.length < 20) loadMoreMovies();
+    loadMoreMovies();
+  }, [loadMoreMovies]); //movies
 
   //* Need conditional check or else everything loads at once
   useEffect(() => {
     // Load movies on initial render
-    if (movies.length === 0) {
-      loadMoreMovies();
-    }
-  }, [loadMoreMovies, movies]);
+    const loadInitialMovies = async () => {
+      try {
+        const pageData = await getMoviesPage(1);
 
-  // useEffect(() => {
-  //   console.log('localList: ', localList);
-  // }, [localList]);
+        setMovies(pageData.results);
+      } catch (error) {
+        console.error('Error fetching initial movies:', error);
+      }
+    };
 
-  // const handleClickLocal = (movie: any) => {
-  //   // setLocalList((prevList: any) => [...prevList, movie]);
+    // loadMoreMovies();
+    loadInitialMovies();
+  }, []);
 
   useEffect(() => {
     //@ts-ignore
@@ -65,29 +66,22 @@ function MoreMovies({ params: { page } }: pageProps) {
     console.log('THIS IS STATE: ', parsedArray);
   }, []);
 
-  //   //@ts-ignore
-  //   const existingArray = JSON.parse(localStorage.getItem('myArray')) || [];
-  //   const newItem = movie; // Replace with the item you want to add
-  //   existingArray.push(newItem);
-  //   localStorage.setItem('myArray', JSON.stringify(existingArray));
-
-  //   console.log('ExistingArray', existingArray);
-  // };
-
   //* Checks if movie is already in localStorage and doesn't allow it to be added if so
   const handleClickLocal = (movie: any) => {
     //@ts-ignore
-    const existingArray = JSON.parse(localStorage.getItem('myArray1')) || []; //TODO Alter this one
+    const existingArray = JSON.parse(localStorage.getItem('myArray1')) || []; //TODO Alter these localStorage arrays to start fresh
     const isItemInLocalStorage = existingArray.some(
       (item: any) => item.id === movie.id
     );
+    const index = existingArray.findIndex((item: any) => item.id === movie.id);
 
     if (isItemInLocalStorage) {
-      console.error('Movie already in localStorage');
-      alert('Movie already added to local storage!');
+      alert('Removed movie from local storage!');
+      existingArray.splice(index, 1);
+      localStorage.setItem('myArray1', JSON.stringify(existingArray)); //TODO)
     } else {
       existingArray.push(movie);
-      localStorage.setItem('myArray1', JSON.stringify(existingArray)); //TODO AND Alter this one
+      localStorage.setItem('myArray1', JSON.stringify(existingArray)); //TODO
       console.log('ExistingArray', existingArray);
     }
   };
@@ -97,13 +91,26 @@ function MoreMovies({ params: { page } }: pageProps) {
       <Nav btnLink='/' text='Home' />
       <div className='main flex justify-center gap-2'>
         {movies.map((movie: any, i: number) => (
-          <div key={i} className='movie flex flex-col'>
-            <Tooltip label='Add to Library'>
+          <div
+            key={i}
+            className='movie flex flex-col hover:drop-shadow-glow hover:z-50 hover:scale-105 box-border transition-all'
+          >
+            <Tooltip
+              label={`${
+                array.some((item: any) => item.id === movie.id)
+                  ? 'Remove movie from library'
+                  : 'Add movie to library'
+              }`}
+            >
               <button
-                className={`absolute top-2 right-3 z-20 ${buttonBg} px-2 rounded-full border-black border-2 box-border text-black`}
+                className={`absolute top-2 right-3 z-20 ${buttonBg} px-2 rounded-full border-black border-2 box-border text-black ${
+                  array.some((item: any) => item.id === movie.id)
+                    ? 'bg-red-600'
+                    : 'bg-green-600'
+                }`}
                 onClick={() => handleClickLocal(movie)}
               >
-                +
+                {array.some((item: any) => item.id === movie.id) ? '-' : '+'}
               </button>
             </Tooltip>
             <Image
@@ -112,7 +119,13 @@ function MoreMovies({ params: { page } }: pageProps) {
               width={0}
               height={0}
               sizes='100vw'
-              style={{ width: '100%', height: 'auto' }}
+              style={{
+                width: '100%',
+                height: 'auto',
+                boxSizing: 'border-box',
+              }}
+              placeholder='blur'
+              blurDataURL='./images/noImage.jpeg'
             />
             <div className='movie-info flex text-center m-auto'>
               <h3 className='font-inter tracking-wider'>{movie.title}</h3>

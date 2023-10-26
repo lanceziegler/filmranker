@@ -10,7 +10,7 @@ export default function HomePage() {
   const [parent, setParent] = useState(null);
   return (
     <>
-      <Nav btnLink='/popular/0' text='Popular' />
+      <Nav btnLink='/popular/1' text='Popular' />
       <main>
         <div className='min-h-screen flex gap-4 items-center'>
           <DndContext onDragEnd={handleDragEnd}>
