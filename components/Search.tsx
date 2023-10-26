@@ -12,7 +12,7 @@ function SearchResults({ results, show }: any) {
   //Check what current color scheme is
   const colorScheme = useMantineColorScheme();
   let theme = colorScheme.colorScheme;
-  let bgColor = theme === 'dark' ? 'black' : 'white';
+  let bgColor = theme === 'dark' ? 'bg-black' : 'bg-white';
   let textColor = theme === 'dark' ? 'white' : 'black';
   let hover = theme === 'dark' ? 'hover:bg-gray-900' : 'hover:bg-gray-100';
 
@@ -39,7 +39,7 @@ function SearchResults({ results, show }: any) {
     <>
       {show ? (
         <div
-          className={`search-results absolute overflow-y-scroll max-h-96 z-30 bg-black border-2 border-${textColor} text-${textColor} rounded-b-3xl rounded-tr-3xl no-scrollbar`}
+          className={`search-results absolute overflow-y-scroll max-h-96 z-30 ${bgColor} border-2 border-${textColor} text-${textColor} rounded-b-3xl rounded-tr-3xl no-scrollbar`}
         >
           {results.map((result: any, i: number) => (
             <div
