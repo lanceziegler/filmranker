@@ -1,14 +1,10 @@
 'use client';
 import { useState, useEffect } from 'react';
-import Image from 'next/image';
-import { Tooltip } from '@mantine/core';
-import { DndContext } from '@dnd-kit/core';
 import LocalMovie from './LocalMovie';
 
 // DnDKit STAGGER IMPORT
 function WatchList() {
   const [array, setArray] = useState<any>([]);
-  const [parent, setParent] = useState(null);
 
   useEffect(() => {
     const parsedArray =
@@ -19,8 +15,8 @@ function WatchList() {
   }, []);
 
   return (
-    <div className='mt-24 p-5 border-white border-2 rounded-3xl'>
-      <h1 className='text-3xl font-inter font-semibold underline underline-offset-4 pb-2'>
+    <div className='mt-24 border-gray-200 border-2 rounded-3xl'>
+      <h1 className='text-3xl p-5 font-montserrat font-semibold underline underline-offset-4 pb-2'>
         Your Movies:
       </h1>
       <div className='flex flex-wrap justify-center'>
@@ -29,8 +25,8 @@ function WatchList() {
             <div key={i} className='hover:scale-105 transition-transform'>
               <LocalMovie
                 title={movie.title}
-                key={i}
                 poster={movie.poster_path}
+                id={movie.title}
               />
             </div>
           );

@@ -1,6 +1,4 @@
-'use client';
-import { Divider } from '@mantine/core';
-import { useDroppable } from '@dnd-kit/core';
+import { Divider, Group } from '@mantine/core';
 
 interface propTypes {
   id: number;
@@ -8,18 +6,16 @@ interface propTypes {
 }
 
 const Row = ({ id, row }: propTypes) => {
-  const { isOver, setNodeRef } = useDroppable({
-    id: id,
-  });
-  const style = {
-    color: isOver ? 'green' : undefined,
-    background: isOver ? 'red' : undefined,
-  };
-
   return (
-    <div ref={setNodeRef}>
-      <div style={style}>{row}</div>
-      <Divider size='lg' />
+    <div className='h-20 flex flex-col justify-center'>
+      <div>
+        <Group>
+          <div className='pl-4 font-montserrat text-xl font-semibold'>
+            {row}
+          </div>
+          <Divider orientation='vertical' size='md' />
+        </Group>
+      </div>
     </div>
   );
 };
