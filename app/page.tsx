@@ -3,17 +3,55 @@ import { Title } from '@mantine/core';
 import TierList from '@/components/TierList';
 import WatchList from '@/components/WatchList';
 import Nav from '@/components/Nav';
-import { DndContext } from '@dnd-kit/core';
 import { useState } from 'react';
+import {
+  DndContext,
+  DragEndEvent,
+  DragMoveEvent,
+  DragOverlay,
+  DragStartEvent,
+  KeyboardSensor,
+  PointerSensor,
+  UniqueIdentifier,
+  closestCorners,
+  useSensor,
+  useSensors,
+} from '@dnd-kit/core';
+import {
+  SortableContext,
+  arrayMove,
+  sortableKeyboardCoordinates,
+} from '@dnd-kit/sortable';
 
 export default function HomePage() {
-  const [parent, setParent] = useState(null);
+  const [activeId, setActiveId] = useState<UniqueIdentifier | null>(null);
+
+  // DND Handlers
+  const sensors = useSensors(
+    useSensor(PointerSensor),
+    useSensor(KeyboardSensor, {
+      coordinateGetter: sortableKeyboardCoordinates,
+    })
+  );
+
+  function handleDragStart(event: DragStartEvent) {
+    const { active } = event;
+    const { id } = active;
+    setActiveId(id);
+  }
+
   return (
     <>
       <Nav btnLink='/popular/1' text='Popular' />
       <main>
         <div className='min-h-screen flex gap-4 items-center'>
-          <DndContext onDragEnd={handleDragEnd}>
+          <DndContext
+            sensors={sensors}
+            collisionDetection={closestCorners}
+            onDragStart={handleDragStart}
+            // onDragMove={handleDragMove}
+            // onDragEnd={handleDragEnd}
+          >
             <div className='flex justify-center flex-1'>
               <TierList />
             </div>
@@ -25,11 +63,4 @@ export default function HomePage() {
       </main>
     </>
   );
-  function handleDragEnd(event: any) {
-    const { over } = event;
-
-    // If the item is dropped over a container, set it as the parent
-    // otherwise reset the parent to `null`
-    setParent(over ? over.id : null);
-  }
 }
