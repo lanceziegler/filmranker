@@ -18,7 +18,7 @@ function WatchList() {
   }, [setArray]);
 
   return (
-    <div className='mt-24 border-gray-200 border-2 rounded-3xl'>
+    <div className='mt-2 border-gray-200 border-2 rounded-3xl'>
       <h1 className='text-3xl p-5 font-montserrat font-semibold underline underline-offset-4 pb-2'>
         Your Movies:
       </h1>

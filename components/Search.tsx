@@ -52,7 +52,7 @@ function SearchResults({ results, show }: any) {
     <>
       {show ? (
         <div
-          className={`search-results absolute overflow-y-scroll max-h-96 z-30 ${bgColor} border-2 border-${textColor} text-${textColor} rounded-b-3xl rounded-tr-3xl no-scrollbar`}
+          className={`search-results absolute overflow-y-scroll max-h-96 z-30 ${bgColor} border-2 border-${textColor} text-${textColor} rounded-b-3xl rounded-tr-3xl no-scrollbar w-96`}
         >
           {results.map((result: any, i: number) => (
             <div

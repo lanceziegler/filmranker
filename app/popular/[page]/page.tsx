@@ -8,6 +8,7 @@ import { IconLoaderQuarter } from '@tabler/icons-react';
 import { Button, Tooltip } from '@mantine/core';
 import { useContext } from 'react';
 import { SavedMoviesContext } from '@/app/libs/MoviesProvider';
+import { IconChevronUp } from '@tabler/icons-react';
 
 interface pageProps {
   params: { page: number };
@@ -18,6 +19,8 @@ function MoreMovies({ params: { page } }: pageProps) {
   const [movies, setMovies] = useState<any>([]);
   const [isLoading, setIsLoading] = useState(false);
   // const [array, setArray] = useState<any>([]);
+  const [showScrollTop, setShowScrollTop] = useState(false);
+  const [opacity, setOpacity] = useState(0);
   const { array, setArray } = useContext(SavedMoviesContext)!;
 
   const loadMoreMovies = useCallback(async () => {
@@ -65,7 +68,8 @@ function MoreMovies({ params: { page } }: pageProps) {
     const parsedArray = JSON.parse(localStorage.getItem('myArray1')) || [];
     setArray(parsedArray);
     console.log('THIS IS STATE: ', parsedArray);
-  }, []);
+    //! Added setArray dependency
+  }, [setArray]);
 
   //TODO Turn into importable function
   //* Checks if movie is already in localStorage and doesn't allow it to be added if so
@@ -89,11 +93,46 @@ function MoreMovies({ params: { page } }: pageProps) {
     }
   };
 
-  //! SEARCH within nav USING UNREACHABLE CONTEXT... CRASHES
+  const handleScroll = () => {
+    const threshold = 4000;
+
+    if (window.scrollY >= threshold) {
+      setOpacity(1);
+      setShowScrollTop(true);
+    } else {
+      setOpacity(0);
+      setShowScrollTop(false);
+    }
+  };
+
+  useEffect(() => {
+    window.addEventListener('scroll', handleScroll);
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, []);
+
+  const handleScrollTop = () => {
+    document.body.scrollTop = 0;
+    document.documentElement.scrollTop = 0;
+  };
+
   return (
-    <div className='relative'>
+    <div>
       <Nav btnLink='/' text='Home' />
-      <div className='main flex justify-center gap-2'>
+      <div className='main flex justify-center gap-2' onScroll={handleScroll}>
+        {showScrollTop ? (
+          <Tooltip label='Scroll to Top'>
+            <button
+              className={`fixed bottom-2 w-28 bg-[#228be6] hover:bg-blue-800 p-5 rounded-lg z-60 hover:border-2 hover:border-white transition-opacity duration-1000 flex justify-center ${opacity}`}
+              onClick={handleScrollTop}
+            >
+              <IconChevronUp color='white' />
+            </button>
+          </Tooltip>
+        ) : null}
+
         {movies.map((movie: any, i: number) => (
           <div
             key={i}

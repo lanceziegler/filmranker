@@ -22,7 +22,7 @@ export function UserButton() {
 
   return (
     <div
-      className='fixed top-2 right-0 block rounded-xl select-none cursor-default'
+      className='absolute top-2 right-0 block rounded-xl select-none cursor-default z-50'
       //   ref={ref}
       onMouseEnter={() => setShowMenu(true)}
       onMouseLeave={() => setShowMenu(false)}

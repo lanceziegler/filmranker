@@ -24,6 +24,9 @@ const config: Config = {
           '0 0px 65px rgba(255, 255,255, 0.1)',
         ],
       },
+      zIndex: {
+        '60': '60',
+      },
     },
   },
   plugins: [],
