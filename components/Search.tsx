@@ -1,5 +1,5 @@
 'use client';
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import { TextInput, Button } from '@mantine/core';
 import { IconSearch } from '@tabler/icons-react';
 import { useFocusWithin } from '@mantine/hooks';
@@ -7,34 +7,47 @@ import Image from 'next/image';
 import { Waypoint } from 'react-waypoint';
 import { Tooltip } from '@mantine/core';
 import { useMantineColorScheme } from '@mantine/core';
+// import { SavedMoviesContext } from '@/app/page';
+import { SavedMoviesContext } from '@/app/libs/MoviesProvider';
 
 function SearchResults({ results, show }: any) {
-  //Check what current color scheme is
+  // Check what current color scheme is
   const colorScheme = useMantineColorScheme();
   let theme = colorScheme.colorScheme;
   let bgColor = theme === 'dark' ? 'bg-black' : 'bg-white';
   let textColor = theme === 'dark' ? 'white' : 'black';
   let hover = theme === 'dark' ? 'hover:bg-gray-900' : 'hover:bg-gray-100';
+  // const [array, setArray] = useState<any>([]);
+  const { array, setArray } = useContext(SavedMoviesContext)!;
+
+  useEffect(() => {
+    //@ts-ignore
+    const parsedArray = JSON.parse(localStorage.getItem('myArray1')) || [];
+    setArray(parsedArray);
+    console.log('THIS IS STATE: ', parsedArray);
+  }, [setArray]);
 
   //* LocalStorage button handler
   const handleClickLocal = (movie: any) => {
     //@ts-ignore
-    const existingArray = JSON.parse(localStorage.getItem('myArray1')) || []; //TODO Alter this one
+    const existingArray = JSON.parse(localStorage.getItem('myArray1')) || []; //TODO Alter these localStorage arrays to start fresh
     const isItemInLocalStorage = existingArray.some(
       (item: any) => item.id === movie.id
     );
+    const index = existingArray.findIndex((item: any) => item.id === movie.id);
 
     if (isItemInLocalStorage) {
-      console.error('Movie already in localStorage');
-      alert('Movie is already in local storage!');
+      existingArray.splice(index, 1);
+      localStorage.setItem('myArray1', JSON.stringify(existingArray)); //TODO)
+      setArray(existingArray);
     } else {
       existingArray.push(movie);
-      localStorage.setItem('myArray1', JSON.stringify(existingArray)); //TODO AND Alter this one
+      localStorage.setItem('myArray1', JSON.stringify(existingArray)); //TODO
       console.log('ExistingArray', existingArray);
+      setArray(existingArray);
     }
   };
 
-  //! Temporarily set bg-black because colorScheme not working
   return (
     <>
       {show ? (
@@ -48,10 +61,14 @@ function SearchResults({ results, show }: any) {
             >
               <Tooltip label='Add to Library'>
                 <button
-                  className={`absolute top-2 right-3 z-20 bg-green-600 px-2 rounded-full border-${textColor} border-2 box-border text-black`}
+                  className={`absolute top-2 right-3 z-20 w-7 rounded-full border-black border-2 box-border text-black ${
+                    array.some((item: any) => item.id === result.id)
+                      ? 'bg-red-600'
+                      : 'bg-green-600'
+                  }`}
                   onClick={() => handleClickLocal(result)}
                 >
-                  +
+                  {array.some((item: any) => item.id === result.id) ? '-' : '+'}
                 </button>
               </Tooltip>
               {result.poster_path !== null ? (

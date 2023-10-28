@@ -6,7 +6,8 @@ import Image from 'next/image';
 import Nav from '@/components/Nav';
 import { IconLoaderQuarter } from '@tabler/icons-react';
 import { Button, Tooltip } from '@mantine/core';
-import { Suspense } from 'react';
+import { useContext } from 'react';
+import { SavedMoviesContext } from '@/app/libs/MoviesProvider';
 
 interface pageProps {
   params: { page: number };
@@ -16,8 +17,8 @@ function MoreMovies({ params: { page } }: pageProps) {
   const [currentPage, setCurrentPage] = useState(page);
   const [movies, setMovies] = useState<any>([]);
   const [isLoading, setIsLoading] = useState(false);
-  const [array, setArray] = useState<any>([]);
-  const [buttonBg, setButtonBg] = useState('bg-green-600');
+  // const [array, setArray] = useState<any>([]);
+  const { array, setArray } = useContext(SavedMoviesContext)!;
 
   const loadMoreMovies = useCallback(async () => {
     if (!isLoading) {
@@ -66,6 +67,7 @@ function MoreMovies({ params: { page } }: pageProps) {
     console.log('THIS IS STATE: ', parsedArray);
   }, []);
 
+  //TODO Turn into importable function
   //* Checks if movie is already in localStorage and doesn't allow it to be added if so
   const handleClickLocal = (movie: any) => {
     //@ts-ignore
@@ -76,16 +78,18 @@ function MoreMovies({ params: { page } }: pageProps) {
     const index = existingArray.findIndex((item: any) => item.id === movie.id);
 
     if (isItemInLocalStorage) {
-      alert('Removed movie from local storage!');
       existingArray.splice(index, 1);
       localStorage.setItem('myArray1', JSON.stringify(existingArray)); //TODO)
+      setArray(existingArray);
     } else {
       existingArray.push(movie);
       localStorage.setItem('myArray1', JSON.stringify(existingArray)); //TODO
       console.log('ExistingArray', existingArray);
+      setArray(existingArray);
     }
   };
-  //! HANDLE NO IMAGE
+
+  //! SEARCH within nav USING UNREACHABLE CONTEXT... CRASHES
   return (
     <div className='relative'>
       <Nav btnLink='/' text='Home' />
@@ -98,12 +102,12 @@ function MoreMovies({ params: { page } }: pageProps) {
             <Tooltip
               label={`${
                 array.some((item: any) => item.id === movie.id)
-                  ? 'Remove movie from library'
-                  : 'Add movie to library'
+                  ? 'Remove from Library'
+                  : 'Add to Library'
               }`}
             >
               <button
-                className={`absolute top-2 right-3 z-20 ${buttonBg} px-2 rounded-full border-black border-2 box-border text-black ${
+                className={`absolute top-2 right-3 z-20 w-7 rounded-full border-black border-2 box-border text-black ${
                   array.some((item: any) => item.id === movie.id)
                     ? 'bg-red-600'
                     : 'bg-green-600'

@@ -1,10 +1,13 @@
 'use client';
 import { useState, useEffect } from 'react';
 import LocalMovie from './LocalMovie';
+import { SavedMoviesContext } from '@/app/libs/MoviesProvider';
+import { useContext } from 'react';
 
 // DnDKit STAGGER IMPORT
 function WatchList() {
-  const [array, setArray] = useState<any>([]);
+  // const [array, setArray] = useState<any>([]);
+  const { array, setArray } = useContext(SavedMoviesContext)!;
 
   useEffect(() => {
     const parsedArray =
@@ -12,7 +15,7 @@ function WatchList() {
 
     setArray(parsedArray);
     console.log('THIS IS STATE: ', parsedArray);
-  }, []);
+  }, [setArray]);
 
   return (
     <div className='mt-24 border-gray-200 border-2 rounded-3xl'>

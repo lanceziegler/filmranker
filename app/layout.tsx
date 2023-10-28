@@ -4,6 +4,7 @@ import { MantineProvider, ColorSchemeScript } from '@mantine/core';
 import { theme } from '../theme';
 import './globals.css';
 import Nav from '@/components/Nav';
+import MoviesProvider from './libs/MoviesProvider';
 
 export const metadata = {
   title: 'FilmRanker',
@@ -22,7 +23,9 @@ export default function RootLayout({ children }: { children: any }) {
         />
       </head>
       <body>
-        <MantineProvider theme={theme}>{children}</MantineProvider>
+        <MantineProvider theme={theme}>
+          <MoviesProvider>{children}</MoviesProvider>
+        </MantineProvider>
       </body>
     </html>
   );

@@ -1,9 +1,9 @@
-'use client';
 import TierList from '@/components/TierList';
 import WatchList from '@/components/WatchList';
 import Nav from '@/components/Nav';
 
 export default function HomePage() {
+
   return (
     <>
       <Nav btnLink='/popular/1' text='Popular' />
