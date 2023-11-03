@@ -125,7 +125,7 @@ function MoreMovies({ params: { page } }: pageProps) {
         {showScrollTop ? (
           <Tooltip label='Scroll to Top'>
             <button
-              className={`fixed bottom-2 w-28 bg-[#228be6] hover:bg-blue-800 p-5 rounded-lg z-60 hover:border-2 hover:border-white transition-opacity duration-1000 flex justify-center ${opacity}`}
+              className={`fixed bottom-10 right-0 w-12 bg-[#228be6] py-2 hover:bg-blue-800 rounded-l-lg z-60 hover:border-2 hover:border-white transition-opacity duration-1000 flex justify-center ${opacity}`}
               onClick={handleScrollTop}
             >
               <IconChevronUp color='white' />
