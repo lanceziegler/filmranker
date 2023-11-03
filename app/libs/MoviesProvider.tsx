@@ -1,5 +1,12 @@
 'use client';
-import { createContext, Dispatch, SetStateAction, useState, useEffect, ReactNode } from 'react';
+import {
+  createContext,
+  Dispatch,
+  SetStateAction,
+  useState,
+  useEffect,
+  ReactNode,
+} from 'react';
 
 type ContextType = {
   array: any[]; // Specify the appropriate type for array
@@ -12,6 +19,15 @@ export const SavedMoviesContext = createContext<ContextType | undefined>(
 
 const MoviesProvider = ({ children }: { children: ReactNode }) => {
   const [array, setArray] = useState<any>([]);
+  const [watchListArray, setWatchListArray] = useState([]);
+  const [tierListObject, setTierListObject] = useState({
+    s: [],
+    a: [],
+    b: [],
+    c: [],
+    d: [],
+    f: [],
+  });
 
   useEffect(() => {
     //@ts-ignore
