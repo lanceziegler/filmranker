@@ -3,14 +3,18 @@ import { Divider, Group } from '@mantine/core';
 interface propTypes {
   id: number;
   row: string;
+  bgColor: string;
+  textColor: string;
 }
 
-const Row = ({ id, row }: propTypes) => {
+const Row = ({ id, row, bgColor, textColor }: propTypes) => {
   return (
-    <div className='h-20 flex flex-col justify-center hover:bg-red-500'>
+    <div
+      className={`h-20 flex flex-col justify-center ${bgColor} ${textColor} hover:text-black`}
+    >
       <div>
         <Group>
-          <div className='pl-4 font-montserrat text-xl font-semibold flex'>
+          <div className={`pl-4 font-montserrat text-xl font-semibold flex`}>
             {row.toUpperCase()}
           </div>
           <Divider orientation='vertical' size='md' />

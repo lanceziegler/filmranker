@@ -3,6 +3,22 @@ import Row from './Row';
 
 function TierList() {
   const rows: string[] = ['s', 'a', 'b', 'c', 'd', 'f'];
+  const bgColors: string[] = [
+    'hover:bg-[#fe7f7e]',
+    'hover:bg-[#febf7e]',
+    'hover:bg-[#feff7f]',
+    'hover:bg-[#7fff7f]',
+    'hover:bg-[#7ffffe]',
+    'hover:bg-[#ff7ffe]',
+  ];
+  const textColors: string[] = [
+    'text-[#fe7f7e]',
+    'text-[#febf7e]',
+    'text-[#feff7f]',
+    'text-[#7fff7f]',
+    'text-[#7ffffe]',
+    'text-[#ff7ffe]',
+  ];
 
   return (
     <div className='mt-2 rounded-3xl flex flex-col border-gray-200 border-2 min-w-full'>
@@ -13,7 +29,7 @@ function TierList() {
         {rows.map((row, i) => {
           return (
             <div key={row}>
-              <Row id={i} row={row} />
+              <Row id={i} row={row} bgColor={bgColors[i]} textColor={textColors[i]} />
               {i < rows.length - 1 ? <Divider size='lg' /> : null}
             </div>
           );
