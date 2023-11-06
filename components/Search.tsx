@@ -31,7 +31,7 @@ function SearchResults({ results, show }: any) {
   //* LocalStorage button handler
   const handleClickLocal = (movie: any) => {
     //@ts-ignore
-    const existingArray = JSON.parse(localStorage.getItem('myArray1')) || []; //TODO Alter these localStorage arrays to start fresh
+    const existingArray = JSON.parse(localStorage.getItem('myArray2')) || []; //TODO Alter these localStorage arrays to start fresh
     const isItemInLocalStorage = existingArray.some(
       (item: any) => item.id === movie.id
     );
@@ -39,11 +39,11 @@ function SearchResults({ results, show }: any) {
 
     if (isItemInLocalStorage) {
       existingArray.splice(index, 1);
-      localStorage.setItem('myArray1', JSON.stringify(existingArray)); //TODO
+      localStorage.setItem('myArray2', JSON.stringify(existingArray)); //TODO
       setArray(existingArray);
     } else {
       existingArray.push(movie);
-      localStorage.setItem('myArray1', JSON.stringify(existingArray)); //TODO
+      localStorage.setItem('myArray2', JSON.stringify(existingArray)); //TODO
       console.log('ExistingArray', existingArray);
       setArray(existingArray);
     }

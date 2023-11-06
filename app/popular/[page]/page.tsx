@@ -21,7 +21,7 @@ function MoreMovies({ params: { page } }: pageProps) {
   // const [array, setArray] = useState<any>([]);
   const [showScrollTop, setShowScrollTop] = useState(false);
   const [opacity, setOpacity] = useState(0);
-  const { array, setArray } = useContext(SavedMoviesContext)!;
+  const { array, setArray, watchListArray } = useContext(SavedMoviesContext)!;
 
   const loadMoreMovies = useCallback(async () => {
     if (!isLoading) {
@@ -75,19 +75,21 @@ function MoreMovies({ params: { page } }: pageProps) {
   //* Checks if movie is already in localStorage and doesn't allow it to be added if so
   const handleClickLocal = (movie: any) => {
     //@ts-ignore
-    const existingArray = JSON.parse(localStorage.getItem('myArray1')) || []; //TODO Alter these localStorage arrays to start fresh
+    const existingArray = JSON.parse(localStorage.getItem('myArray2')) || []; //TODO Alter these localStorage arrays to start fresh
     const isItemInLocalStorage = existingArray.some(
       (item: any) => item.id === movie.id
     );
     const index = existingArray.findIndex((item: any) => item.id === movie.id);
 
     if (isItemInLocalStorage) {
+      // Remove movie from local storage if it exists
       existingArray.splice(index, 1);
-      localStorage.setItem('myArray1', JSON.stringify(existingArray)); //TODO)
+      localStorage.setItem('myArray2', JSON.stringify(existingArray)); //TODO)
       setArray(existingArray);
     } else {
+      // add item to local storage if not already in
       existingArray.push(movie);
-      localStorage.setItem('myArray1', JSON.stringify(existingArray)); //TODO
+      localStorage.setItem('myArray2', JSON.stringify(existingArray)); //TODO
       console.log('ExistingArray', existingArray);
       setArray(existingArray);
     }

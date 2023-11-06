@@ -11,6 +11,10 @@ import {
 type ContextType = {
   array: any[];
   setArray: Dispatch<SetStateAction<any[]>>;
+  watchListArray: any[];
+  setWatchListArray: Dispatch<SetStateAction<any[]>>;
+  tierListObject: {};
+  setTierListObject: Dispatch<SetStateAction<any>>;
 };
 
 export const SavedMoviesContext = createContext<ContextType | undefined>(
@@ -19,8 +23,8 @@ export const SavedMoviesContext = createContext<ContextType | undefined>(
 
 const MoviesProvider = ({ children }: { children: ReactNode }) => {
   const [array, setArray] = useState<any>([]);
-  const [watchListArray, setWatchListArray] = useState([]);
-  const [tierListObject, setTierListObject] = useState({
+  const [watchListArray, setWatchListArray] = useState<any>([]);
+  const [tierListObject, setTierListObject] = useState<any>({
     s: [],
     a: [],
     b: [],
@@ -31,13 +35,34 @@ const MoviesProvider = ({ children }: { children: ReactNode }) => {
 
   useEffect(() => {
     //@ts-ignore
-    const parsedArray = JSON.parse(localStorage.getItem('myArray1')) || [];
+    const parsedArray = JSON.parse(localStorage.getItem('myArray2')) || [];
     setArray(parsedArray);
-    console.log('THIS IS STATE: ', parsedArray);
+    console.log('array: ', parsedArray);
+    //@ts-ignore
+    const parsedLocalWatchListArray =
+      //@ts-ignore
+      JSON.parse(localStorage.getItem('myArray2')) || [];
+    setWatchListArray(parsedLocalWatchListArray);
+    console.log('watchListArray: ', watchListArray);
+    //@ts-ignore
+    const parsedLocalTierListObject =
+      //@ts-ignore
+      JSON.parse(localStorage.getItem('myArray2')) || [];
+    setTierListObject(parsedLocalTierListObject);
+    console.log('tierListObject: ', tierListObject);
   }, []);
 
   return (
-    <SavedMoviesContext.Provider value={{ array, setArray }}>
+    <SavedMoviesContext.Provider
+      value={{
+        array,
+        setArray,
+        watchListArray,
+        setWatchListArray,
+        tierListObject,
+        setTierListObject,
+      }}
+    >
       {children}
     </SavedMoviesContext.Provider>
   );
