@@ -41,13 +41,13 @@ const MoviesProvider = ({ children }: { children: ReactNode }) => {
     //@ts-ignore
     const parsedLocalWatchListArray =
       //@ts-ignore
-      JSON.parse(localStorage.getItem('myArray2')) || [];
+      JSON.parse(localStorage.getItem('localStorageWatchList1')) || [];
     setWatchListArray(parsedLocalWatchListArray);
     console.log('watchListArray: ', watchListArray);
     //@ts-ignore
     const parsedLocalTierListObject =
       //@ts-ignore
-      JSON.parse(localStorage.getItem('myArray2')) || [];
+      JSON.parse(localStorage.getItem('localStorageTierList1')) || [];
     setTierListObject(parsedLocalTierListObject);
     console.log('tierListObject: ', tierListObject);
   }, []);

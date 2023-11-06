@@ -19,7 +19,14 @@ function SearchResults({ results, show }: any) {
   let textColor = theme === 'dark' ? 'white' : 'black';
   let hover = theme === 'dark' ? 'hover:bg-gray-900' : 'hover:bg-gray-100';
   // const [array, setArray] = useState<any>([]);
-  const { array, setArray } = useContext(SavedMoviesContext)!;
+  const {
+    array,
+    setArray,
+    watchListArray,
+    setWatchListArray,
+    tierListObject,
+    setTierListObject,
+  } = useContext(SavedMoviesContext)!;
 
   // useEffect(() => {
   //   //@ts-ignore
@@ -29,12 +36,33 @@ function SearchResults({ results, show }: any) {
   // }, [setArray]);
 
   //* LocalStorage button handler
+  // const handleClickLocal = (movie: any) => {
+  //   //@ts-ignore
+  //   const existingArray = JSON.parse(localStorage.getItem('myArray2')) || []; //TODO Alter these localStorage arrays to start fresh
+  //   const isItemInLocalStorage = existingArray.some(
+  //     (item: any) => item.id === movie.id
+  //   );
+  //   const index = existingArray.findIndex((item: any) => item.id === movie.id);
+
+  //   if (isItemInLocalStorage) {
+  //     existingArray.splice(index, 1);
+  //     localStorage.setItem('myArray2', JSON.stringify(existingArray)); //TODO
+  //     setArray(existingArray);
+  //   } else {
+  //     existingArray.push(movie);
+  //     localStorage.setItem('myArray2', JSON.stringify(existingArray)); //TODO
+  //     console.log('ExistingArray', existingArray);
+  //     setArray(existingArray);
+  //   }
+  // };
+
   const handleClickLocal = (movie: any) => {
     //@ts-ignore
     const existingArray = JSON.parse(localStorage.getItem('myArray2')) || []; //TODO Alter these localStorage arrays to start fresh
     const isItemInLocalStorage = existingArray.some(
       (item: any) => item.id === movie.id
     );
+
     const index = existingArray.findIndex((item: any) => item.id === movie.id);
 
     if (isItemInLocalStorage) {

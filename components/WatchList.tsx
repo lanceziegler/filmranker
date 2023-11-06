@@ -7,7 +7,8 @@ import { useContext } from 'react';
 // DnDKit STAGGER IMPORT
 function WatchList() {
   // const [array, setArray] = useState<any>([]);
-  const { array, setArray } = useContext(SavedMoviesContext)!;
+  const { array, setArray, watchListArray, setWatchListArray } =
+    useContext(SavedMoviesContext)!;
 
   // useEffect(() => {
   //   const parsedArray =
@@ -23,7 +24,7 @@ function WatchList() {
         Your Movies:
       </h1>
       <div className='flex flex-wrap justify-center'>
-        {array.map((movie: any, i: number) => {
+        {watchListArray.map((movie: any, i: number) => {
           return (
             <div key={i} className='hover:scale-105 transition-transform'>
               <LocalMovie

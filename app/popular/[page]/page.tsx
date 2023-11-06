@@ -21,7 +21,14 @@ function MoreMovies({ params: { page } }: pageProps) {
   // const [array, setArray] = useState<any>([]);
   const [showScrollTop, setShowScrollTop] = useState(false);
   const [opacity, setOpacity] = useState(0);
-  const { array, setArray, watchListArray } = useContext(SavedMoviesContext)!;
+  const {
+    array,
+    setArray,
+    watchListArray,
+    setWatchListArray,
+    tierListObject,
+    setTierListObject,
+  } = useContext(SavedMoviesContext)!;
 
   const loadMoreMovies = useCallback(async () => {
     if (!isLoading) {
