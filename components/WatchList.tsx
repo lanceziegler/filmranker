@@ -9,13 +9,13 @@ function WatchList() {
   // const [array, setArray] = useState<any>([]);
   const { array, setArray } = useContext(SavedMoviesContext)!;
 
-  useEffect(() => {
-    const parsedArray =
-      JSON.parse(localStorage.getItem('myArray1') as string) || [];
+  // useEffect(() => {
+  //   const parsedArray =
+  //     JSON.parse(localStorage.getItem('myArray1') as string) || []; //TODO Alter to start fresh
 
-    setArray(parsedArray);
-    console.log('THIS IS STATE: ', parsedArray);
-  }, [setArray]);
+  //   setArray(parsedArray);
+  //   console.log('THIS IS STATE: ', parsedArray);
+  // }, [setArray]);
 
   return (
     <div className='mt-2 border-gray-200 border-2 rounded-3xl'>

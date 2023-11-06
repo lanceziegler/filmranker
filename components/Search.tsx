@@ -9,6 +9,7 @@ import { Tooltip } from '@mantine/core';
 import { useMantineColorScheme } from '@mantine/core';
 // import { SavedMoviesContext } from '@/app/page';
 import { SavedMoviesContext } from '@/app/libs/MoviesProvider';
+import getProviders from '@/app/libs/getProviders';
 
 function SearchResults({ results, show }: any) {
   // Check what current color scheme is
@@ -20,12 +21,12 @@ function SearchResults({ results, show }: any) {
   // const [array, setArray] = useState<any>([]);
   const { array, setArray } = useContext(SavedMoviesContext)!;
 
-  useEffect(() => {
-    //@ts-ignore
-    const parsedArray = JSON.parse(localStorage.getItem('myArray1')) || [];
-    setArray(parsedArray);
-    console.log('THIS IS STATE: ', parsedArray);
-  }, [setArray]);
+  // useEffect(() => {
+  //   //@ts-ignore
+  //   const parsedArray = JSON.parse(localStorage.getItem('myArray1')) || [];
+  //   setArray(parsedArray);
+  //   console.log('THIS IS STATE: ', parsedArray);
+  // }, [setArray]);
 
   //* LocalStorage button handler
   const handleClickLocal = (movie: any) => {
@@ -38,7 +39,7 @@ function SearchResults({ results, show }: any) {
 
     if (isItemInLocalStorage) {
       existingArray.splice(index, 1);
-      localStorage.setItem('myArray1', JSON.stringify(existingArray)); //TODO)
+      localStorage.setItem('myArray1', JSON.stringify(existingArray)); //TODO
       setArray(existingArray);
     } else {
       existingArray.push(movie);

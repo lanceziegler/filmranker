@@ -9,8 +9,8 @@ import {
 } from 'react';
 
 type ContextType = {
-  array: any[]; // Specify the appropriate type for array
-  setArray: Dispatch<SetStateAction<any[]>>; // Specify the appropriate type for setArray
+  array: any[];
+  setArray: Dispatch<SetStateAction<any[]>>;
 };
 
 export const SavedMoviesContext = createContext<ContextType | undefined>(

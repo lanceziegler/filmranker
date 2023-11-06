@@ -63,13 +63,13 @@ function MoreMovies({ params: { page } }: pageProps) {
     loadInitialMovies();
   }, []);
 
-  useEffect(() => {
-    //@ts-ignore
-    const parsedArray = JSON.parse(localStorage.getItem('myArray1')) || [];
-    setArray(parsedArray);
-    console.log('THIS IS STATE: ', parsedArray);
-    //! Added setArray dependency
-  }, [setArray]);
+  // useEffect(() => {
+  //   //@ts-ignore
+  //   const parsedArray = JSON.parse(localStorage.getItem('myArray1')) || [];
+  //   setArray(parsedArray);
+  //   console.log('THIS IS STATE: ', parsedArray);
+  //   //! Added setArray dependency
+  // }, [setArray]);
 
   //TODO Turn into importable function
   //* Checks if movie is already in localStorage and doesn't allow it to be added if so
