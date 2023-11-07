@@ -10,7 +10,7 @@ interface propTypes {
 const Row = ({ id, row, bgColor, textColor }: propTypes) => {
   return (
     <div
-      className={`h-20 flex flex-col justify-center ${bgColor} ${textColor} hover:text-black`}
+      className={`h-24 flex flex-col justify-center ${bgColor} ${textColor} hover:text-black`}
     >
       <div>
         <Group>

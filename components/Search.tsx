@@ -62,7 +62,6 @@ function SearchResults({ results, show }: any) {
     const isItemInLocalStorage = existingArray.some(
       (item: any) => item.id === movie.id
     );
-
     const index = existingArray.findIndex((item: any) => item.id === movie.id);
 
     if (isItemInLocalStorage) {
@@ -74,6 +73,61 @@ function SearchResults({ results, show }: any) {
       localStorage.setItem('myArray2', JSON.stringify(existingArray)); //TODO
       console.log('ExistingArray', existingArray);
       setArray(existingArray);
+    }
+
+    //* Get WatchList from localStorage and check if movie is in it
+    const localStorageWatchList = localStorage.getItem('localStorageWatchList');
+    const existingWatchListArray = localStorageWatchList
+      ? JSON.parse(localStorageWatchList)
+      : [];
+    const isItemInWatchListLocalStorage = existingWatchListArray.some(
+      (item: any) => item.id === movie.id
+    );
+    const watchListIndex = existingWatchListArray.findIndex(
+      (item: any) => item.id === movie.id
+    );
+
+    //* Get TierList from localStorage and check if movie is in it
+    const localStorageTierList = localStorage.getItem('localStorageTierList');
+    const existingTierList = localStorageTierList
+      ? JSON.parse(localStorageTierList)
+      : [];
+    const isItemInTierListLocalStorage = Object.values(existingTierList).some(
+      (array: any) => array.includes(movie)
+    );
+    //create empty array to store array within TierListObject that contains the movie
+    let tempTierListArray;
+    // Get the index of
+    const tierListIndex = Object.values(existingTierList).map((array: any) => {
+      if (array.includes(movie)) {
+        tempTierListArray = array;
+        array.findIndex((item: any) => item.id === movie.id);
+      }
+    });
+
+    if (isItemInWatchListLocalStorage) {
+      //* Remove movie if in WatchList in local storage already
+      existingWatchListArray.split(watchListIndex, 1);
+      localStorage.setItem(
+        //!------------------- HERE ------------------------
+        'localStorageWatchList',
+        JSON.stringify(existingWatchListArray)
+      );
+      setWatchListArray(existingWatchListArray);
+    } else {
+      existingWatchListArray.push(movie);
+      localStorage.setItem(
+        'localStorageWatchList',
+        JSON.stringify(existingWatchListArray)
+      );
+      console.log('existingWatchListArray: ', existingWatchListArray);
+      setWatchListArray(existingWatchListArray);
+    }
+
+    if (isItemInTierListLocalStorage) {
+      //@ts-ignore --- TIER LIST ARRAY POSSIBLY UNDEFINED
+      tempTierListArray.split(tierListIndex, 1);
+      //TODO setTierListObject()
     }
   };
 

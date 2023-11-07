@@ -21,6 +21,16 @@ export const SavedMoviesContext = createContext<ContextType | undefined>(
   undefined
 );
 
+//TODO: Iterate through tierListObject property arrays to see if movie exists before moving, adding, or removing element
+/*
+const containsElement1 = Object.values(tierListObject).some(array => array.includes(1));
+
+if (containsElement1) {
+  console.log('tierListObject contains the element 1 in one of its arrays.');
+} else {
+  console.log('tierListObject does not contain the element 1 in any of its arrays.');
+}
+*/
 const MoviesProvider = ({ children }: { children: ReactNode }) => {
   const [array, setArray] = useState<any>([]);
   const [watchListArray, setWatchListArray] = useState<any>([]);
@@ -41,13 +51,13 @@ const MoviesProvider = ({ children }: { children: ReactNode }) => {
     //@ts-ignore
     const parsedLocalWatchListArray =
       //@ts-ignore
-      JSON.parse(localStorage.getItem('localStorageWatchList1')) || [];
+      JSON.parse(localStorage.getItem('localStorageWatchList')) || [];
     setWatchListArray(parsedLocalWatchListArray);
     console.log('watchListArray: ', watchListArray);
     //@ts-ignore
     const parsedLocalTierListObject =
       //@ts-ignore
-      JSON.parse(localStorage.getItem('localStorageTierList1')) || [];
+      JSON.parse(localStorage.getItem('localStorageTierList')) || {};
     setTierListObject(parsedLocalTierListObject);
     console.log('tierListObject: ', tierListObject);
   }, []);
