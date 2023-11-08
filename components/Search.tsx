@@ -58,22 +58,22 @@ function SearchResults({ results, show }: any) {
 
   const handleClickLocal = (movie: any) => {
     //@ts-ignore
-    const existingArray = JSON.parse(localStorage.getItem('myArray2')) || []; //TODO Alter these localStorage arrays to start fresh
-    const isItemInLocalStorage = existingArray.some(
-      (item: any) => item.id === movie.id
-    );
-    const index = existingArray.findIndex((item: any) => item.id === movie.id);
+    // const existingArray = JSON.parse(localStorage.getItem('myArray2')) || []; //TODO Alter these localStorage arrays to start fresh
+    // const isItemInLocalStorage = existingArray.some(
+    //   (item: any) => item.id === movie.id
+    // );
+    // const index = existingArray.findIndex((item: any) => item.id === movie.id);
 
-    if (isItemInLocalStorage) {
-      existingArray.splice(index, 1);
-      localStorage.setItem('myArray2', JSON.stringify(existingArray)); //TODO
-      setArray(existingArray);
-    } else {
-      existingArray.push(movie);
-      localStorage.setItem('myArray2', JSON.stringify(existingArray)); //TODO
-      console.log('ExistingArray', existingArray);
-      setArray(existingArray);
-    }
+    // if (isItemInLocalStorage) {
+    //   existingArray.splice(index, 1);
+    //   localStorage.setItem('myArray2', JSON.stringify(existingArray)); //TODO
+    //   setArray(existingArray);
+    // } else {
+    //   existingArray.push(movie);
+    //   localStorage.setItem('myArray2', JSON.stringify(existingArray)); //TODO
+    //   console.log('ExistingArray', existingArray);
+    //   setArray(existingArray);
+    // }
 
     //* Get WatchList from localStorage and check if movie is in it
     const localStorageWatchList = localStorage.getItem('localStorageWatchList');
@@ -107,7 +107,7 @@ function SearchResults({ results, show }: any) {
 
     if (isItemInWatchListLocalStorage) {
       //* Remove movie if in WatchList in local storage already
-      existingWatchListArray.split(watchListIndex, 1);
+      existingWatchListArray.splice(watchListIndex, 1);
       localStorage.setItem(
         //!------------------- HERE ------------------------
         'localStorageWatchList',
@@ -126,7 +126,7 @@ function SearchResults({ results, show }: any) {
 
     if (isItemInTierListLocalStorage) {
       //@ts-ignore --- TIER LIST ARRAY POSSIBLY UNDEFINED
-      tempTierListArray.split(tierListIndex, 1);
+      tempTierListArray.splice(tierListIndex, 1);
       //TODO setTierListObject()
     }
   };
@@ -145,7 +145,7 @@ function SearchResults({ results, show }: any) {
               <Tooltip label='Add to Library'>
                 <button
                   className={`absolute top-2 right-3 z-20 w-7 rounded-full border-black border-2 box-border text-black ${
-                    array.some((item: any) => item.id === result.id)
+                    watchListArray.some((item: any) => item.id === result.id)
                       ? 'bg-red-600'
                       : 'bg-green-600'
                   }`}

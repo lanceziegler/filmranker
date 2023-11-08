@@ -8,8 +8,12 @@ interface propTypes {
 }
 
 const LocalMovie = ({ title, poster, id }: propTypes) => {
+  function handleOnDrag(e: React.DragEvent, title: string) {
+    e.dataTransfer.setData('title', title);
+  }
+
   return (
-    <div>
+    <div draggable onDragStart={(e) => handleOnDrag(e, id)}>
       <Tooltip label={title}>
         {poster !== null ? (
           <Image
@@ -19,7 +23,7 @@ const LocalMovie = ({ title, poster, id }: propTypes) => {
             height={50}
             //   sizes='100vw'
             loading='lazy'
-            className='rounded-full hover:scale-105 transition-transform w-auto h-auto'
+            className='p-1 hover:scale-105 transition-transform w-auto h-auto'
           />
         ) : (
           <Image

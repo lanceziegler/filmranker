@@ -17,6 +17,15 @@ type ContextType = {
   setTierListObject: Dispatch<SetStateAction<any>>;
 };
 
+type TierListObjectType = {
+  s: any[]; // Define the type for each tier array
+  a: any[];
+  b: any[];
+  c: any[];
+  d: any[];
+  f: any[];
+};
+
 export const SavedMoviesContext = createContext<ContextType | undefined>(
   undefined
 );
@@ -34,7 +43,7 @@ if (containsElement1) {
 const MoviesProvider = ({ children }: { children: ReactNode }) => {
   const [array, setArray] = useState<any>([]);
   const [watchListArray, setWatchListArray] = useState<any>([]);
-  const [tierListObject, setTierListObject] = useState<any>({
+  const [tierListObject, setTierListObject] = useState<TierListObjectType>({
     s: [],
     a: [],
     b: [],
@@ -57,7 +66,14 @@ const MoviesProvider = ({ children }: { children: ReactNode }) => {
     //@ts-ignore
     const parsedLocalTierListObject =
       //@ts-ignore
-      JSON.parse(localStorage.getItem('localStorageTierList')) || {};
+      JSON.parse(localStorage.getItem('localStorageTierList')) || {
+        s: [],
+        a: [],
+        b: [],
+        c: [],
+        d: [],
+        f: [],
+      };
     setTierListObject(parsedLocalTierListObject);
     console.log('tierListObject: ', tierListObject);
   }, []);
