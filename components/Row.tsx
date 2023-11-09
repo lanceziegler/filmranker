@@ -37,6 +37,38 @@ const Row = ({ id, row, bgColor, textColor, color }: propTypes) => {
       //@ts-ignore
       updatedTierListObject[row].push(movie); // Add the movie to the appropriate tier array
       setTierListObject(updatedTierListObject); // Update the context state
+
+      //! Currently removes movie from WatchList only. Need logic for adding it to TierList.
+      const localStorageWatchList = localStorage.getItem(
+        'localStorageWatchList'
+      );
+      const existingWatchListArray = localStorageWatchList
+        ? JSON.parse(localStorageWatchList)
+        : [];
+      const isItemInWatchListLocalStorage = existingWatchListArray.some(
+        (item: any) => item.id === movie.id
+      );
+      const watchListIndex = existingWatchListArray.findIndex(
+        (item: any) => item.id === movie.id
+      );
+
+      if (isItemInWatchListLocalStorage) {
+        //* Remove movie if in WatchList in local storage already
+        existingWatchListArray.splice(watchListIndex, 1);
+        localStorage.setItem(
+          'localStorageWatchList',
+          JSON.stringify(existingWatchListArray)
+        );
+        setWatchListArray(existingWatchListArray);
+      } else {
+        existingWatchListArray.push(movie);
+        localStorage.setItem(
+          'localStorageWatchList',
+          JSON.stringify(existingWatchListArray)
+        );
+        console.log('existingWatchListArray: ', existingWatchListArray);
+        setWatchListArray(existingWatchListArray);
+      }
     }
   }
 

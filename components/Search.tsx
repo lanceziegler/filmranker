@@ -10,6 +10,7 @@ import { useMantineColorScheme } from '@mantine/core';
 // import { SavedMoviesContext } from '@/app/page';
 import { SavedMoviesContext } from '@/app/libs/MoviesProvider';
 import getProviders from '@/app/libs/getProviders';
+import WatchList from './WatchList';
 
 function SearchResults({ results, show }: any) {
   // Check what current color scheme is
@@ -142,7 +143,13 @@ function SearchResults({ results, show }: any) {
               key={i}
               className={`flex ${hover} transition-colors duration-50 border-gray-300 items-center gap-4 relative select-none cursor-default`}
             >
-              <Tooltip label='Add to Library'>
+              <Tooltip
+                label={`${
+                  watchListArray.some((item: any) => item.id === result.id)
+                    ? 'Remove from Library'
+                    : 'Add to Library'
+                }`}
+              >
                 <button
                   className={`absolute top-2 right-3 z-20 w-7 rounded-full border-black border-2 box-border text-black ${
                     watchListArray.some((item: any) => item.id === result.id)
@@ -151,7 +158,9 @@ function SearchResults({ results, show }: any) {
                   }`}
                   onClick={() => handleClickLocal(result)}
                 >
-                  {array.some((item: any) => item.id === result.id) ? '-' : '+'}
+                  {watchListArray.some((item: any) => item.id === result.id)
+                    ? '-'
+                    : '+'}
                 </button>
               </Tooltip>
               {result.poster_path !== null ? (

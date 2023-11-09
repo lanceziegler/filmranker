@@ -80,25 +80,100 @@ function MoreMovies({ params: { page } }: pageProps) {
 
   //TODO Turn into importable function
   //* Checks if movie is already in localStorage and doesn't allow it to be added if so
+  // const handleClickLocal = (movie: any) => {
+  //   //@ts-ignore
+  //   const existingArray = JSON.parse(localStorage.getItem('myArray2')) || []; //TODO Alter these localStorage arrays to start fresh
+  //   const isItemInLocalStorage = existingArray.some(
+  //     (item: any) => item.id === movie.id
+  //   );
+  //   const index = existingArray.findIndex((item: any) => item.id === movie.id);
+
+  //   if (isItemInLocalStorage) {
+  //     // Remove movie from local storage if it exists
+  //     existingArray.splice(index, 1);
+  //     localStorage.setItem('myArray2', JSON.stringify(existingArray)); //TODO)
+  //     setArray(existingArray);
+  //   } else {
+  //     // add item to local storage if not already in
+  //     existingArray.push(movie);
+  //     localStorage.setItem('myArray2', JSON.stringify(existingArray)); //TODO
+  //     console.log('ExistingArray', existingArray);
+  //     setArray(existingArray);
+  //   }
+  // };
+
   const handleClickLocal = (movie: any) => {
     //@ts-ignore
-    const existingArray = JSON.parse(localStorage.getItem('myArray2')) || []; //TODO Alter these localStorage arrays to start fresh
-    const isItemInLocalStorage = existingArray.some(
+    // const existingArray = JSON.parse(localStorage.getItem('myArray2')) || []; //TODO Alter these localStorage arrays to start fresh
+    // const isItemInLocalStorage = existingArray.some(
+    //   (item: any) => item.id === movie.id
+    // );
+    // const index = existingArray.findIndex((item: any) => item.id === movie.id);
+
+    // if (isItemInLocalStorage) {
+    //   existingArray.splice(index, 1);
+    //   localStorage.setItem('myArray2', JSON.stringify(existingArray)); //TODO
+    //   setArray(existingArray);
+    // } else {
+    //   existingArray.push(movie);
+    //   localStorage.setItem('myArray2', JSON.stringify(existingArray)); //TODO
+    //   console.log('ExistingArray', existingArray);
+    //   setArray(existingArray);
+    // }
+
+    //* Get WatchList from localStorage and check if movie is in it
+    const localStorageWatchList = localStorage.getItem('localStorageWatchList');
+    const existingWatchListArray = localStorageWatchList
+      ? JSON.parse(localStorageWatchList)
+      : [];
+    const isItemInWatchListLocalStorage = existingWatchListArray.some(
       (item: any) => item.id === movie.id
     );
-    const index = existingArray.findIndex((item: any) => item.id === movie.id);
+    const watchListIndex = existingWatchListArray.findIndex(
+      (item: any) => item.id === movie.id
+    );
 
-    if (isItemInLocalStorage) {
-      // Remove movie from local storage if it exists
-      existingArray.splice(index, 1);
-      localStorage.setItem('myArray2', JSON.stringify(existingArray)); //TODO)
-      setArray(existingArray);
+    //* Get TierList from localStorage and check if movie is in it
+    const localStorageTierList = localStorage.getItem('localStorageTierList');
+    const existingTierList = localStorageTierList
+      ? JSON.parse(localStorageTierList)
+      : [];
+    const isItemInTierListLocalStorage = Object.values(existingTierList).some(
+      (array: any) => array.includes(movie)
+    );
+    //create empty array to store array within TierListObject that contains the movie
+    let tempTierListArray;
+    // Get the index of
+    const tierListIndex = Object.values(existingTierList).map((array: any) => {
+      if (array.includes(movie)) {
+        tempTierListArray = array;
+        array.findIndex((item: any) => item.id === movie.id);
+      }
+    });
+
+    if (isItemInWatchListLocalStorage) {
+      //* Remove movie if in WatchList in local storage already
+      existingWatchListArray.splice(watchListIndex, 1);
+      localStorage.setItem(
+        //!------------------- HERE ------------------------
+        'localStorageWatchList',
+        JSON.stringify(existingWatchListArray)
+      );
+      setWatchListArray(existingWatchListArray);
     } else {
-      // add item to local storage if not already in
-      existingArray.push(movie);
-      localStorage.setItem('myArray2', JSON.stringify(existingArray)); //TODO
-      console.log('ExistingArray', existingArray);
-      setArray(existingArray);
+      existingWatchListArray.push(movie);
+      localStorage.setItem(
+        'localStorageWatchList',
+        JSON.stringify(existingWatchListArray)
+      );
+      console.log('existingWatchListArray: ', existingWatchListArray);
+      setWatchListArray(existingWatchListArray);
+    }
+
+    if (isItemInTierListLocalStorage) {
+      //@ts-ignore --- TIER LIST ARRAY POSSIBLY UNDEFINED
+      tempTierListArray.splice(tierListIndex, 1);
+      //TODO setTierListObject()
     }
   };
 
@@ -156,7 +231,7 @@ function MoreMovies({ params: { page } }: pageProps) {
             >
               <button
                 className={`absolute top-2 right-3 z-20 w-7 rounded-full border-black border-2 box-border text-black ${
-                  array.some((item: any) => item.id === movie.id)
+                  watchListArray.some((item: any) => item.id === movie.id)
                     ? 'bg-red-600'
                     : 'bg-green-600'
                 }`}
