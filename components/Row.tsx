@@ -31,13 +31,23 @@ const Row = ({ id, row, bgColor, textColor, color }: propTypes) => {
     console.log(movieName, `dropped into ${row}`);
     const updatedTierListObject = { ...tierListObject };
 
+    const isItemInTierListState = Object.values(tierListObject).some(
+      (array: any) => array.includes(movie)
+    );
+    //@ts-ignore
+    const isItemInTierListStateArray = tierListObject[row].some(
+      (item: any) => item.id === movie.id
+    );
+    // const isItemInTierListState = tierListObject[row].includes(movie);
+
     setDragOver(false);
 
-    if (movie) {
+    if (movie && !isItemInTierListStateArray) {
+      //TODO Should not pass because item is in tierListObject after being initially dragged in
       //@ts-ignore
-      updatedTierListObject[row].push(movie); // Add the movie to the appropriate tier array
+      updatedTierListObject[row].push(movie); // Add the movie to the appropriate tier array //! Here is why it keeps pushing a movie
       setTierListObject(updatedTierListObject); // Update the context state
-      console.log(tierListObject);
+      console.log('tierListObject', tierListObject);
 
       //! Currently removes movie from WatchList only. Need logic for adding it to TierList.
       const localStorageWatchList = localStorage.getItem(
@@ -60,9 +70,7 @@ const Row = ({ id, row, bgColor, textColor, color }: propTypes) => {
       const isItemInTierListLocalStorage = Object.values(existingTierList).some(
         (array: any) => array.includes(movie)
       );
-      const isItemInTierListState = Object.values(tierListObject).some(
-        (array: any) => !array.includes(movie)
-      );
+
       //create empty array to store array within TierListObject that contains the movie
       let tempTierListArray;
       // Get the index of
@@ -75,7 +83,7 @@ const Row = ({ id, row, bgColor, textColor, color }: propTypes) => {
         }
       );
 
-      if (isItemInWatchListLocalStorage && isItemInTierListState) {
+      if (isItemInWatchListLocalStorage && !isItemInTierListState) {
         //* Remove movie if in WatchList in local storage already
         existingWatchListArray.splice(watchListIndex, 1);
         localStorage.setItem(

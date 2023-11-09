@@ -62,7 +62,7 @@ const MoviesProvider = ({ children }: { children: ReactNode }) => {
       //@ts-ignore
       JSON.parse(localStorage.getItem('localStorageWatchList')) || [];
     setWatchListArray(parsedLocalWatchListArray);
-    console.log('watchListArray: ', watchListArray);
+    console.log('watchListArray: ', parsedLocalWatchListArray);
     //@ts-ignore
     const parsedLocalTierListObject =
       //@ts-ignore
