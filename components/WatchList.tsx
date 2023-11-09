@@ -18,11 +18,26 @@ function WatchList() {
   //   console.log('THIS IS STATE: ', parsedArray);
   // }, [setArray]);
 
+  function handleDrop(e: React.DragEvent) {
+    const movieName = e.dataTransfer.getData('title') as string;
+    console.log(`${movieName} dropped into WatchList`);
+  }
+
+  function handleDragOver(e: React.DragEvent) {
+    e.preventDefault();
+    console.log('dragging over Watchlist');
+  }
+
   return (
-    <div className='mt-2 border-gray-200 border-2 rounded-3xl'>
+    <div
+      className='mt-2 border-gray-200 border-2 rounded-3xl'
+      onDrop={handleDrop}
+      onDragOver={handleDragOver}
+    >
       <h1 className='text-3xl p-5 font-montserrat font-semibold underline underline-offset-4 pb-2'>
         Your Movies:
       </h1>
+      {/** Make this div have onDragOver, onDragLeave, and onDrop functions */}
       <div className='flex flex-wrap justify-center'>
         {watchListArray.map((movie: any, i: number) => {
           return (
@@ -31,6 +46,7 @@ function WatchList() {
                 title={movie.title}
                 poster={movie.poster_path}
                 id={movie.title}
+                movie={movie}
               />
             </div>
           );

@@ -1,20 +1,49 @@
+'use client';
+
 import { Tooltip } from '@mantine/core';
 import Image from 'next/image';
+import { useState } from 'react';
 
 interface propTypes {
   title: string;
   poster: string;
   id: string;
+  movie: any;
 }
 
-const LocalMovie = ({ title, poster, id }: propTypes) => {
+const LocalMovie = ({ title, poster, id, movie }: propTypes) => {
+  const [clickScale, setClickScale] = useState(false);
+
   function handleOnDrag(e: React.DragEvent, title: string) {
     e.dataTransfer.setData('title', title);
+    e.dataTransfer.setData('movie', JSON.stringify(movie));
+    setClickScale(true);
+  }
+
+  function handleDragEnd() {
+    setClickScale(false);
+  }
+
+  function handleMouseDown() {
+    setClickScale(true);
+  }
+
+  function handleMouseUp() {
+    setClickScale(false);
   }
 
   return (
-    <div draggable onDragStart={(e) => handleOnDrag(e, id)}>
-      <Tooltip label={title}>
+    <div
+      draggable
+      onDragStart={(e) => handleOnDrag(e, id)}
+      onDragEnd={handleDragEnd}
+      onMouseDown={handleMouseDown}
+      onMouseUp={handleMouseUp}
+      className={`${
+        clickScale ? 'scale-110' : ''
+      } transition-transform hover:cursor-pointer hover:drop-shadow-glow`}
+    >
+      <Tooltip label={title} withArrow arrowSize={10}>
         {poster !== null ? (
           <Image
             alt={title}

@@ -27,8 +27,17 @@ const Row = ({ id, row, bgColor, textColor, color }: propTypes) => {
 
   function handleDrop(e: React.DragEvent) {
     const movieName = e.dataTransfer.getData('title') as string;
+    const movie = JSON.parse(e.dataTransfer.getData('movie'));
     console.log(movieName, `dropped into ${row}`);
+    const updatedTierListObject = { ...tierListObject };
+
     setDragOver(false);
+
+    if (movie) {
+      //@ts-ignore
+      updatedTierListObject[row].push(movie); // Add the movie to the appropriate tier array
+      setTierListObject(updatedTierListObject); // Update the context state
+    }
   }
 
   function handleDragOver(e: React.DragEvent) {
@@ -38,9 +47,10 @@ const Row = ({ id, row, bgColor, textColor, color }: propTypes) => {
   }
 
   function handleDragLeave(e: React.DragEvent) {
+    e.preventDefault();
     setDragOver(false);
   }
-
+  // Make it so that when a movie is dropped into the row, it has a border that is the color of the row for 500ms
   return (
     <div
       onDrop={handleDrop}
@@ -56,15 +66,15 @@ const Row = ({ id, row, bgColor, textColor, color }: propTypes) => {
             {row.toUpperCase()}
           </div>
           <Divider orientation='vertical' size='md' />
-
           {/**@ts-ignore */}
           {tierListObject[row].map((movie: any, i: number) => {
             return (
-              <div key={i} className='hover:scale-105 transition-transform'>
+              <div key={i} className={`hover:scale-105 transition-transform`}>
                 <LocalMovie
                   title={movie.title}
                   poster={movie.poster_path}
                   id={movie.title}
+                  movie={movie}
                 />
               </div>
             );
