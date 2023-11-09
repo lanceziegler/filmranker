@@ -37,6 +37,7 @@ const Row = ({ id, row, bgColor, textColor, color }: propTypes) => {
       //@ts-ignore
       updatedTierListObject[row].push(movie); // Add the movie to the appropriate tier array
       setTierListObject(updatedTierListObject); // Update the context state
+      console.log(tierListObject);
 
       //! Currently removes movie from WatchList only. Need logic for adding it to TierList.
       const localStorageWatchList = localStorage.getItem(
@@ -52,7 +53,29 @@ const Row = ({ id, row, bgColor, textColor, color }: propTypes) => {
         (item: any) => item.id === movie.id
       );
 
-      if (isItemInWatchListLocalStorage) {
+      const localStorageTierList = localStorage.getItem('localStorageTierList');
+      const existingTierList = localStorageTierList
+        ? JSON.parse(localStorageTierList)
+        : [];
+      const isItemInTierListLocalStorage = Object.values(existingTierList).some(
+        (array: any) => array.includes(movie)
+      );
+      const isItemInTierListState = Object.values(tierListObject).some(
+        (array: any) => !array.includes(movie)
+      );
+      //create empty array to store array within TierListObject that contains the movie
+      let tempTierListArray;
+      // Get the index of
+      const tierListIndex = Object.values(existingTierList).map(
+        (array: any) => {
+          if (array.includes(movie)) {
+            tempTierListArray = array;
+            array.findIndex((item: any) => item.id === movie.id);
+          }
+        }
+      );
+
+      if (isItemInWatchListLocalStorage && isItemInTierListState) {
         //* Remove movie if in WatchList in local storage already
         existingWatchListArray.splice(watchListIndex, 1);
         localStorage.setItem(
@@ -60,15 +83,16 @@ const Row = ({ id, row, bgColor, textColor, color }: propTypes) => {
           JSON.stringify(existingWatchListArray)
         );
         setWatchListArray(existingWatchListArray);
-      } else {
-        existingWatchListArray.push(movie);
-        localStorage.setItem(
-          'localStorageWatchList',
-          JSON.stringify(existingWatchListArray)
-        );
-        console.log('existingWatchListArray: ', existingWatchListArray);
-        setWatchListArray(existingWatchListArray);
       }
+      // } else {
+      //   existingWatchListArray.push(movie);
+      //   localStorage.setItem(
+      //     'localStorageWatchList',
+      //     JSON.stringify(existingWatchListArray)
+      //   );
+      //   console.log('existingWatchListArray: ', existingWatchListArray);
+      //   setWatchListArray(existingWatchListArray);
+      // }
     }
   }
 
