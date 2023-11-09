@@ -9,6 +9,7 @@ function WatchList() {
   // const [array, setArray] = useState<any>([]);
   const { array, setArray, watchListArray, setWatchListArray } =
     useContext(SavedMoviesContext)!;
+  const watchListArrayCopy = [...watchListArray];
 
   // useEffect(() => {
   //   const parsedArray =
@@ -19,8 +20,14 @@ function WatchList() {
   // }, [setArray]);
 
   function handleDrop(e: React.DragEvent) {
-    const movieName = e.dataTransfer.getData('title') as string;
-    console.log(`${movieName} dropped into WatchList`);
+    const movie = JSON.parse(e.dataTransfer.getData('movie'));
+    const movieId = movie.id;
+
+    if (!watchListArrayCopy.some((m: any) => m.id === movieId)) {
+      watchListArrayCopy.push(movie);
+      setWatchListArray(watchListArrayCopy);
+      console.log(`${movie.title} dropped into WatchList`);
+    }
   }
 
   function handleDragOver(e: React.DragEvent) {
