@@ -3,12 +3,19 @@ import { useState, useEffect } from 'react';
 import LocalMovie from './LocalMovie';
 import { SavedMoviesContext } from '@/app/libs/MoviesProvider';
 import { useContext } from 'react';
+import Trash from './Trash';
 
 // DnDKit STAGGER IMPORT
 function WatchList() {
   // const [array, setArray] = useState<any>([]);
-  const { array, setArray, watchListArray, setWatchListArray } =
-    useContext(SavedMoviesContext)!;
+  const {
+    array,
+    setArray,
+    watchListArray,
+    setWatchListArray,
+    tierListObject,
+    setTierListObject,
+  } = useContext(SavedMoviesContext)!;
   const watchListArrayCopy = [...watchListArray];
 
   // useEffect(() => {
@@ -27,6 +34,7 @@ function WatchList() {
       watchListArrayCopy.push(movie);
       setWatchListArray(watchListArrayCopy);
       console.log(`${movie.title} dropped into WatchList`);
+      //! Need to set localstorage
     }
   }
 
@@ -37,7 +45,7 @@ function WatchList() {
 
   return (
     <div
-      className='mt-2 border-gray-200 border-2 rounded-3xl'
+      className='mt-2 border-gray-200 border-2 rounded-3xl relative'
       onDrop={handleDrop}
       onDragOver={handleDragOver}
     >

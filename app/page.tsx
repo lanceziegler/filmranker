@@ -1,6 +1,7 @@
 import TierList from '@/components/TierList';
 import WatchList from '@/components/WatchList';
 import Nav from '@/components/Nav';
+import Trash from '@/components/Trash';
 
 export default function HomePage() {
   return (
@@ -14,6 +15,7 @@ export default function HomePage() {
           <div className='flex flex-1 justify-center'>
             <WatchList />
           </div>
+          <Trash />
         </div>
       </main>
     </>
