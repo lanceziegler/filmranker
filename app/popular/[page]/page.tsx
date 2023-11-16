@@ -242,7 +242,7 @@ function MoreMovies({ params: { page } }: pageProps) {
           >
             <Tooltip
               label={`${
-                array.some((item: any) => item.id === movie.id)
+                watchListArray.some((item: any) => item.id === movie.id)
                   ? 'Remove from Library'
                   : 'Add to Library'
               }`}
@@ -255,7 +255,9 @@ function MoreMovies({ params: { page } }: pageProps) {
                 }`}
                 onClick={() => handleClickLocal(movie)}
               >
-                {array.some((item: any) => item.id === movie.id) ? '-' : '+'}
+                {watchListArray.some((item: any) => item.id === movie.id)
+                  ? '-'
+                  : '+'}
               </button>
             </Tooltip>
 
