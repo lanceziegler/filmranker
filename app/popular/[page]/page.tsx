@@ -8,7 +8,8 @@ import { IconLoaderQuarter } from '@tabler/icons-react';
 import { Button, Tooltip } from '@mantine/core';
 import { useContext } from 'react';
 import { SavedMoviesContext } from '@/app/libs/MoviesProvider';
-import { IconChevronUp } from '@tabler/icons-react';
+import { IconChevronUp, IconLoader } from '@tabler/icons-react';
+import { Skeleton } from '@mantine/core';
 
 interface pageProps {
   params: { page: number };
@@ -29,6 +30,7 @@ function MoreMovies({ params: { page } }: pageProps) {
     tierListObject,
     setTierListObject,
   } = useContext(SavedMoviesContext)!;
+  const [imageLoaded, setImageLoaded] = useState(false);
 
   const loadMoreMovies = useCallback(async () => {
     if (!isLoading) {
@@ -53,13 +55,12 @@ function MoreMovies({ params: { page } }: pageProps) {
     loadMoreMovies();
   }, [loadMoreMovies]); //movies
 
-  //* Need conditional check or else everything loads at once
+  //! Initial movies ************************
   useEffect(() => {
     // Load movies on initial render
     const loadInitialMovies = async () => {
       try {
         const pageData = await getMoviesPage(1);
-
         setMovies(pageData.results);
       } catch (error) {
         console.error('Error fetching initial movies:', error);
@@ -202,6 +203,12 @@ function MoreMovies({ params: { page } }: pageProps) {
     document.documentElement.scrollTop = 0;
   };
 
+  //   <div className='flex min-h-screen items-center justify-center content-center'>
+  //   <IconLoader color='white' />{' '}
+  // </div>
+
+  const arbitraryArray = new Array(20).fill(null);
+
   return (
     <div>
       <Nav btnLink='/' text='Home' />
@@ -216,6 +223,17 @@ function MoreMovies({ params: { page } }: pageProps) {
             </button>
           </Tooltip>
         ) : null}
+        {!imageLoaded && (
+          <div className='flex flex-wrap content-center justify-center items-center gap-4'>
+            {arbitraryArray.map((_, index) => {
+              return (
+                <div key={index}>
+                  <Skeleton height={425} width='230px' />
+                </div>
+              );
+            })}
+          </div>
+        )}
 
         {movies.map((movie: any, i: number) => (
           <div
@@ -240,6 +258,7 @@ function MoreMovies({ params: { page } }: pageProps) {
                 {array.some((item: any) => item.id === movie.id) ? '-' : '+'}
               </button>
             </Tooltip>
+
             <Image
               alt={movie.title}
               src={`https://image.tmdb.org/t/p/w780${movie.poster_path}`}
@@ -251,8 +270,10 @@ function MoreMovies({ params: { page } }: pageProps) {
                 height: 'auto',
                 boxSizing: 'border-box',
               }}
-              placeholder='blur'
-              blurDataURL='./images/noImage.jpeg'
+              priority
+              placeholder='empty'
+              blurDataURL='https://i.natgeofe.com/n/548467d8-c5f1-4551-9f58-6817a8d2c45e/NationalGeographic_2572187_square.jpg'
+              onLoad={() => setImageLoaded(true)}
             />
             <div className='movie-info flex text-center m-auto'>
               <h3 className='font-inter tracking-wider'>{movie.title}</h3>
