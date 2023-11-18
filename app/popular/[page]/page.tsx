@@ -31,6 +31,30 @@ function MoreMovies({ params: { page } }: pageProps) {
     setTierListObject,
   } = useContext(SavedMoviesContext)!;
   const [imageLoaded, setImageLoaded] = useState(false);
+  const handleScrollTop = () => {
+    document.body.scrollTop = 0;
+    document.documentElement.scrollTop = 0;
+  };
+  const shimmer = (w: number, h: number) => `
+<svg width="${w}" height="${h}" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+  <defs>
+    <linearGradient id="g">
+      <stop stop-color="#333" offset="20%" />
+      <stop stop-color="#222" offset="50%" />
+      <stop stop-color="#333" offset="70%" />
+    </linearGradient>
+  </defs>
+  <rect width="${w}" height="${h}" fill="#333" />
+  <rect id="r" width="${w}" height="${h}" fill="url(#g)" />
+  <animate xlink:href="#r" attributeName="x" from="-${w}" to="${w}" dur="1s" repeatCount="indefinite"  />
+</svg>`;
+
+  const toBase64 = (str: string) =>
+    typeof window === 'undefined'
+      ? Buffer.from(str).toString('base64')
+      : window.btoa(str);
+
+  const arbitraryArray = new Array(20).fill(null);
 
   const loadMoreMovies = useCallback(async () => {
     if (!isLoading) {
@@ -71,57 +95,7 @@ function MoreMovies({ params: { page } }: pageProps) {
     loadInitialMovies();
   }, []);
 
-  // useEffect(() => {
-  //   //@ts-ignore
-  //   const parsedArray = JSON.parse(localStorage.getItem('myArray1')) || [];
-  //   setArray(parsedArray);
-  //   console.log('THIS IS STATE: ', parsedArray);
-  //   //! Added setArray dependency
-  // }, [setArray]);
-
-  //TODO Turn into importable function
-  //* Checks if movie is already in localStorage and doesn't allow it to be added if so
-  // const handleClickLocal = (movie: any) => {
-  //   //@ts-ignore
-  //   const existingArray = JSON.parse(localStorage.getItem('myArray2')) || []; //TODO Alter these localStorage arrays to start fresh
-  //   const isItemInLocalStorage = existingArray.some(
-  //     (item: any) => item.id === movie.id
-  //   );
-  //   const index = existingArray.findIndex((item: any) => item.id === movie.id);
-
-  //   if (isItemInLocalStorage) {
-  //     // Remove movie from local storage if it exists
-  //     existingArray.splice(index, 1);
-  //     localStorage.setItem('myArray2', JSON.stringify(existingArray)); //TODO)
-  //     setArray(existingArray);
-  //   } else {
-  //     // add item to local storage if not already in
-  //     existingArray.push(movie);
-  //     localStorage.setItem('myArray2', JSON.stringify(existingArray)); //TODO
-  //     console.log('ExistingArray', existingArray);
-  //     setArray(existingArray);
-  //   }
-  // };
-
   const handleClickLocal = (movie: any) => {
-    //@ts-ignore
-    // const existingArray = JSON.parse(localStorage.getItem('myArray2')) || []; //TODO Alter these localStorage arrays to start fresh
-    // const isItemInLocalStorage = existingArray.some(
-    //   (item: any) => item.id === movie.id
-    // );
-    // const index = existingArray.findIndex((item: any) => item.id === movie.id);
-
-    // if (isItemInLocalStorage) {
-    //   existingArray.splice(index, 1);
-    //   localStorage.setItem('myArray2', JSON.stringify(existingArray)); //TODO
-    //   setArray(existingArray);
-    // } else {
-    //   existingArray.push(movie);
-    //   localStorage.setItem('myArray2', JSON.stringify(existingArray)); //TODO
-    //   console.log('ExistingArray', existingArray);
-    //   setArray(existingArray);
-    // }
-
     //* Get WatchList from localStorage and check if movie is in it
     const localStorageWatchList = localStorage.getItem('localStorageWatchList');
     const existingWatchListArray = localStorageWatchList
@@ -198,17 +172,6 @@ function MoreMovies({ params: { page } }: pageProps) {
     };
   }, []);
 
-  const handleScrollTop = () => {
-    document.body.scrollTop = 0;
-    document.documentElement.scrollTop = 0;
-  };
-
-  //   <div className='flex min-h-screen items-center justify-center content-center'>
-  //   <IconLoader color='white' />{' '}
-  // </div>
-
-  const arbitraryArray = new Array(20).fill(null);
-
   return (
     <div>
       <Nav btnLink='/' text='Home' />
@@ -238,7 +201,7 @@ function MoreMovies({ params: { page } }: pageProps) {
         {movies.map((movie: any, i: number) => (
           <div
             key={i}
-            className='movie flex flex-col hover:drop-shadow-glow hover:z-50 hover:scale-105 box-border transition-all'
+            className='movie flex flex-col hover:drop-shadow-glow hover:z-50 hover:scale-105 box-border transition-all fadeIn'
           >
             <Tooltip
               label={`${
@@ -274,8 +237,11 @@ function MoreMovies({ params: { page } }: pageProps) {
               }}
               priority
               placeholder='empty'
-              blurDataURL='https://i.natgeofe.com/n/548467d8-c5f1-4551-9f58-6817a8d2c45e/NationalGeographic_2572187_square.jpg'
+              blurDataURL={`data:image/svg+xml;base64,${toBase64(
+                shimmer(700, 475)
+              )}`}
               onLoad={() => setImageLoaded(true)}
+              // className='fadeIn'
             />
             <div className='movie-info flex text-center m-auto'>
               <h3 className='font-inter tracking-wider'>{movie.title}</h3>

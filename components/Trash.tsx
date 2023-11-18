@@ -1,10 +1,19 @@
 'use client';
-import { useState } from 'react';
+import { useState, useContext } from 'react';
 import { IconTrash } from '@tabler/icons-react';
 import { Tooltip } from '@mantine/core';
+import { SavedMoviesContext } from '@/app/libs/MoviesProvider';
 
 const Trash = () => {
   const [toolTip, setToolTip] = useState(false);
+  const {
+    array,
+    setArray,
+    watchListArray,
+    setWatchListArray,
+    tierListObject,
+    setTierListObject,
+  } = useContext(SavedMoviesContext)!;
 
   function handledrop(e: React.DragEvent) {}
 

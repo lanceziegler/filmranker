@@ -45,7 +45,7 @@ function WatchList() {
 
   return (
     <div
-      className='mt-2 border-gray-200 border-2 rounded-3xl relative'
+      className='mt-2 border-gray-200 border-2 rounded-3xl relative w-3/4'
       onDrop={handleDrop}
       onDragOver={handleDragOver}
     >

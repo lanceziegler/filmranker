@@ -38,7 +38,11 @@
   margin-left: 10px;
   margin-right: 10px;
   margin-top: 10px;
-  animation: fadeIn 2s cubic-bezier(0.4, 0.01, 0.4, 0.04);
+  /* animation: fadeIn 1s cubic-bezier(0.4, 0.01, 0.4, 0.04); */
+}
+
+.fadeIn {
+  animation: fadeIn 0.3s cubic-bezier(0.4, 0.01, 0.4, 0.04);
 }
 
 .movie {

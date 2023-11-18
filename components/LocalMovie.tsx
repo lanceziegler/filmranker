@@ -41,7 +41,7 @@ const LocalMovie = ({ title, poster, id, movie }: propTypes) => {
       onMouseUp={handleMouseUp}
       className={`${
         clickScale ? 'scale-110' : ''
-      } transition-transform hover:cursor-pointer`}
+      } transition-transform hover:cursor-pointer fadeIn`}
     >
       <Tooltip label={title} withArrow arrowSize={10}>
         {poster !== null ? (

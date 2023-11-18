@@ -29,7 +29,7 @@ function TierList() {
   ];
 
   return (
-    <div className='mt-2 rounded-3xl flex flex-col border-gray-200 border-2 w-full'>
+    <div className='mt-2 ml-4 rounded-3xl flex flex-col border-gray-200 border-2 w-full'>
       <h1 className='text-3xl p-5 font-montserrat font-semibold underline underline-offset-4 pb-2'>
         Tier List:
       </h1>
