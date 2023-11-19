@@ -96,6 +96,7 @@ const Row = ({ id, row, bgColor, textColor, color }: propTypes) => {
         .filter((entry) => entry !== undefined);
 
       console.log('TIER LIST INDEXES:', tierListIndexes);
+      console.log('SOURCE: ' + source);
 
       if (isItemInWatchListLocalStorage && !isItemInTierListState) {
         //* Remove movie if in WatchList in local storage already

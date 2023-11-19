@@ -53,6 +53,7 @@ function WatchList() {
       .filter((entry) => entry !== undefined);
 
     console.log('TIER LIST INDEXES:', tierListIndexes);
+    console.log('SOURCE: ' + source);
   }
 
   function handleDragOver(e: React.DragEvent) {
