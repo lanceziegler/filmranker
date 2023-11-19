@@ -72,6 +72,8 @@ const Row = ({ id, row, bgColor, textColor, color }: propTypes) => {
       const isItemInWatchListLocalStorage = existingWatchListArray.some(
         (item: any) => item.id === movie.id
       );
+
+      //******* INDEX FOR WATCHLIST  ********************************************************/
       const watchListIndex = existingWatchListArray.findIndex(
         (item: any) => item.id === movie.id
       );
@@ -84,17 +86,15 @@ const Row = ({ id, row, bgColor, textColor, color }: propTypes) => {
         (array: any) => array.includes(movie)
       );
 
-      //create empty array to store array within TierListObject that contains the movie
-      let tempTierListArray;
-      // Get the index of
-      const tierListIndex = Object.values(existingTierList).map(
-        (array: any) => {
-          if (array.includes(movie)) {
-            tempTierListArray = array;
-            array.findIndex((item: any) => item.id === movie.id);
-          }
-        }
-      );
+      //******* TIER LIST INDEX OF JUST-DROPPED MOVIE ****************************************/
+      const tierListIndexes = Object.entries(tierListObject)
+        .map(([key, array]: [string, any]) => {
+          const index = array.findIndex((item: any) => item.id === movie.id);
+          return index !== -1 ? { key, index } : undefined;
+        })
+        .filter((entry) => entry !== undefined);
+
+      console.log('TIER LIST INDEXES:', tierListIndexes);
 
       if (isItemInWatchListLocalStorage && !isItemInTierListState) {
         //* Remove movie if in WatchList in local storage already
@@ -142,7 +142,7 @@ const Row = ({ id, row, bgColor, textColor, color }: propTypes) => {
           <div className={`pl-4 font-montserrat text-xl font-semibold flex`}>
             {row.toUpperCase()}
           </div>
-          <Divider orientation='vertical' size='md'/>
+          <Divider orientation='vertical' size='md' />
           {/**@ts-ignore */}
           {tierListObject[row].map((movie: any, i: number) => {
             return (

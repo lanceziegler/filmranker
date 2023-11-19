@@ -36,6 +36,22 @@ function WatchList() {
       console.log(`${movie.title} dropped into WatchList`);
       //! Need to set localstorage
     }
+
+    //! Remove movie from TierListObject and set localstorage (localStorageTierList) to altered tierListObject
+    // Change so it's finding the tierListIndex for the relevant array... need to search entire object
+    /*
+       const watchListIndex = existingWatchListArray.findIndex(
+        (item: any) => item.id === movie.id
+      );
+    */
+    const tierListIndexes = Object.entries(tierListObject)
+      .map(([key, array]: [string, any]) => {
+        const index = array.findIndex((item: any) => item.id === movie.id);
+        return index !== -1 ? { key, index } : undefined;
+      })
+      .filter((entry) => entry !== undefined);
+
+    console.log('TIER LIST INDEXES:', tierListIndexes);
   }
 
   function handleDragOver(e: React.DragEvent) {
