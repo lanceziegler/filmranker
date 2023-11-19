@@ -14,6 +14,10 @@ interface propTypes {
 
 const LocalMovie = ({ title, poster, id, movie, source }: propTypes) => {
   const [clickScale, setClickScale] = useState(false);
+  const [lastDragged, setLastDragged] = useState<{
+    tier: string;
+    index: number;
+  } | null>(null);
 
   function handleOnDrag(e: React.DragEvent, title: string) {
     e.dataTransfer.setData('title', title);

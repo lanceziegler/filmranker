@@ -44,26 +44,7 @@ const Row = ({ id, row, bgColor, textColor, color }: propTypes) => {
     setDragOver(false);
 
     if (movie) {
-      //TODO Should not pass because item is in tierListObject after being initially dragged in
-      //@ts-ignore
-      // updatedTierListObject[row].push(movie); // Add the movie to the appropriate tier array //! Here is why it keeps pushing a movie
-      // setTierListObject(updatedTierListObject); // Update the context state
-      // console.log('tierListObject', tierListObject);
-      let movieAlreadyInTierList = false;
-      Object.keys(tierListObject).forEach((key) => {
-        //@ts-ignore
-        if (tierListObject[key].some((item: any) => item.id === movie.id)) {
-          movieAlreadyInTierList = true;
-        }
-      });
-      if (!movieAlreadyInTierList || !isItemInTierListStateArray) {
-        //@ts-ignore
-        //TODO need to find the index of the current
-        updatedTierListObject[row].push(movie);
-        setTierListObject(updatedTierListObject);
-        console.log('tierListObject', tierListObject);
-      }
-      //! Currently removes movie from WatchList only. Need logic for adding it to TierList.
+      //******* LOGIC FOR WATCHLIST  *******************************************************WatchList/
       const localStorageWatchList = localStorage.getItem(
         'localStorageWatchList'
       );
@@ -74,10 +55,35 @@ const Row = ({ id, row, bgColor, textColor, color }: propTypes) => {
         (item: any) => item.id === movie.id
       );
 
-      //******* INDEX FOR WATCHLIST  ********************************************************/
       const watchListIndex = existingWatchListArray.findIndex(
         (item: any) => item.id === movie.id
       );
+
+      if (isItemInWatchListLocalStorage && !isItemInTierListState) {
+        //* Remove movie if in WatchList local storage already
+        existingWatchListArray.splice(watchListIndex, 1);
+        localStorage.setItem(
+          'localStorageWatchList',
+          JSON.stringify(existingWatchListArray)
+        );
+        setWatchListArray(existingWatchListArray);
+      }
+
+      //******* LOGIC FOR TIERLIST **********************************************************TierList/
+      // let movieAlreadyInTierList = false;
+      // Object.keys(tierListObject).forEach((key) => {
+      //   //@ts-ignore
+      //   if (tierListObject[key].some((item: any) => item.id === movie.id)) {
+      //     movieAlreadyInTierList = true;
+      //   }
+      // });
+      if (!isItemInTierListStateArray) {
+        //@ts-ignore
+        //TODO need to find the index of the current
+        updatedTierListObject[row].push(movie);
+        setTierListObject(updatedTierListObject);
+        console.log('tierListObject', tierListObject);
+      }
 
       const localStorageTierList = localStorage.getItem('localStorageTierList');
       const existingTierList = localStorageTierList
@@ -87,35 +93,20 @@ const Row = ({ id, row, bgColor, textColor, color }: propTypes) => {
         (array: any) => array.includes(movie)
       );
 
-      //******* TIER LIST INDEX OF JUST-DROPPED MOVIE ****************************************/
       const tierListIndexes = Object.entries(tierListObject)
-        .map(([key, array]: [string, any]) => {
+        .map(([tier, array]: [string, any]) => {
           const index = array.findIndex((item: any) => item.id === movie.id);
-          return index !== -1 ? { key, index } : undefined;
+          return index !== -1 ? { tier, index } : undefined;
         })
         .filter((entry) => entry !== undefined);
 
       console.log('TIER LIST INDEXES:', tierListIndexes);
       console.log('SOURCE: ' + source);
 
-      if (isItemInWatchListLocalStorage && !isItemInTierListState) {
-        //* Remove movie if in WatchList in local storage already
-        existingWatchListArray.splice(watchListIndex, 1);
-        localStorage.setItem(
-          'localStorageWatchList',
-          JSON.stringify(existingWatchListArray)
-        );
-        setWatchListArray(existingWatchListArray);
+      if (source === 'TierList') {
+        console.log('Item Dragged from TierList in TierList');
+        // Figure out where item is being dragged from (tierListIndexes)
       }
-      // } else {
-      //   existingWatchListArray.push(movie);
-      //   localStorage.setItem(
-      //     'localStorageWatchList',
-      //     JSON.stringify(existingWatchListArray)
-      //   );
-      //   console.log('existingWatchListArray: ', existingWatchListArray);
-      //   setWatchListArray(existingWatchListArray);
-      // }
     }
   }
 

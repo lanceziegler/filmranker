@@ -30,6 +30,8 @@ function WatchList() {
     const movie = JSON.parse(e.dataTransfer.getData('movie'));
     const movieId = movie.id;
     const source = e.dataTransfer.getData('source');
+    const updatedTierListObject = { ...tierListObject };
+
 
     if (!watchListArrayCopy.some((m: any) => m.id === movieId)) {
       watchListArrayCopy.push(movie);
@@ -38,19 +40,14 @@ function WatchList() {
       //! Need to set localstorage
     }
 
-    //! Remove movie from TierListObject and set localstorage (localStorageTierList) to altered tierListObject
-    // Change so it's finding the tierListIndex for the relevant array... need to search entire object
-    /*
-       const watchListIndex = existingWatchListArray.findIndex(
-        (item: any) => item.id === movie.id
-      );
-    */
     const tierListIndexes = Object.entries(tierListObject)
-      .map(([key, array]: [string, any]) => {
+      .map(([tier, array]: [string, any]) => {
         const index = array.findIndex((item: any) => item.id === movie.id);
-        return index !== -1 ? { key, index } : undefined;
+        return index !== -1 ? { tier, index } : undefined;
       })
       .filter((entry) => entry !== undefined);
+
+      // use tierList indexes resuls
 
     console.log('TIER LIST INDEXES:', tierListIndexes);
     console.log('SOURCE: ' + source);
