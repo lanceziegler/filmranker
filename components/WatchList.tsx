@@ -29,6 +29,7 @@ function WatchList() {
   function handleDrop(e: React.DragEvent) {
     const movie = JSON.parse(e.dataTransfer.getData('movie'));
     const movieId = movie.id;
+    const source = e.dataTransfer.getData('source');
 
     if (!watchListArrayCopy.some((m: any) => m.id === movieId)) {
       watchListArrayCopy.push(movie);
@@ -78,6 +79,7 @@ function WatchList() {
                 poster={movie.poster_path}
                 id={movie.title}
                 movie={movie}
+                source='WatchList'
               />
             </div>
           );

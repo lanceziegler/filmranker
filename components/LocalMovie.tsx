@@ -9,14 +9,16 @@ interface propTypes {
   poster: string;
   id: string;
   movie: any;
+  source: 'WatchList' | 'TierList';
 }
 
-const LocalMovie = ({ title, poster, id, movie }: propTypes) => {
+const LocalMovie = ({ title, poster, id, movie, source }: propTypes) => {
   const [clickScale, setClickScale] = useState(false);
 
   function handleOnDrag(e: React.DragEvent, title: string) {
     e.dataTransfer.setData('title', title);
     e.dataTransfer.setData('movie', JSON.stringify(movie));
+    e.dataTransfer.setData('source', source);
     setClickScale(true);
   }
 

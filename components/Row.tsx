@@ -29,6 +29,7 @@ const Row = ({ id, row, bgColor, textColor, color }: propTypes) => {
     const movieName = e.dataTransfer.getData('title') as string;
     const movie = JSON.parse(e.dataTransfer.getData('movie'));
     console.log(movieName, `dropped into ${row}`);
+    const source = e.dataTransfer.getData('source');
     const updatedTierListObject = { ...tierListObject };
 
     const isItemInTierListState = Object.values(tierListObject).some(
@@ -152,6 +153,7 @@ const Row = ({ id, row, bgColor, textColor, color }: propTypes) => {
                   poster={movie.poster_path}
                   id={movie.title}
                   movie={movie}
+                  source='TierList'
                 />
               </div>
             );
