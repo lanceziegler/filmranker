@@ -13,6 +13,7 @@ interface propTypes {
 }
 
 const LocalMovie = ({ title, poster, id, movie, source }: propTypes) => {
+  //test
   const [clickScale, setClickScale] = useState(false);
   const [lastDragged, setLastDragged] = useState<{
     tier: string;
