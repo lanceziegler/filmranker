@@ -26,43 +26,42 @@ function WatchList() {
   //   console.log('THIS IS STATE: ', parsedArray);
   // }, [setArray]);
 
-  function handleDrop(e: React.DragEvent) {
-    const movie = JSON.parse(e.dataTransfer.getData('movie'));
-    const movieId = movie.id;
-    const source = e.dataTransfer.getData('source');
-    const updatedTierListObject = { ...tierListObject };
+  // function handleDrop(e: React.DragEvent) {
+  //   const movie = JSON.parse(e.dataTransfer.getData('movie'));
+  //   const movieId = movie.id;
+  //   const source = e.dataTransfer.getData('source');
+  //   const updatedTierListObject = { ...tierListObject };
 
+  //   if (!watchListArrayCopy.some((m: any) => m.id === movieId)) {
+  //     watchListArrayCopy.push(movie);
+  //     setWatchListArray(watchListArrayCopy);
+  //     console.log(`${movie.title} dropped into WatchList`);
+  //     //! Need to set localstorage
+  //   }
 
-    if (!watchListArrayCopy.some((m: any) => m.id === movieId)) {
-      watchListArrayCopy.push(movie);
-      setWatchListArray(watchListArrayCopy);
-      console.log(`${movie.title} dropped into WatchList`);
-      //! Need to set localstorage
-    }
+  //   const tierListIndexes = Object.entries(tierListObject)
+  //     .map(([tier, array]: [string, any]) => {
+  //       const index = array.findIndex((item: any) => item.id === movie.id);
+  //       return index !== -1 ? { tier, index } : undefined;
+  //     })
+  //     .filter((entry) => entry !== undefined);
 
-    const tierListIndexes = Object.entries(tierListObject)
-      .map(([tier, array]: [string, any]) => {
-        const index = array.findIndex((item: any) => item.id === movie.id);
-        return index !== -1 ? { tier, index } : undefined;
-      })
-      .filter((entry) => entry !== undefined);
+  //   // use tierList indexes resuls
 
-      // use tierList indexes resuls
+  //   console.log('TIER LIST INDEXES:', tierListIndexes);
+  //   console.log('SOURCE: ' + source);
+  // }
 
-    console.log('TIER LIST INDEXES:', tierListIndexes);
-    console.log('SOURCE: ' + source);
-  }
-
-  function handleDragOver(e: React.DragEvent) {
-    e.preventDefault();
-    console.log('dragging over Watchlist');
-  }
+  // function handleDragOver(e: React.DragEvent) {
+  //   e.preventDefault();
+  //   console.log('dragging over Watchlist');
+  // }
 
   return (
     <div
       className='mt-2 border-gray-200 border-2 rounded-3xl relative w-3/4'
-      onDrop={handleDrop}
-      onDragOver={handleDragOver}
+      // onDrop={handleDrop}
+      // onDragOver={handleDragOver}
     >
       <h1 className='text-3xl p-5 font-montserrat font-semibold underline underline-offset-4 pb-2'>
         Your Movies:

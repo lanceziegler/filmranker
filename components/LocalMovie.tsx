@@ -14,41 +14,41 @@ interface propTypes {
 
 const LocalMovie = ({ title, poster, id, movie, source }: propTypes) => {
   //test
-  const [clickScale, setClickScale] = useState(false);
-  const [lastDragged, setLastDragged] = useState<{
-    tier: string;
-    index: number;
-  } | null>(null);
+  // const [clickScale, setClickScale] = useState(false);
+  // const [lastDragged, setLastDragged] = useState<{
+  //   tier: string;
+  //   index: number;
+  // } | null>(null);
 
-  function handleOnDrag(e: React.DragEvent, title: string) {
-    e.dataTransfer.setData('title', title);
-    e.dataTransfer.setData('movie', JSON.stringify(movie));
-    e.dataTransfer.setData('source', source);
-    setClickScale(true);
-  }
+  // function handleOnDrag(e: React.DragEvent, title: string) {
+  //   e.dataTransfer.setData('title', title);
+  //   e.dataTransfer.setData('movie', JSON.stringify(movie));
+  //   e.dataTransfer.setData('source', source);
+  //   setClickScale(true);
+  // }
 
-  function handleDragEnd() {
-    setClickScale(false);
-  }
+  // function handleDragEnd() {
+  //   setClickScale(false);
+  // }
 
-  function handleMouseDown() {
-    setClickScale(true);
-  }
+  // function handleMouseDown() {
+  //   setClickScale(true);
+  // }
 
-  function handleMouseUp() {
-    setClickScale(false);
-  }
+  // function handleMouseUp() {
+  //   setClickScale(false);
+  // }
 
   return (
     <div
-      draggable
-      onDragStart={(e) => handleOnDrag(e, id)}
-      onDragEnd={handleDragEnd}
-      onMouseDown={handleMouseDown}
-      onMouseUp={handleMouseUp}
-      className={`${
-        clickScale ? 'scale-110' : ''
-      } transition-transform hover:cursor-pointer fadeIn`}
+      // draggable
+      // onDragStart={(e) => handleOnDrag(e, id)}
+      // onDragEnd={handleDragEnd}
+      // onMouseDown={handleMouseDown}
+      // onMouseUp={handleMouseUp}
+      // className={`${
+      //   clickScale ? 'scale-110' : ''
+      // } transition-transform hover:cursor-pointer fadeIn`}
     >
       <Tooltip label={title} withArrow arrowSize={10}>
         {poster !== null ? (
