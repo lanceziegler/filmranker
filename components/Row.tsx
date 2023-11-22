@@ -4,9 +4,10 @@ import { Divider, Group } from '@mantine/core';
 import { useContext, useState } from 'react';
 import { SavedMoviesContext } from '@/app/libs/MoviesProvider';
 import LocalMovie from './LocalMovie';
+import { useDroppable } from '@dnd-kit/core';
 
 interface propTypes {
-  id: number;
+  id: string;
   row: string;
   bgColor: string;
   textColor: string;
@@ -14,6 +15,9 @@ interface propTypes {
 }
 
 const Row = ({ id, row, bgColor, textColor, color }: propTypes) => {
+  const { setNodeRef } = useDroppable({
+    id: id,
+  });
   const {
     array,
     setArray,
@@ -129,9 +133,8 @@ const Row = ({ id, row, bgColor, textColor, color }: propTypes) => {
       // className={`h-24 flex flex-col justify-center ${
       //   dragOver ? color : ''
       // } ${bgColor} ${textColor} hover:text-black`}
-      className={`h-24 flex flex-col justify-center ${
-        dragOver ? color : ''
-      } ${bgColor} ${textColor} hover:text-black`}
+      ref={setNodeRef}
+      className={`h-24 flex flex-col justify-center ${textColor}`}
     >
       <div>
         <Group>

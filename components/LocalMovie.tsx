@@ -3,7 +3,8 @@
 import { Tooltip } from '@mantine/core';
 import Image from 'next/image';
 import { useState } from 'react';
-
+import { useDraggable } from '@dnd-kit/core';
+import Draggable from './Draggable';
 interface propTypes {
   title: string;
   poster: string;
@@ -13,6 +14,10 @@ interface propTypes {
 }
 
 const LocalMovie = ({ title, poster, id, movie, source }: propTypes) => {
+  const { attributes, listeners, setNodeRef } = useDraggable({
+    id: id,
+  });
+  // const [isDragging, setIsDragging] = useState(false);
   //test
   // const [clickScale, setClickScale] = useState(false);
   // const [lastDragged, setLastDragged] = useState<{
@@ -38,7 +43,13 @@ const LocalMovie = ({ title, poster, id, movie, source }: propTypes) => {
   // function handleMouseUp() {
   //   setClickScale(false);
   // }
+  // function handleDragStart() {
+  //   setIsDragging(true);
+  // }
 
+  // function handleDragEnd() {
+  //   setIsDragging(false);
+  // }
   return (
     <div
       // draggable
@@ -49,6 +60,8 @@ const LocalMovie = ({ title, poster, id, movie, source }: propTypes) => {
       // className={`${
       //   clickScale ? 'scale-110' : ''
       // } transition-transform hover:cursor-pointer fadeIn`}
+      // onDragStart={handleDragStart}
+      // onDragEnd={handleDragEnd}
     >
       <Tooltip label={title} withArrow arrowSize={10}>
         {poster !== null ? (

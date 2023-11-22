@@ -1,5 +1,6 @@
 import { SimpleGrid, Divider } from '@mantine/core';
 import Row from './Row';
+import { v4 as uuidv4 } from 'uuid';
 
 function TierList() {
   const rows: string[] = ['s', 'a', 'b', 'c', 'd', 'f'];
@@ -37,7 +38,13 @@ function TierList() {
         {rows.map((row, i) => {
           return (
             <div key={row}>
-              <Row id={i} row={row} bgColor={bgColors[i]} textColor={textColors[i]} color={colors[i]}/>
+              <Row
+                id={uuidv4()}
+                row={row}
+                bgColor={bgColors[i]}
+                textColor={textColors[i]}
+                color={colors[i]}
+              />
               {i < rows.length - 1 ? <Divider size='lg' /> : null}
             </div>
           );

@@ -4,6 +4,13 @@ import LocalMovie from './LocalMovie';
 import { SavedMoviesContext } from '@/app/libs/MoviesProvider';
 import { useContext } from 'react';
 import Trash from './Trash';
+import Draggable from './Draggable';
+import {
+  SortableContext,
+  horizontalListSortingStrategy,
+  verticalListSortingStrategy,
+} from '@dnd-kit/sortable';
+import { DndContext } from '@dnd-kit/core';
 
 // DnDKit STAGGER IMPORT
 function WatchList() {
@@ -67,21 +74,27 @@ function WatchList() {
         Your Movies:
       </h1>
       {/** Make this div have onDragOver, onDragLeave, and onDrop functions */}
-      <div className='flex flex-wrap justify-center'>
-        {watchListArray.map((movie: any, i: number) => {
-          return (
-            <div key={i} className='hover:scale-105 transition-transform'>
-              <LocalMovie
-                title={movie.title}
-                poster={movie.poster_path}
-                id={movie.title}
-                movie={movie}
-                source='WatchList'
-              />
-            </div>
-          );
-        })}
-      </div>
+      <DndContext>
+        <SortableContext items={watchListArray}>
+          <div className='flex flex-wrap justify-center'>
+            {watchListArray.map((movie: any, i: number) => {
+              return (
+                <div key={i} className='hover:scale-105 transition-transform'>
+                  <Draggable id={i.toString()}>
+                    <LocalMovie
+                      title={movie.title}
+                      poster={movie.poster_path}
+                      id={movie.title}
+                      movie={movie}
+                      source='WatchList'
+                    />
+                  </Draggable>
+                </div>
+              );
+            })}
+          </div>
+        </SortableContext>
+      </DndContext>
     </div>
   );
 }
