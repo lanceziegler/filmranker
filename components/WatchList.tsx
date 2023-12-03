@@ -6,11 +6,13 @@ import { useContext } from 'react';
 import Trash from './Trash';
 import Draggable from './Draggable';
 import {
+  arrayMove,
   SortableContext,
   horizontalListSortingStrategy,
   verticalListSortingStrategy,
 } from '@dnd-kit/sortable';
 import { DndContext } from '@dnd-kit/core';
+import { IconLoader } from '@tabler/icons-react';
 
 // DnDKit STAGGER IMPORT
 function WatchList() {
@@ -76,9 +78,11 @@ function WatchList() {
       {/** Make this div have onDragOver, onDragLeave, and onDrop functions */}
       <DndContext>
         <SortableContext items={watchListArray}>
-          <div className='flex flex-wrap justify-center'>
-            {watchListArray.map((movie: any, i: number) => {
-              return (
+          {watchListArray.length === 0 ? (
+            <IconLoader className='animate-spin absolute top-1/2 right-1/2' />
+          ) : (
+            <div className='flex flex-wrap justify-center'>
+              {watchListArray.map((movie: any, i: number) => (
                 <div key={i} className='hover:scale-105 transition-transform'>
                   <Draggable id={i.toString()}>
                     <LocalMovie
@@ -90,9 +94,9 @@ function WatchList() {
                     />
                   </Draggable>
                 </div>
-              );
-            })}
-          </div>
+              ))}
+            </div>
+          )}
         </SortableContext>
       </DndContext>
     </div>
