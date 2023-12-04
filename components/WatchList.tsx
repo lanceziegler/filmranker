@@ -84,7 +84,7 @@ function WatchList() {
             <div className='flex flex-wrap justify-center'>
               {watchListArray.map((movie: any, i: number) => (
                 <div key={i} className='hover:scale-105 transition-transform'>
-                  <Draggable id={i.toString()}>
+                  {/* <Draggable id={i.toString()}> */}
                     <LocalMovie
                       title={movie.title}
                       poster={movie.poster_path}
@@ -92,7 +92,7 @@ function WatchList() {
                       movie={movie}
                       source='WatchList'
                     />
-                  </Draggable>
+                  {/* </Draggable> */}
                 </div>
               ))}
             </div>

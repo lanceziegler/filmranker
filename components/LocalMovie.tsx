@@ -51,7 +51,8 @@ const LocalMovie = ({ title, poster, id, movie, source }: propTypes) => {
   //   setIsDragging(false);
   // }
   return (
-    <div
+    <Draggable id={id}>
+      <div
       // draggable
       // onDragStart={(e) => handleOnDrag(e, id)}
       // onDragEnd={handleDragEnd}
@@ -62,30 +63,31 @@ const LocalMovie = ({ title, poster, id, movie, source }: propTypes) => {
       // } transition-transform hover:cursor-pointer fadeIn`}
       // onDragStart={handleDragStart}
       // onDragEnd={handleDragEnd}
-    >
-      <Tooltip label={title} withArrow arrowSize={10}>
-        {poster !== null ? (
-          <Image
-            alt={title}
-            src={`https://image.tmdb.org/t/p/w154${poster}`}
-            width={50}
-            height={50}
-            //   sizes='100vw'
-            loading='lazy'
-            className='p-1 hover:scale-105 transition-transform w-auto h-auto'
-          />
-        ) : (
-          <Image
-            alt={title}
-            src='/noImage.jpeg'
-            width={50}
-            height={50}
-            //   sizes='100vw'
-            style={{ width: 'auto', height: 'auto' }}
-          />
-        )}
-      </Tooltip>
-    </div>
+      >
+        <Tooltip label={title} withArrow arrowSize={10}>
+          {poster !== null ? (
+            <Image
+              alt={title}
+              src={`https://image.tmdb.org/t/p/w154${poster}`}
+              width={50}
+              height={50}
+              //   sizes='100vw'
+              loading='lazy'
+              className='p-1 hover:scale-105 transition-transform w-auto h-auto'
+            />
+          ) : (
+            <Image
+              alt={title}
+              src='/noImage.jpeg'
+              width={50}
+              height={50}
+              //   sizes='100vw'
+              style={{ width: 'auto', height: 'auto' }}
+            />
+          )}
+        </Tooltip>
+      </div>
+    </Draggable>
   );
 };
 
