@@ -2,73 +2,100 @@
 
 import { Tooltip } from '@mantine/core';
 import Image from 'next/image';
-import { useState } from 'react';
+import { useState, forwardRef, HTMLAttributes, CSSProperties } from 'react';
 import { useDraggable } from '@dnd-kit/core';
 import Draggable from './Draggable';
-interface propTypes {
+// interface propTypes {
+//   title: string;
+//   poster: string;
+//   id: string;
+//   movie: any;
+//   source: 'WatchList' | 'TierList';
+// }
+export type WatchListProps = HTMLAttributes<HTMLDivElement> & {
+  id: string;
+  withOpacity?: boolean;
+  isDragging?: boolean;
   title: string;
   poster: string;
-  id: string;
   movie: any;
   source: 'WatchList' | 'TierList';
-}
+};
 
-const LocalMovie = ({ title, poster, id, movie, source }: propTypes) => {
-  const { attributes, listeners, setNodeRef } = useDraggable({
-    id: id,
-  });
-  // const [isDragging, setIsDragging] = useState(false);
-  //test
-  // const [clickScale, setClickScale] = useState(false);
-  // const [lastDragged, setLastDragged] = useState<{
-  //   tier: string;
-  //   index: number;
-  // } | null>(null);
+const LocalMovie = forwardRef<HTMLDivElement, WatchListProps>(
+  ({ id, withOpacity, isDragging, style, ...props }, ref) => {
+    const inlineStyles: CSSProperties = {
+      opacity: withOpacity ? '0.5' : '1',
+      transformOrigin: '50% 50%',
+      cursor: isDragging ? 'grabbing' : 'grab',
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
+      boxShadow: isDragging
+        ? 'rgb(63 63 68 / 5%) 0px 2px 0px 2px, rgb(34 33 81 / 15%) 0px 2px 3px 2px'
+        : 'rgb(63 63 68 / 5%) 0px 0px 0px 1px, rgb(34 33 81 / 15%) 0px 1px 3px 0px',
+      transform: isDragging ? 'scale(1.05)' : 'scale(1)',
+      ...style,
+    };
 
-  // function handleOnDrag(e: React.DragEvent, title: string) {
-  //   e.dataTransfer.setData('title', title);
-  //   e.dataTransfer.setData('movie', JSON.stringify(movie));
-  //   e.dataTransfer.setData('source', source);
-  //   setClickScale(true);
-  // }
+    // const { attributes, listeners, setNodeRef } = useDraggable({
+    //   id: id,
+    // });
+    // const [isDragging, setIsDragging] = useState(false);
+    //test
+    // const [clickScale, setClickScale] = useState(false);
+    // const [lastDragged, setLastDragged] = useState<{
+    //   tier: string;
+    //   index: number;
+    // } | null>(null);
 
-  // function handleDragEnd() {
-  //   setClickScale(false);
-  // }
+    // function handleOnDrag(e: React.DragEvent, title: string) {
+    //   e.dataTransfer.setData('title', title);
+    //   e.dataTransfer.setData('movie', JSON.stringify(movie));
+    //   e.dataTransfer.setData('source', source);
+    //   setClickScale(true);
+    // }
 
-  // function handleMouseDown() {
-  //   setClickScale(true);
-  // }
+    // function handleDragEnd() {
+    //   setClickScale(false);
+    // }
 
-  // function handleMouseUp() {
-  //   setClickScale(false);
-  // }
-  // function handleDragStart() {
-  //   setIsDragging(true);
-  // }
+    // function handleMouseDown() {
+    //   setClickScale(true);
+    // }
 
-  // function handleDragEnd() {
-  //   setIsDragging(false);
-  // }
-  return (
-    <Draggable id={id}>
+    // function handleMouseUp() {
+    //   setClickScale(false);
+    // }
+    // function handleDragStart() {
+    //   setIsDragging(true);
+    // }
+
+    // function handleDragEnd() {
+    //   setIsDragging(false);
+    // }
+    return (
+      // <Draggable id={id}>
       <div
-      // draggable
-      // onDragStart={(e) => handleOnDrag(e, id)}
-      // onDragEnd={handleDragEnd}
-      // onMouseDown={handleMouseDown}
-      // onMouseUp={handleMouseUp}
-      // className={`${
-      //   clickScale ? 'scale-110' : ''
-      // } transition-transform hover:cursor-pointer fadeIn`}
-      // onDragStart={handleDragStart}
-      // onDragEnd={handleDragEnd}
+        ref={ref}
+        style={inlineStyles}
+        {...props}
+        // draggable
+        // onDragStart={(e) => handleOnDrag(e, id)}
+        // onDragEnd={handleDragEnd}
+        // onMouseDown={handleMouseDown}
+        // onMouseUp={handleMouseUp}
+        // className={`${
+        //   clickScale ? 'scale-110' : ''
+        // } transition-transform hover:cursor-pointer fadeIn`}
+        // onDragStart={handleDragStart}
+        // onDragEnd={handleDragEnd}
       >
-        <Tooltip label={title} withArrow arrowSize={10}>
-          {poster !== null ? (
+        <Tooltip label={props.title} withArrow arrowSize={10}>
+          {props.poster !== null ? (
             <Image
-              alt={title}
-              src={`https://image.tmdb.org/t/p/w154${poster}`}
+              alt={props.title}
+              src={`https://image.tmdb.org/t/p/w154${props.poster}`}
               width={50}
               height={50}
               //   sizes='100vw'
@@ -77,7 +104,7 @@ const LocalMovie = ({ title, poster, id, movie, source }: propTypes) => {
             />
           ) : (
             <Image
-              alt={title}
+              alt={props.title}
               src='/noImage.jpeg'
               width={50}
               height={50}
@@ -87,8 +114,11 @@ const LocalMovie = ({ title, poster, id, movie, source }: propTypes) => {
           )}
         </Tooltip>
       </div>
-    </Draggable>
-  );
-};
+      // </Draggable>
+    );
+  }
+);
+
+LocalMovie.displayName = 'LocalMovie';
 
 export default LocalMovie;

@@ -1,17 +1,27 @@
 'use client';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo, useCallback } from 'react';
 import LocalMovie from './LocalMovie';
 import { SavedMoviesContext } from '@/app/libs/MoviesProvider';
 import { useContext } from 'react';
 import Trash from './Trash';
 import Draggable from './Draggable';
+import SortableItem from './SortableItem';
 import {
   arrayMove,
   SortableContext,
-  horizontalListSortingStrategy,
-  verticalListSortingStrategy,
+  rectSortingStrategy,
 } from '@dnd-kit/sortable';
-import { DndContext } from '@dnd-kit/core';
+import {
+  DndContext,
+  closestCenter,
+  useSensors,
+  useSensor,
+  MouseSensor,
+  TouchSensor,
+  DragStartEvent,
+  DragEndEvent,
+  DragCancelEvent,
+} from '@dnd-kit/core';
 import { IconLoader } from '@tabler/icons-react';
 
 // DnDKit STAGGER IMPORT
@@ -26,6 +36,35 @@ function WatchList() {
     setTierListObject,
   } = useContext(SavedMoviesContext)!;
   const watchListArrayCopy = [...watchListArray];
+  const watchListArrayIds = useMemo(
+    () => watchListArray.map((item) => item.id),
+    [watchListArray]
+  );
+  const [activeId, setActiveId] = useState<string | null>(null);
+  const sensors = useSensors(useSensor(MouseSensor), useSensor(TouchSensor));
+
+  const handleDragStart = useCallback((event: any) => {
+    setActiveId(event.active.id);
+  }, []);
+
+  const handleDragEnd = useCallback((event: DragEndEvent) => {
+    const { active, over } = event;
+
+    if (active.id !== over?.id) {
+      setWatchListArray((items) => {
+        const oldIndex = items.indexOf(active.id);
+        const newIndex = items.indexOf(over!.id);
+
+        return arrayMove(items, oldIndex, newIndex);
+      });
+    }
+
+    setActiveId(null);
+  }, []);
+
+  const handleDragCancel = useCallback(() => {
+    setActiveId(null);
+  }, []);
 
   // useEffect(() => {
   //   const parsedArray =
@@ -76,24 +115,44 @@ function WatchList() {
         Your Movies:
       </h1>
       {/** Make this div have onDragOver, onDragLeave, and onDrop functions */}
-      <DndContext>
-        <SortableContext items={watchListArray}>
+      <DndContext
+        sensors={sensors}
+        collisionDetection={closestCenter}
+        onDragStart={handleDragStart}
+        onDragEnd={handleDragEnd}
+        onDragCancel={handleDragCancel}
+      >
+        <SortableContext
+          items={watchListArrayIds}
+          strategy={rectSortingStrategy}
+        >
           {watchListArray.length === 0 ? (
             <IconLoader className='animate-spin absolute top-1/2 right-1/2' />
           ) : (
             <div className='flex flex-wrap justify-center'>
               {watchListArray.map((movie: any, i: number) => (
-                <div key={i} className='hover:scale-105 transition-transform'>
-                  {/* <Draggable id={i.toString()}> */}
-                    <LocalMovie
-                      title={movie.title}
-                      poster={movie.poster_path}
-                      id={movie.title}
-                      movie={movie}
-                      source='WatchList'
-                    />
-                  {/* </Draggable> */}
-                </div>
+                // <div key={i} className='hover:scale-105 transition-transform'>
+                // {/* <Draggable id={i.toString()}> */}
+
+                <SortableItem
+                  key={i}
+                  id={movie.id}
+                  title={movie.title}
+                  poster={movie.poster_path}
+                  movie={movie}
+                  source='WatchList'
+                />
+
+                // <LocalMovie
+                //   key={i.toString()}
+                //   id={movie.title}
+                //   title={movie.title}
+                //   poster={movie.poster_path}
+                //   movie={movie}
+                //   source='WatchList'
+                // />
+                // {/* </Draggable> */}
+                // </div>
               ))}
             </div>
           )}
