@@ -21,6 +21,7 @@ import {
   DragStartEvent,
   DragEndEvent,
   DragCancelEvent,
+  DragOverlay,
 } from '@dnd-kit/core';
 import { IconLoader } from '@tabler/icons-react';
 
@@ -41,26 +42,71 @@ function WatchList() {
     [watchListArray]
   );
   const [activeId, setActiveId] = useState<string | null>(null);
+  const [activeTitle, setActiveTitle] = useState<string | null>(null);
+  const [activePoster, setActivePoster] = useState<string | null>(null);
+
   const sensors = useSensors(useSensor(MouseSensor), useSensor(TouchSensor));
 
-  const handleDragStart = useCallback((event: any) => {
-    setActiveId(event.active.id);
-  }, []);
+  const handleDragStart = useCallback(
+    (event: any) => {
+      const { id, data } = event.active;
+      const index = watchListArray.findIndex((item) => item.id === id);
 
-  const handleDragEnd = useCallback((event: DragEndEvent) => {
-    const { active, over } = event;
+      if (index !== -1) {
+        setActiveId(id);
+        setActiveTitle(watchListArray[index].title);
+        setActivePoster(watchListArray[index].poster_path);
+      } else {
+        // Handle the case when the movie with the given id is not found
+        console.error(`Movie with id ${id} not found in watchListArray`);
+      }
+    },
+    [watchListArray]
+  );
 
-    if (active.id !== over?.id) {
-      setWatchListArray((items) => {
-        const oldIndex = items.indexOf(active.id);
-        const newIndex = items.indexOf(over!.id);
+  const handleDragEnd = useCallback(
+    (event: DragEndEvent) => {
+      const { active, over } = event;
+      console.log(`active id: ${active.id}`);
+      console.log(`over id: ${over?.id}`);
 
-        return arrayMove(items, oldIndex, newIndex);
-      });
-    }
+      if (active.id !== over?.id) {
+        setWatchListArray((watchListArray) => {
+          // Create a new copy of the array before modifying it
+          const newArray = [...watchListArray];
 
-    setActiveId(null);
-  }, []);
+          const localStorageWatchList = localStorage.getItem(
+            'localStorageWatchList'
+          );
+          const existingWatchListArray = localStorageWatchList
+            ? JSON.parse(localStorageWatchList)
+            : [];
+
+          // Find the indices in the copied array
+          const oldIndex = newArray.findIndex((item) => item.id === active.id);
+          const newIndex = newArray.findIndex((item) => item.id === over!.id);
+
+          console.log(`old index: ${oldIndex}`);
+          console.log(`new index: ${newIndex}`);
+
+          // Modify the copied array
+          const movedArray = arrayMove(newArray, oldIndex, newIndex);
+
+          //* Setting local Storage to new order of movedArray
+          localStorage.setItem(
+            'localStorageWatchList',
+            JSON.stringify(movedArray)
+          );
+
+          // Return the modified array
+          return movedArray;
+        });
+      }
+
+      setActiveId(null);
+    },
+    [setWatchListArray]
+  );
 
   const handleDragCancel = useCallback(() => {
     setActiveId(null);
@@ -135,7 +181,7 @@ function WatchList() {
                 // {/* <Draggable id={i.toString()}> */}
 
                 <SortableItem
-                  key={i}
+                  key={movie.id}
                   id={movie.id}
                   title={movie.title}
                   poster={movie.poster_path}
@@ -157,6 +203,16 @@ function WatchList() {
             </div>
           )}
         </SortableContext>
+        <DragOverlay adjustScale style={{ transformOrigin: '0 0 ' }}>
+          {activeId ? (
+            <LocalMovie
+              id={activeId}
+              title={activeTitle || 'Missing title'}
+              poster={activePoster || 'Missing Poster'}
+              isDragging
+            />
+          ) : null}
+        </DragOverlay>
       </DndContext>
     </div>
   );

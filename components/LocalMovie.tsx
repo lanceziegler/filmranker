@@ -13,17 +13,17 @@ import Draggable from './Draggable';
 //   source: 'WatchList' | 'TierList';
 // }
 export type WatchListProps = HTMLAttributes<HTMLDivElement> & {
-  id: string;
+  // id: string;
   withOpacity?: boolean;
   isDragging?: boolean;
   title: string;
   poster: string;
-  movie: any;
-  source: 'WatchList' | 'TierList';
+  movie?: any;
+  source?: 'WatchList' | 'TierList';
 };
 
 const LocalMovie = forwardRef<HTMLDivElement, WatchListProps>(
-  ({ id, withOpacity, isDragging, style, ...props }, ref) => {
+  ({ withOpacity, isDragging, style, ...props }, ref) => {
     const inlineStyles: CSSProperties = {
       opacity: withOpacity ? '0.5' : '1',
       transformOrigin: '50% 50%',
@@ -79,6 +79,7 @@ const LocalMovie = forwardRef<HTMLDivElement, WatchListProps>(
       <div
         ref={ref}
         style={inlineStyles}
+        id={props.id}
         {...props}
         // draggable
         // onDragStart={(e) => handleOnDrag(e, id)}
@@ -91,10 +92,15 @@ const LocalMovie = forwardRef<HTMLDivElement, WatchListProps>(
         // onDragStart={handleDragStart}
         // onDragEnd={handleDragEnd}
       >
-        <Tooltip label={props.title} withArrow arrowSize={10}>
+        <Tooltip
+          label={props.title}
+          withArrow
+          arrowSize={10}
+          disabled={isDragging}
+        >
           {props.poster !== null ? (
             <Image
-              alt={props.title}
+              alt={props.title || 'Movie Title'}
               src={`https://image.tmdb.org/t/p/w154${props.poster}`}
               width={50}
               height={50}
@@ -104,7 +110,7 @@ const LocalMovie = forwardRef<HTMLDivElement, WatchListProps>(
             />
           ) : (
             <Image
-              alt={props.title}
+              alt={props.title || 'Movie Title'}
               src='/noImage.jpeg'
               width={50}
               height={50}

@@ -11,6 +11,7 @@ import { SavedMoviesContext } from '@/app/libs/MoviesProvider';
 import { IconChevronUp, IconLoader } from '@tabler/icons-react';
 import { Skeleton } from '@mantine/core';
 
+//! When Overview takes up entire container, text becomes blurry... something to do with
 interface pageProps {
   params: { page: number };
 }
