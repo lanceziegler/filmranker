@@ -244,8 +244,10 @@ function MoreMovies({ params: { page } }: pageProps) {
               onLoad={() => setImageLoaded(true)}
               // className='fadeIn'
             />
-            <div className='movie-info flex text-center m-auto'>
-              <h3 className='font-inter tracking-wider'>{movie.title}</h3>
+            <div className='m-auto'>
+              <h3 className='font-inter tracking-wider titleText flex content-center items-center text-center'>
+                {movie.title}
+              </h3>
               {/* <span className= {`vote ${this.props.imdbColor}`}>{this.props.vote}</span> */}
             </div>
             <div className='overview no-scrollbar'>
