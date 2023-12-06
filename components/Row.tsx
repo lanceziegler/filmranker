@@ -1,10 +1,28 @@
 'use client';
 
 import { Divider, Group } from '@mantine/core';
-import { useContext, useState } from 'react';
+import { useContext, useState, useCallback, useMemo } from 'react';
 import { SavedMoviesContext } from '@/app/libs/MoviesProvider';
 import LocalMovie from './LocalMovie';
-import { useDroppable } from '@dnd-kit/core';
+// import { useDroppable } from '@dnd-kit/core';
+import SortableItem from './SortableItem';
+import {
+  arrayMove,
+  SortableContext,
+  rectSortingStrategy,
+} from '@dnd-kit/sortable';
+import {
+  DndContext,
+  closestCenter,
+  useSensors,
+  useSensor,
+  MouseSensor,
+  TouchSensor,
+  DragStartEvent,
+  DragEndEvent,
+  DragCancelEvent,
+  DragOverlay,
+} from '@dnd-kit/core';
 
 interface propTypes {
   id: string;
@@ -15,9 +33,13 @@ interface propTypes {
 }
 
 const Row = ({ id, row, bgColor, textColor, color }: propTypes) => {
-  const { setNodeRef } = useDroppable({
-    id: id,
-  });
+  // const { setNodeRef } = useDroppable({
+  //   id: id,
+  // });
+  const sensors = useSensors(useSensor(MouseSensor), useSensor(TouchSensor));
+  const [activeId, setActiveId] = useState<string | null>(null);
+  const [activeTitle, setActiveTitle] = useState<string | null>(null);
+  const [activePoster, setActivePoster] = useState<string | null>(null);
   const {
     array,
     setArray,
@@ -27,8 +49,93 @@ const Row = ({ id, row, bgColor, textColor, color }: propTypes) => {
     setTierListObject,
   } = useContext(SavedMoviesContext)!;
 
-  const [dragOver, setDragOver] = useState(false);
+  // Function to retrieve array from relevant {row}
+  const getArrayForRow = (tierListObject: any, row: string) => {
+    return tierListObject[row] || [];
+  };
+  const tierListRowArray = getArrayForRow(tierListObject, row);
+  console.log(`Array for Tier ${row}: `, tierListRowArray);
 
+  const tierListRowArrayIds = useMemo(
+    () => tierListRowArray.map((item: any) => item.id),
+    [tierListRowArray]
+  );
+
+  // const [dragOver, setDragOver] = useState(false);
+
+  //* HANDLE DRAG START ----------------------------------- Handle drag start
+  const handleDragStart = useCallback(
+    (event: any) => {
+      const { id, data } = event.active;
+      const index = tierListRowArray.findIndex((item: any) => item.id === id);
+
+      if (index !== -1) {
+        setActiveId(id);
+        setActiveTitle(tierListRowArray[index].title);
+        setActivePoster(tierListRowArray[index].poster_path);
+      } else {
+        // Handle the case when the movie with the given id is not found
+        console.error(`Movie with id ${id} not found in tierListRowArray`);
+      }
+    },
+    [tierListRowArray]
+  );
+
+  //TODO ->
+  //* HANDLE DRAG END -------------------------------------- Handle drag end
+  const handleDragEnd = useCallback(
+    (event: DragEndEvent) => {
+      const { active, over } = event;
+      console.log(`active id: ${active.id}`);
+      console.log(`over id: ${over?.id}`);
+
+      // Checking if the ID of the current movie is different than the one it's over
+      //TODO Here is where we will use the newArray to remove the watchListArray item (need index...) AND update localstorage, add append it to the tierListRowArray AND update localstorage for that as well...
+      if (active.id !== over?.id) {
+        setWatchListArray((watchListArray) => {
+          // Create a new copy of the array before modifying it
+          const newArray = [...watchListArray];
+
+          const localStorageWatchList = localStorage.getItem(
+            'localStorageWatchList'
+          );
+          const existingWatchListArray = localStorageWatchList
+            ? JSON.parse(localStorageWatchList)
+            : [];
+
+          // Find the indices in the copied array
+          const oldIndex = newArray.findIndex((item) => item.id === active.id);
+          //over!.id
+          const newIndex = newArray.findIndex((item) => item.id === over?.id);
+
+          console.log(`old index: ${oldIndex}`);
+          console.log(`new index: ${newIndex}`);
+
+          // Modify the copied array
+          const movedArray = arrayMove(newArray, oldIndex, newIndex);
+
+          //* Setting local Storage to new order of movedArray
+          localStorage.setItem(
+            'localStorageWatchList',
+            JSON.stringify(movedArray)
+          );
+
+          // Return the modified array
+          return movedArray;
+        });
+      }
+
+      setActiveId(null);
+    },
+    [setWatchListArray]
+  );
+
+  //* HANDLE DRAG Cancel ----------------------------------- Handle drag cancel
+  const handleDragCancel = useCallback(() => {
+    setActiveId(null);
+  }, []);
+
+  //TODO -------------- REMOVE IF NOT NEEDED ---------------------------------------
   // function handleDrop(e: React.DragEvent) {
   //   const movieName = e.dataTransfer.getData('title') as string;
   //   const movie = JSON.parse(e.dataTransfer.getData('movie'));
@@ -124,7 +231,9 @@ const Row = ({ id, row, bgColor, textColor, color }: propTypes) => {
   //   e.preventDefault();
   //   setDragOver(false);
   // }
-  // Make it so that when a movie is dropped into the row, it has a border that is the color of the row for 500ms
+  //TODO -------------- END REMOVE IF NOT NEEDED ---------------------------------------
+
+  //TODO Make it so that when a movie is dropped into the row, it has a border that is the color of the row for 500ms
   return (
     <div
       // onDrop={handleDrop}
@@ -133,7 +242,7 @@ const Row = ({ id, row, bgColor, textColor, color }: propTypes) => {
       // className={`h-24 flex flex-col justify-center ${
       //   dragOver ? color : ''
       // } ${bgColor} ${textColor} hover:text-black`}
-      ref={setNodeRef}
+      // ref={setNodeRef}
       className={`h-24 flex flex-col justify-center ${textColor}`}
     >
       <div>
@@ -142,20 +251,36 @@ const Row = ({ id, row, bgColor, textColor, color }: propTypes) => {
             {row.toUpperCase()}
           </div>
           <Divider orientation='vertical' size='md' />
-          {/**@ts-ignore */}
-          {tierListObject[row].map((movie: any, i: number) => {
-            return (
-              <div key={i} className={`hover:scale-105 transition-transform`}>
-                <LocalMovie
-                  title={movie.title}
-                  poster={movie.poster_path}
-                  id={movie.title}
-                  movie={movie}
-                  source='TierList'
-                />
-              </div>
-            );
-          })}
+          <DndContext
+            sensors={sensors}
+            collisionDetection={closestCenter}
+            onDragStart={handleDragStart}
+            onDragEnd={handleDragEnd}
+            onDragCancel={handleDragCancel}
+          >
+            <SortableContext
+              items={tierListRowArrayIds}
+              strategy={rectSortingStrategy}
+            >
+              {/**@ts-ignore */}
+              {tierListObject[row].map((movie: any, i: number) => {
+                return (
+                  <div
+                    key={i}
+                    className={`hover:scale-105 transition-transform`}
+                  >
+                    <LocalMovie
+                      title={movie.title}
+                      poster={movie.poster_path}
+                      id={movie.title}
+                      movie={movie}
+                      source='TierList'
+                    />
+                  </div>
+                );
+              })}
+            </SortableContext>
+          </DndContext>
         </Group>
       </div>
     </div>

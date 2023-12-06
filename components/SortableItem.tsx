@@ -12,7 +12,12 @@ const SortableItem = memo((props: any) => {
     setNodeRef,
     transform,
     transition,
-  } = useSortable({ id: props.id });
+  } = useSortable({
+    id: props.id,
+    data: {
+      row: props.row,
+    },
+  });
 
   const style = {
     transform: CSS.Transform.toString(transform),

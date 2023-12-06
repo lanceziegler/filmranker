@@ -36,10 +36,11 @@ function TierList() {
       </h1>
       <div>
         {rows.map((row, i) => {
+          const uuid = uuidv4();
           return (
-            <div key={row}>
+            <div key={uuid}>
               <Row
-                id={uuidv4()}
+                id={uuid}
                 row={row}
                 bgColor={bgColors[i]}
                 textColor={textColors[i]}

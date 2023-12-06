@@ -20,6 +20,7 @@ export type WatchListProps = HTMLAttributes<HTMLDivElement> & {
   poster: string;
   movie?: any;
   source?: 'WatchList' | 'TierList';
+  tier?: 'a' | 'b' | 'c' | 'd' | 'f';
 };
 
 const LocalMovie = forwardRef<HTMLDivElement, WatchListProps>(

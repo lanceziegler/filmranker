@@ -37,6 +37,7 @@ function WatchList() {
     setTierListObject,
   } = useContext(SavedMoviesContext)!;
   const watchListArrayCopy = [...watchListArray];
+
   const watchListArrayIds = useMemo(
     () => watchListArray.map((item) => item.id),
     [watchListArray]
@@ -47,6 +48,7 @@ function WatchList() {
 
   const sensors = useSensors(useSensor(MouseSensor), useSensor(TouchSensor));
 
+  //* HANDLE DRAG START ----------------------------------- Handle drag start
   const handleDragStart = useCallback(
     (event: any) => {
       const { id, data } = event.active;
@@ -64,12 +66,14 @@ function WatchList() {
     [watchListArray]
   );
 
+  //* HANDLE DRAG END -------------------------------------- Handle drag end
   const handleDragEnd = useCallback(
     (event: DragEndEvent) => {
       const { active, over } = event;
       console.log(`active id: ${active.id}`);
       console.log(`over id: ${over?.id}`);
 
+      // Checking if the ID of the current movie is different than the one it's over
       if (active.id !== over?.id) {
         setWatchListArray((watchListArray) => {
           // Create a new copy of the array before modifying it
@@ -84,7 +88,8 @@ function WatchList() {
 
           // Find the indices in the copied array
           const oldIndex = newArray.findIndex((item) => item.id === active.id);
-          const newIndex = newArray.findIndex((item) => item.id === over!.id);
+          //over!.id
+          const newIndex = newArray.findIndex((item) => item.id === over?.id);
 
           console.log(`old index: ${oldIndex}`);
           console.log(`new index: ${newIndex}`);
@@ -108,10 +113,12 @@ function WatchList() {
     [setWatchListArray]
   );
 
+  //* HANDLE DRAG CANCEL ----------------------------------- Handle drag cancel
   const handleDragCancel = useCallback(() => {
     setActiveId(null);
   }, []);
 
+  //TODO -------------- REMOVE IF NOT NEEDED ---------------------------------------
   // useEffect(() => {
   //   const parsedArray =
   //     JSON.parse(localStorage.getItem('myArray1') as string) || []; //TODO Alter to start fresh
@@ -133,12 +140,13 @@ function WatchList() {
   //     //! Need to set localstorage
   //   }
 
-  //   const tierListIndexes = Object.entries(tierListObject)
-  //     .map(([tier, array]: [string, any]) => {
-  //       const index = array.findIndex((item: any) => item.id === movie.id);
-  //       return index !== -1 ? { tier, index } : undefined;
-  //     })
-  //     .filter((entry) => entry !== undefined);
+  //************* Tier List Indexes */
+    // const tierListIndexes = Object.entries(tierListObject)
+    //   .map(([tier, array]: [string, any]) => {
+    //     const index = array.findIndex((item: any) => item.id === movie.id);
+    //     return index !== -1 ? { tier, index } : undefined;
+    //   })
+    //   .filter((entry) => entry !== undefined);
 
   //   // use tierList indexes resuls
 
@@ -150,6 +158,7 @@ function WatchList() {
   //   e.preventDefault();
   //   console.log('dragging over Watchlist');
   // }
+  //TODO -------------- END REMOVE IF NOT NEEDED ------------------------------------
 
   return (
     <div
@@ -183,6 +192,7 @@ function WatchList() {
                 <SortableItem
                   key={movie.id}
                   id={movie.id}
+                  row={null}
                   title={movie.title}
                   poster={movie.poster_path}
                   movie={movie}

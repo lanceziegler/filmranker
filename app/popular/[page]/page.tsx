@@ -192,7 +192,7 @@ function MoreMovies({ params: { page } }: pageProps) {
             {arbitraryArray.map((_, index) => {
               return (
                 <div key={index}>
-                  <Skeleton height={425} width='230px' />
+                  <Skeleton height={410} width='228px' radius={10} />
                 </div>
               );
             })}
