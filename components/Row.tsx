@@ -70,6 +70,7 @@ const Row = ({ id, row, bgColor, textColor, color }: propTypes) => {
       const index = tierListRowArray.findIndex((item: any) => item.id === id);
 
       if (index !== -1) {
+        console.log('dragging item in tier: ', row);
         setActiveId(id);
         setActiveTitle(tierListRowArray[index].title);
         setActivePoster(tierListRowArray[index].poster_path);
@@ -78,7 +79,7 @@ const Row = ({ id, row, bgColor, textColor, color }: propTypes) => {
         console.error(`Movie with id ${id} not found in tierListRowArray`);
       }
     },
-    [tierListRowArray]
+    [tierListRowArray, row]
   );
 
   //TODO ->
@@ -269,13 +270,22 @@ const Row = ({ id, row, bgColor, textColor, color }: propTypes) => {
                     key={i}
                     className={`hover:scale-105 transition-transform`}
                   >
-                    <LocalMovie
+                    <SortableItem
+                      key={movie.id}
+                      id={movie.id}
+                      row={row}
+                      title={movie.title}
+                      poster={movie.poster_path}
+                      movie={movie}
+                      source='TierList'
+                    />
+                    {/* <LocalMovie
                       title={movie.title}
                       poster={movie.poster_path}
                       id={movie.title}
                       movie={movie}
                       source='TierList'
-                    />
+                    /> */}
                   </div>
                 );
               })}

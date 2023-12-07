@@ -41,10 +41,28 @@ if (containsElement1) {
 }
 */
 const MoviesProvider = ({ children }: { children: ReactNode }) => {
+  const testMovie = {
+    adult: false,
+    backdrop_path: '/tC78Pck2YCsUAtEdZwuHYUFYtOj.jpg',
+    genre_ids: [28, 53, 80],
+    id: 926393,
+    original_language: 'en',
+    original_title: 'The Equalizer 3',
+    overview:
+      "Robert McCall finds himself at home in Southern Italy but he discovers his friends are under the control of local crime bosses. As events turn deadly, McCall knows what he has to do: become his friends' protector by taking on the mafia.",
+    popularity: 1590.991,
+    poster_path: '/b0Ej6fnXAP8fK75hlyi2jKqdhHz.jpg',
+    release_date: '2023-08-30',
+    title: 'The Equalizer 3',
+    video: false,
+    vote_average: 7.4,
+    vote_count: 1416,
+  };
+
   const [array, setArray] = useState<any>([]);
   const [watchListArray, setWatchListArray] = useState<any>([]);
   const [tierListObject, setTierListObject] = useState<TierListObjectType>({
-    s: [],
+    s: [testMovie],
     a: [],
     b: [],
     c: [],
@@ -74,7 +92,7 @@ const MoviesProvider = ({ children }: { children: ReactNode }) => {
         d: [],
         f: [],
       };
-    setTierListObject(parsedLocalTierListObject);
+    // setTierListObject(parsedLocalTierListObject);
     console.log('tierListObject: ', tierListObject);
   }, []);
 
