@@ -141,12 +141,12 @@ function WatchList() {
   //   }
 
   //************* Tier List Indexes */
-    // const tierListIndexes = Object.entries(tierListObject)
-    //   .map(([tier, array]: [string, any]) => {
-    //     const index = array.findIndex((item: any) => item.id === movie.id);
-    //     return index !== -1 ? { tier, index } : undefined;
-    //   })
-    //   .filter((entry) => entry !== undefined);
+  // const tierListIndexes = Object.entries(tierListObject)
+  //   .map(([tier, array]: [string, any]) => {
+  //     const index = array.findIndex((item: any) => item.id === movie.id);
+  //     return index !== -1 ? { tier, index } : undefined;
+  //   })
+  //   .filter((entry) => entry !== undefined);
 
   //   // use tierList indexes resuls
 
@@ -218,7 +218,7 @@ function WatchList() {
             <LocalMovie
               id={activeId}
               title={activeTitle || 'Missing title'}
-              poster={activePoster || 'Missing Poster'}
+              poster={activePoster || null}
               isDragging
             />
           ) : null}

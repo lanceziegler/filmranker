@@ -17,7 +17,7 @@ export type WatchListProps = HTMLAttributes<HTMLDivElement> & {
   withOpacity?: boolean;
   isDragging?: boolean;
   title: string;
-  poster: string;
+  poster: string | null;
   movie?: any;
   source?: 'WatchList' | 'TierList';
   tier?: 'a' | 'b' | 'c' | 'd' | 'f';
