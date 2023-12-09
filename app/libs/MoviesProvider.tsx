@@ -58,11 +58,27 @@ const MoviesProvider = ({ children }: { children: ReactNode }) => {
     vote_average: 7.4,
     vote_count: 1416,
   };
+  const testMovie2 = {
+    adult: false,
+    backdrop_path: '/iiXliCeykkzmJ0Eg9RYJ7F2CWSz.jpg',
+    genre_ids: [28, 53, 80],
+    id: 762430,
+    original_language: 'en',
+    original_title: 'The Equalizer 3',
+    overview: 'Blah blah',
+    popularity: 1590.991,
+    poster_path: '/ljl70pjLIX1hx3bPyCCbxGj6WPr.jpg',
+    release_date: '2023-08-30',
+    title: 'Retribution',
+    video: false,
+    vote_average: 7.4,
+    vote_count: 1416,
+  };
 
   const [array, setArray] = useState<any>([]);
   const [watchListArray, setWatchListArray] = useState<any>([]);
   const [tierListObject, setTierListObject] = useState<TierListObjectType>({
-    s: [],
+    s: [testMovie, testMovie2],
     a: [],
     b: [],
     c: [],
@@ -92,7 +108,7 @@ const MoviesProvider = ({ children }: { children: ReactNode }) => {
         d: [],
         f: [],
       };
-    setTierListObject(parsedLocalTierListObject);
+    // setTierListObject(parsedLocalTierListObject);
     console.log('tierListObject: ', tierListObject);
   }, []);
 

@@ -1,5 +1,5 @@
 'use client';
-import { useState, useEffect, useMemo, useCallback } from 'react';
+import { useState, useEffect, useMemo, useCallback, useRef } from 'react';
 import LocalMovie from './LocalMovie';
 import { SavedMoviesContext } from '@/app/libs/MoviesProvider';
 import { useContext } from 'react';
@@ -27,6 +27,7 @@ import { IconLoader } from '@tabler/icons-react';
 
 // DnDKit STAGGER IMPORT
 function WatchList() {
+  const watchListRef = useRef(null);
   // const [array, setArray] = useState<any>([]);
   const {
     array,
@@ -73,42 +74,49 @@ function WatchList() {
       console.log(`active id: ${active.id}`);
       console.log(`over id: ${over?.id}`);
 
-      // Checking if the ID of the current movie is different than the one it's over
-      if (active.id !== over?.id) {
-        setWatchListArray((watchListArray) => {
-          // Create a new copy of the array before modifying it
-          const newArray = [...watchListArray];
+      if (
+        active.data.current!.source === 'WatchList' &&
+        over?.data.current!.source === 'WatchList'
+      ) {
+        // Checking if the ID of the current movie is different than the one it's over
+        if (active.id !== over?.id) {
+          setWatchListArray((watchListArray) => {
+            // Create a new copy of the array before modifying it
+            const newArray = [...watchListArray];
 
-          const localStorageWatchList = localStorage.getItem(
-            'localStorageWatchList'
-          );
-          const existingWatchListArray = localStorageWatchList
-            ? JSON.parse(localStorageWatchList)
-            : [];
+            const localStorageWatchList = localStorage.getItem(
+              'localStorageWatchList'
+            );
+            const existingWatchListArray = localStorageWatchList
+              ? JSON.parse(localStorageWatchList)
+              : [];
 
-          // Find the indices in the copied array
-          const oldIndex = newArray.findIndex((item) => item.id === active.id);
-          //over!.id
-          const newIndex = newArray.findIndex((item) => item.id === over?.id);
+            // Find the indices in the copied array
+            const oldIndex = newArray.findIndex(
+              (item) => item.id === active.id
+            );
+            //over!.id
+            const newIndex = newArray.findIndex((item) => item.id === over?.id);
 
-          console.log(`old index: ${oldIndex}`);
-          console.log(`new index: ${newIndex}`);
+            console.log(`old index: ${oldIndex}`);
+            console.log(`new index: ${newIndex}`);
 
-          // Modify the copied array
-          const movedArray = arrayMove(newArray, oldIndex, newIndex);
+            // Modify the copied array
+            const movedArray = arrayMove(newArray, oldIndex, newIndex);
 
-          //* Setting local Storage to new order of movedArray
-          localStorage.setItem(
-            'localStorageWatchList',
-            JSON.stringify(movedArray)
-          );
+            //* Setting local Storage to new order of movedArray
+            localStorage.setItem(
+              'localStorageWatchList',
+              JSON.stringify(movedArray)
+            );
 
-          // Return the modified array
-          return movedArray;
-        });
+            // Return the modified array
+            return movedArray;
+          });
+        }
+
+        setActiveId(null);
       }
-
-      setActiveId(null);
     },
     [setWatchListArray]
   );
@@ -162,7 +170,9 @@ function WatchList() {
 
   return (
     <div
-      className='mt-2 border-gray-200 border-2 rounded-3xl relative w-3/4'
+      ref={watchListRef}
+      className='mt-2 border-gray-200 border-2 rounded-3xl relative w-3/4 overflow-scroll no-scrollbar'
+      id='watch'
       // onDrop={handleDrop}
       // onDragOver={handleDragOver}
     >
@@ -192,7 +202,7 @@ function WatchList() {
                 <SortableItem
                   key={movie.id}
                   id={movie.id}
-                  row={null}
+                  row={null} //TODO Use this in Row.tsx to determine if movie exists in current row already or not
                   title={movie.title}
                   poster={movie.poster_path}
                   movie={movie}
@@ -219,6 +229,7 @@ function WatchList() {
               id={activeId}
               title={activeTitle || 'Missing title'}
               poster={activePoster || null}
+              source='WatchList'
               isDragging
             />
           ) : null}

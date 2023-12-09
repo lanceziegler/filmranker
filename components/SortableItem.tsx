@@ -16,6 +16,7 @@ const SortableItem = memo((props: any) => {
     id: props.id,
     data: {
       row: props.row,
+      source: props.source,
     },
   });
 

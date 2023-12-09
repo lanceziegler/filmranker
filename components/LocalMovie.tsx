@@ -20,7 +20,7 @@ export type WatchListProps = HTMLAttributes<HTMLDivElement> & {
   poster: string | null;
   movie?: any;
   source?: 'WatchList' | 'TierList';
-  tier?: 'a' | 'b' | 'c' | 'd' | 'f';
+  row?: 'a' | 'b' | 'c' | 'd' | 'f';
 };
 
 const LocalMovie = forwardRef<HTMLDivElement, WatchListProps>(
@@ -37,6 +37,10 @@ const LocalMovie = forwardRef<HTMLDivElement, WatchListProps>(
         : 'rgb(63 63 68 / 5%) 0px 0px 0px 1px, rgb(34 33 81 / 15%) 0px 1px 3px 0px',
       transform: isDragging ? 'scale(1.05)' : 'scale(1)',
       ...style,
+    };
+
+    const handleOnDrag = (e: React.DragEvent) => {
+      e.dataTransfer.setData('source', props.source || '');
     };
 
     // const { attributes, listeners, setNodeRef } = useDraggable({
@@ -83,7 +87,7 @@ const LocalMovie = forwardRef<HTMLDivElement, WatchListProps>(
         id={props.id}
         {...props}
         // draggable
-        // onDragStart={(e) => handleOnDrag(e, id)}
+        onDragStart={(e) => handleOnDrag(e)}
         // onDragEnd={handleDragEnd}
         // onMouseDown={handleMouseDown}
         // onMouseUp={handleMouseUp}

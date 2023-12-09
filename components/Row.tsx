@@ -1,7 +1,7 @@
 'use client';
 
 import { Divider, Group } from '@mantine/core';
-import { useContext, useState, useCallback, useMemo } from 'react';
+import { useContext, useState, useCallback, useMemo, useRef } from 'react';
 import { SavedMoviesContext } from '@/app/libs/MoviesProvider';
 import LocalMovie from './LocalMovie';
 // import { useDroppable } from '@dnd-kit/core';
@@ -36,6 +36,7 @@ const Row = ({ id, row, bgColor, textColor, color }: propTypes) => {
   // const { setNodeRef } = useDroppable({
   //   id: id,
   // });
+  const rowRef = useRef(null);
   const sensors = useSensors(useSensor(MouseSensor), useSensor(TouchSensor));
   const [activeId, setActiveId] = useState<string | null>(null);
   const [activeTitle, setActiveTitle] = useState<string | null>(null);
@@ -54,7 +55,7 @@ const Row = ({ id, row, bgColor, textColor, color }: propTypes) => {
     return tierListObject[row] || [];
   };
   const tierListRowArray = getArrayForRow(tierListObject, row);
-  console.log(`Array for Tier ${row}: `, tierListRowArray);
+  // console.log(`Array for Tier ${row}: `, tierListRowArray);
 
   const tierListRowArrayIds = useMemo(
     () => tierListRowArray.map((item: any) => item.id),
@@ -130,6 +131,11 @@ const Row = ({ id, row, bgColor, textColor, color }: propTypes) => {
     },
     [setWatchListArray]
   );
+
+  //! Not logging anything currently
+  const handleDragOver = (event: any) => {
+    console.log('dragging over: ', row);
+  };
 
   //* HANDLE DRAG Cancel ----------------------------------- Handle drag cancel
   const handleDragCancel = useCallback(() => {
@@ -237,6 +243,7 @@ const Row = ({ id, row, bgColor, textColor, color }: propTypes) => {
   //TODO Make it so that when a movie is dropped into the row, it has a border that is the color of the row for 500ms
   return (
     <div
+      ref={rowRef}
       // onDrop={handleDrop}
       // onDragOver={handleDragOver}
       // onDragLeave={handleDragLeave}
@@ -258,6 +265,7 @@ const Row = ({ id, row, bgColor, textColor, color }: propTypes) => {
             onDragStart={handleDragStart}
             onDragEnd={handleDragEnd}
             onDragCancel={handleDragCancel}
+            onDragOver={handleDragOver}
           >
             <SortableContext
               items={tierListRowArrayIds}
@@ -279,17 +287,21 @@ const Row = ({ id, row, bgColor, textColor, color }: propTypes) => {
                       movie={movie}
                       source='TierList'
                     />
-                    {/* <LocalMovie
-                      title={movie.title}
-                      poster={movie.poster_path}
-                      id={movie.title}
-                      movie={movie}
-                      source='TierList'
-                    /> */}
                   </div>
                 );
               })}
             </SortableContext>
+            <DragOverlay adjustScale style={{ transformOrigin: '0 0 ' }}>
+              {activeId ? (
+                <LocalMovie
+                  id={activeId}
+                  title={activeTitle || 'Missing title'}
+                  poster={activePoster || null}
+                  source='TierList'
+                  isDragging
+                />
+              ) : null}
+            </DragOverlay>
           </DndContext>
         </Group>
       </div>
