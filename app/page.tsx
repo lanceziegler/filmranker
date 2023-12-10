@@ -11,17 +11,17 @@ import {
   TouchSensor,
   MouseSensor,
   closestCenter,
+  DragOverEvent,
 } from '@dnd-kit/core';
 import { createPortal } from 'react-dom';
 
 export default function HomePage() {
-  const sensors = useSensors(useSensor(MouseSensor), useSensor(TouchSensor));
   return (
     <>
       <Nav btnLink='/popular/1' text='Popular' />
       <main>
         <div className='flex gap-5 max-h-[42rem]'>
-          <DndContext sensors={sensors} collisionDetection={closestCenter}>
+          <DndContext>
             <div className='flex flex-1 justify-center'>
               <TierList />
             </div>

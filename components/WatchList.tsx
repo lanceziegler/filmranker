@@ -11,6 +11,7 @@ import {
   SortableContext,
   rectSortingStrategy,
 } from '@dnd-kit/sortable';
+import { restrictToWindowEdges } from '@dnd-kit/modifiers';
 import {
   DndContext,
   closestCenter,
@@ -22,6 +23,7 @@ import {
   DragEndEvent,
   DragCancelEvent,
   DragOverlay,
+  useDroppable,
 } from '@dnd-kit/core';
 import { IconLoader } from '@tabler/icons-react';
 
@@ -48,6 +50,10 @@ function WatchList() {
   const [activePoster, setActivePoster] = useState<string | null>(null);
 
   const sensors = useSensors(useSensor(MouseSensor), useSensor(TouchSensor));
+
+  const { setNodeRef } = useDroppable({
+    id: 'WatchListId',
+  });
 
   //* HANDLE DRAG START ----------------------------------- Handle drag start
   const handleDragStart = useCallback(
@@ -170,7 +176,7 @@ function WatchList() {
 
   return (
     <div
-      ref={watchListRef}
+      ref={setNodeRef}
       className='mt-2 border-gray-200 border-2 rounded-3xl relative w-3/4 overflow-scroll no-scrollbar'
       id='watch'
       // onDrop={handleDrop}
@@ -196,9 +202,6 @@ function WatchList() {
           ) : (
             <div className='flex flex-wrap justify-center'>
               {watchListArray.map((movie: any, i: number) => (
-                // <div key={i} className='hover:scale-105 transition-transform'>
-                // {/* <Draggable id={i.toString()}> */}
-
                 <SortableItem
                   key={movie.id}
                   id={movie.id}
@@ -208,22 +211,19 @@ function WatchList() {
                   movie={movie}
                   source='WatchList'
                 />
-
-                // <LocalMovie
-                //   key={i.toString()}
-                //   id={movie.title}
-                //   title={movie.title}
-                //   poster={movie.poster_path}
-                //   movie={movie}
-                //   source='WatchList'
-                // />
-                // {/* </Draggable> */}
-                // </div>
               ))}
             </div>
           )}
         </SortableContext>
-        <DragOverlay adjustScale style={{ transformOrigin: '0 0 ' }}>
+        <DragOverlay
+          adjustScale
+          style={{ transformOrigin: '0 0 ' }}
+          dropAnimation={{
+            duration: 100,
+            easing: 'cubic-bezier(0.18, 0.67, 0.6, 1.22)',
+          }}
+          modifiers={[restrictToWindowEdges]}
+        >
           {activeId ? (
             <LocalMovie
               id={activeId}

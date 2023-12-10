@@ -6,6 +6,8 @@ import { SavedMoviesContext } from '@/app/libs/MoviesProvider';
 import LocalMovie from './LocalMovie';
 // import { useDroppable } from '@dnd-kit/core';
 import SortableItem from './SortableItem';
+import { restrictToWindowEdges } from '@dnd-kit/modifiers';
+
 import {
   arrayMove,
   SortableContext,
@@ -22,6 +24,8 @@ import {
   DragEndEvent,
   DragCancelEvent,
   DragOverlay,
+  useDroppable,
+  useDndContext,
 } from '@dnd-kit/core';
 
 interface propTypes {
@@ -33,9 +37,10 @@ interface propTypes {
 }
 
 const Row = ({ id, row, bgColor, textColor, color }: propTypes) => {
-  // const { setNodeRef } = useDroppable({
-  //   id: id,
-  // });
+  const { setNodeRef, isOver } = useDroppable({
+    id: `${id}-${row}`,
+  });
+
   const rowRef = useRef(null);
   const sensors = useSensors(useSensor(MouseSensor), useSensor(TouchSensor));
   const [activeId, setActiveId] = useState<string | null>(null);
@@ -243,16 +248,14 @@ const Row = ({ id, row, bgColor, textColor, color }: propTypes) => {
   //TODO Make it so that when a movie is dropped into the row, it has a border that is the color of the row for 500ms
   return (
     <div
-      ref={rowRef}
-      // onDrop={handleDrop}
-      // onDragOver={handleDragOver}
-      // onDragLeave={handleDragLeave}
-      // className={`h-24 flex flex-col justify-center ${
-      //   dragOver ? color : ''
-      // } ${bgColor} ${textColor} hover:text-black`}
-      // ref={setNodeRef}
-      className={`h-24 flex flex-col justify-center ${textColor}`}
+      ref={setNodeRef}
+      className={`h-24 flex flex-col justify-center ${textColor} relative`}
     >
+      {isOver ? (
+        <div className='w-24 h-24 bg-blue-500 absolute top-0 right-0'>
+          IS OVER
+        </div>
+      ) : null}
       <div>
         <Group>
           <div className={`pl-4 font-montserrat text-xl font-semibold flex`}>
@@ -291,7 +294,11 @@ const Row = ({ id, row, bgColor, textColor, color }: propTypes) => {
                 );
               })}
             </SortableContext>
-            <DragOverlay adjustScale style={{ transformOrigin: '0 0 ' }}>
+            <DragOverlay
+              adjustScale
+              style={{ transformOrigin: '0 0 ' }}
+              modifiers={[restrictToWindowEdges]}
+            >
               {activeId ? (
                 <LocalMovie
                   id={activeId}

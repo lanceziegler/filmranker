@@ -1,7 +1,7 @@
 import { SimpleGrid, Divider } from '@mantine/core';
 import Row from './Row';
 import { v4 as uuidv4 } from 'uuid';
-import { DndContext } from '@dnd-kit/core';
+import { DndContext, closestCenter } from '@dnd-kit/core';
 
 function TierList() {
   const rows: string[] = ['s', 'a', 'b', 'c', 'd', 'f'];
@@ -30,9 +30,9 @@ function TierList() {
     'text-[#ff7ffe]',
   ];
 
-  const handleDragOver = () => {
-    console.log('dragging over tier list');
-  };
+  // const handleDragOver = () => {
+  //   console.log('dragging over tier list');
+  // };
 
   return (
     <div className='mt-2 ml-4 rounded-3xl flex flex-col border-gray-200 border-2 w-full'>
@@ -40,23 +40,21 @@ function TierList() {
         Tier List:
       </h1>
       <div>
-        <DndContext onDragOver={handleDragOver}>
-          {rows.map((row, i) => {
-            const uuid = uuidv4();
-            return (
-              <div key={uuid}>
-                <Row
-                  id={uuid}
-                  row={row}
-                  bgColor={bgColors[i]}
-                  textColor={textColors[i]}
-                  color={colors[i]}
-                />
-                {i < rows.length - 1 ? <Divider size='lg' /> : null}
-              </div>
-            );
-          })}
-        </DndContext>
+        {rows.map((row, i) => {
+          const uuid = uuidv4();
+          return (
+            <div key={uuid}>
+              <Row
+                id={uuid}
+                row={row}
+                bgColor={bgColors[i]}
+                textColor={textColors[i]}
+                color={colors[i]}
+              />
+              {i < rows.length - 1 ? <Divider size='lg' /> : null}
+            </div>
+          );
+        })}
       </div>
     </div>
   );
