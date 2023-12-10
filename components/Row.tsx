@@ -37,11 +37,10 @@ interface propTypes {
 }
 
 const Row = ({ id, row, bgColor, textColor, color }: propTypes) => {
+  // Droppable ZOne Ref
   const { setNodeRef, isOver } = useDroppable({
     id: `${id}-${row}`,
   });
-
-  const rowRef = useRef(null);
   const sensors = useSensors(useSensor(MouseSensor), useSensor(TouchSensor));
   const [activeId, setActiveId] = useState<string | null>(null);
   const [activeTitle, setActiveTitle] = useState<string | null>(null);
@@ -76,7 +75,7 @@ const Row = ({ id, row, bgColor, textColor, color }: propTypes) => {
       const index = tierListRowArray.findIndex((item: any) => item.id === id);
 
       if (index !== -1) {
-        console.log('dragging item in tier: ', row);
+        console.log('dragging item in tier: ', row.toUpperCase());
         setActiveId(id);
         setActiveTitle(tierListRowArray[index].title);
         setActivePoster(tierListRowArray[index].poster_path);
@@ -139,7 +138,7 @@ const Row = ({ id, row, bgColor, textColor, color }: propTypes) => {
 
   //! Not logging anything currently
   const handleDragOver = (event: any) => {
-    console.log('dragging over: ', row);
+    console.log(event.active.data.current.source);
   };
 
   //* HANDLE DRAG Cancel ----------------------------------- Handle drag cancel

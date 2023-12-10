@@ -78,8 +78,8 @@ const MoviesProvider = ({ children }: { children: ReactNode }) => {
   const [array, setArray] = useState<any>([]);
   const [watchListArray, setWatchListArray] = useState<any>([]);
   const [tierListObject, setTierListObject] = useState<TierListObjectType>({
-    s: [testMovie, testMovie2],
-    a: [testMovie, testMovie2],
+    s: [],
+    a: [],
     b: [],
     c: [],
     d: [],
@@ -108,7 +108,7 @@ const MoviesProvider = ({ children }: { children: ReactNode }) => {
         d: [],
         f: [],
       };
-    // setTierListObject(parsedLocalTierListObject);
+    setTierListObject(parsedLocalTierListObject);
     console.log('tierListObject: ', tierListObject);
   }, []);
 

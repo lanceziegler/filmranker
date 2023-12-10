@@ -28,8 +28,7 @@ import {
 import { IconLoader } from '@tabler/icons-react';
 
 // DnDKit STAGGER IMPORT
-function WatchList() {
-  const watchListRef = useRef(null);
+function WatchList({ activeId, setActiveId, activePoster, activeTitle }: any) {
   // const [array, setArray] = useState<any>([]);
   const {
     array,
@@ -40,14 +39,13 @@ function WatchList() {
     setTierListObject,
   } = useContext(SavedMoviesContext)!;
   const watchListArrayCopy = [...watchListArray];
-
   const watchListArrayIds = useMemo(
     () => watchListArray.map((item) => item.id),
     [watchListArray]
   );
-  const [activeId, setActiveId] = useState<string | null>(null);
-  const [activeTitle, setActiveTitle] = useState<string | null>(null);
-  const [activePoster, setActivePoster] = useState<string | null>(null);
+  // const [activeId, setActiveId] = useState<string | null>(null);
+  // const [activeTitle, setActiveTitle] = useState<string | null>(null);
+  // const [activePoster, setActivePoster] = useState<string | null>(null);
 
   const sensors = useSensors(useSensor(MouseSensor), useSensor(TouchSensor));
 
@@ -55,77 +53,92 @@ function WatchList() {
     id: 'WatchListId',
   });
 
-  //* HANDLE DRAG START ----------------------------------- Handle drag start
-  const handleDragStart = useCallback(
-    (event: any) => {
-      const { id, data } = event.active;
-      const index = watchListArray.findIndex((item) => item.id === id);
+  //TODO - MOVE ALL DNDCONTEXT LOGIC INTO PAGE.TSX AND CHECK FOR DATA.CURRENT.SOURCE TO DIFFERENTIATE LOGIC BETWEEN TIERLIST/WATCHLIST
 
-      if (index !== -1) {
-        setActiveId(id);
-        setActiveTitle(watchListArray[index].title);
-        setActivePoster(watchListArray[index].poster_path);
-      } else {
-        // Handle the case when the movie with the given id is not found
-        console.error(`Movie with id ${id} not found in watchListArray`);
-      }
-    },
-    [watchListArray]
-  );
+  //* HANDLE DRAG START ----------------------------------- Handle drag start
+  // const handleDragStart = useCallback(
+  //   (event: any) => {
+  //     const { id, data } = event.active;
+  //     //* Check if movie is being dragged FROM WatchList
+  //     if (data.current.source === 'WatchList') {
+  //       console.log('hi');
+
+  //       const index = watchListArray.findIndex((item) => item.id === id);
+
+  //       if (index !== -1) {
+  //         setActiveId(id);
+  //         setActiveTitle(watchListArray[index].title);
+  //         setActivePoster(watchListArray[index].poster_path);
+  //       } else {
+  //         // Handle the case when the movie with the given id is not found
+  //         console.error(`Movie with id ${id} not found in watchListArray`);
+  //       }
+  //     }
+  //   },
+  //   [watchListArray]
+  // );
 
   //* HANDLE DRAG END -------------------------------------- Handle drag end
-  const handleDragEnd = useCallback(
-    (event: DragEndEvent) => {
-      const { active, over } = event;
-      console.log(`active id: ${active.id}`);
-      console.log(`over id: ${over?.id}`);
+  // const handleDragEnd = useCallback(
+  //   (event: DragEndEvent) => {
+  //     const { active, over } = event;
+  //     console.log(`active id: ${active.id}`);
+  //     console.log(`over id: ${over?.id}`);
 
-      if (
-        active.data.current!.source === 'WatchList' &&
-        over?.data.current!.source === 'WatchList'
-      ) {
-        // Checking if the ID of the current movie is different than the one it's over
-        if (active.id !== over?.id) {
-          setWatchListArray((watchListArray) => {
-            // Create a new copy of the array before modifying it
-            const newArray = [...watchListArray];
+  //     if (
+  //       active.data.current!.source === 'WatchList' &&
+  //       over?.data.current!.source === 'WatchList'
+  //     ) {
+  //       // Checking if the ID of the current movie is different than the one it's over
+  //       if (active.id !== over?.id) {
+  //         setWatchListArray((watchListArray) => {
+  //           // Create a new copy of the array before modifying it
+  //           const newArray = [...watchListArray];
 
-            const localStorageWatchList = localStorage.getItem(
-              'localStorageWatchList'
-            );
-            const existingWatchListArray = localStorageWatchList
-              ? JSON.parse(localStorageWatchList)
-              : [];
+  //           const localStorageWatchList = localStorage.getItem(
+  //             'localStorageWatchList'
+  //           );
+  //           const existingWatchListArray = localStorageWatchList
+  //             ? JSON.parse(localStorageWatchList)
+  //             : [];
 
-            // Find the indices in the copied array
-            const oldIndex = newArray.findIndex(
-              (item) => item.id === active.id
-            );
-            //over!.id
-            const newIndex = newArray.findIndex((item) => item.id === over?.id);
+  //           // Find the indices in the copied array
+  //           const oldIndex = newArray.findIndex(
+  //             (item) => item.id === active.id
+  //           );
+  //           //over!.id
+  //           const newIndex = newArray.findIndex((item) => item.id === over?.id);
 
-            console.log(`old index: ${oldIndex}`);
-            console.log(`new index: ${newIndex}`);
+  //           console.log(`old index: ${oldIndex}`);
+  //           console.log(`new index: ${newIndex}`);
 
-            // Modify the copied array
-            const movedArray = arrayMove(newArray, oldIndex, newIndex);
+  //           // Modify the copied array
+  //           const movedArray = arrayMove(newArray, oldIndex, newIndex);
 
-            //* Setting local Storage to new order of movedArray
-            localStorage.setItem(
-              'localStorageWatchList',
-              JSON.stringify(movedArray)
-            );
+  //           //* Setting local Storage to new order of movedArray
+  //           localStorage.setItem(
+  //             'localStorageWatchList',
+  //             JSON.stringify(movedArray)
+  //           );
 
-            // Return the modified array
-            return movedArray;
-          });
-        }
+  //           // Return the modified array
+  //           return movedArray;
+  //         });
+  //       }
 
-        setActiveId(null);
-      }
-    },
-    [setWatchListArray]
-  );
+  //       setActiveId(null);
+  //     }
+  //   },
+  //   [setWatchListArray]
+  // );
+
+  const handleDragOver = (event: any) => {
+    const { data } = event.active;
+
+    if (data.current.source == 'TierList') {
+      console.log('TEST');
+    }
+  };
 
   //* HANDLE DRAG CANCEL ----------------------------------- Handle drag cancel
   const handleDragCancel = useCallback(() => {
@@ -186,13 +199,14 @@ function WatchList() {
         Your Movies:
       </h1>
       {/** Make this div have onDragOver, onDragLeave, and onDrop functions */}
-      <DndContext
+      {/* <DndContext
         sensors={sensors}
         collisionDetection={closestCenter}
-        onDragStart={handleDragStart}
+        // onDragStart={handleDragStart}
         onDragEnd={handleDragEnd}
         onDragCancel={handleDragCancel}
-      >
+        onDragOver={handleDragOver}
+      > */}
         <SortableContext
           items={watchListArrayIds}
           strategy={rectSortingStrategy}
@@ -234,7 +248,7 @@ function WatchList() {
             />
           ) : null}
         </DragOverlay>
-      </DndContext>
+      {/* </DndContext> */}
     </div>
   );
 }
