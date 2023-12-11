@@ -3,7 +3,7 @@ import Row from './Row';
 import { v4 as uuidv4 } from 'uuid';
 import { DndContext, closestCenter } from '@dnd-kit/core';
 
-function TierList({activeId, activeTitle, activePoster, setActiveId}: any) {
+function TierList({activeId, activeTitle, activePoster, setActiveId, setHoveringRow}: any) {
   const rows: string[] = ['s', 'a', 'b', 'c', 'd', 'f'];
   const colors: string[] = [
     'bg-[#fe7f7e]',
@@ -54,6 +54,7 @@ function TierList({activeId, activeTitle, activePoster, setActiveId}: any) {
                 activeTitle={activeTitle}
                 activePoster={activePoster}
                 setActiveId={setActiveId}
+                setHoveringRow={setHoveringRow}
               />
               {i < rows.length - 1 ? <Divider size='lg' /> : null}
             </div>

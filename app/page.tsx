@@ -46,6 +46,7 @@ export default function HomePage() {
   const [activeId, setActiveId] = useState<string | null>(null);
   const [activeTitle, setActiveTitle] = useState<string | null>(null);
   const [activePoster, setActivePoster] = useState<string | null>(null);
+  const [hoveringRow, setHoveringRow] = useState<boolean | null>(null);
   const sensors = useSensors(useSensor(MouseSensor), useSensor(TouchSensor));
 
   //TODO Need to use the ROW data atttribute to perform logic on Rows.
@@ -149,12 +150,10 @@ export default function HomePage() {
       //* END logic for dragging over WatchList from WatchList (Reorder...)
 
       //* Logic for dragging over TierList from WatchList
-      if (
-        active.data.current!.source === 'WatchList' &&
-        over?.data.current!.source === 'TierList'
-      ) {
-        console.log('Item dropped into TierList');
-      }
+      //! HOW WILL I KNOW IF IT IS DRAGGING OVER EMPTY ROW....
+      // if (active.data.current!.source === 'WatchList') {
+      //   console.log('Item dropped into TierList');
+      // }
     },
     [setWatchListArray]
   );
@@ -168,6 +167,7 @@ export default function HomePage() {
       over.data.current?.source === 'TierList'
     ) {
       console.log('Testing drag FROM WatchList TO TierList');
+      // console.log(hoveringRow);
     }
     if (
       active.data.current.source === 'TierList' &&
@@ -184,6 +184,9 @@ export default function HomePage() {
       console.log(
         `Testing drag within ${active.data.current.source} to ${active.data.current.source}`
       );
+    }
+    if (active.data.current.source === 'WatchList' && over.data.current.row) {
+      console.log(over.data.current.row);
     }
   };
 
@@ -210,6 +213,7 @@ export default function HomePage() {
                 setActiveId={setActiveId}
                 activeTitle={activeTitle}
                 activePoster={activePoster}
+                setHoveringRow={setHoveringRow}
               />
             </div>
             <div className='flex flex-1 justify-center'>

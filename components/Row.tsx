@@ -1,7 +1,14 @@
 'use client';
 
 import { Divider, Group } from '@mantine/core';
-import { useContext, useState, useCallback, useMemo, useRef } from 'react';
+import {
+  useContext,
+  useState,
+  useCallback,
+  useMemo,
+  useRef,
+  useEffect,
+} from 'react';
 import { SavedMoviesContext } from '@/app/libs/MoviesProvider';
 import LocalMovie from './LocalMovie';
 // import { useDroppable } from '@dnd-kit/core';
@@ -38,6 +45,7 @@ interface propTypes {
   activeTitle: string;
   activePoster: string;
   setActiveId: any;
+  setHoveringRow: any;
 }
 
 const Row = ({
@@ -50,10 +58,11 @@ const Row = ({
   activeTitle,
   activePoster,
   setActiveId,
+  setHoveringRow,
 }: propTypes) => {
   // Droppable ZOne Ref
   const { setNodeRef, isOver } = useDroppable({
-    id: `${id}-${row}`,
+    id: id,
     data: { row: row },
   });
   // const sensors = useSensors(useSensor(MouseSensor), useSensor(TouchSensor));
@@ -81,6 +90,10 @@ const Row = ({
     () => tierListRowArray.map((item: any) => item.id),
     [tierListRowArray]
   );
+
+  // useEffect(() => {
+  //   if (isOver) setHoveringRow(row);
+  // }, [isOver]);
 
   // const [dragOver, setDragOver] = useState(false);
 
