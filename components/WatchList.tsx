@@ -28,7 +28,7 @@ import {
 import { IconLoader } from '@tabler/icons-react';
 
 // DnDKit STAGGER IMPORT
-function WatchList({ activeId, setActiveId, activePoster, activeTitle }: any) {
+function WatchList({ activeId, activePoster, activeTitle }: any) {
   // const [array, setArray] = useState<any>([]);
   const {
     array,
@@ -38,7 +38,6 @@ function WatchList({ activeId, setActiveId, activePoster, activeTitle }: any) {
     tierListObject,
     setTierListObject,
   } = useContext(SavedMoviesContext)!;
-  const watchListArrayCopy = [...watchListArray];
   const watchListArrayIds = useMemo(
     () => watchListArray.map((item) => item.id),
     [watchListArray]
@@ -47,14 +46,13 @@ function WatchList({ activeId, setActiveId, activePoster, activeTitle }: any) {
   // const [activeTitle, setActiveTitle] = useState<string | null>(null);
   // const [activePoster, setActivePoster] = useState<string | null>(null);
 
-  const sensors = useSensors(useSensor(MouseSensor), useSensor(TouchSensor));
+  // const sensors = useSensors(useSensor(MouseSensor), useSensor(TouchSensor));
 
   const { setNodeRef } = useDroppable({
     id: 'WatchListId',
   });
 
   //TODO - MOVE ALL DNDCONTEXT LOGIC INTO PAGE.TSX AND CHECK FOR DATA.CURRENT.SOURCE TO DIFFERENTIATE LOGIC BETWEEN TIERLIST/WATCHLIST
-
   //* HANDLE DRAG START ----------------------------------- Handle drag start
   // const handleDragStart = useCallback(
   //   (event: any) => {
@@ -132,18 +130,19 @@ function WatchList({ activeId, setActiveId, activePoster, activeTitle }: any) {
   //   [setWatchListArray]
   // );
 
-  const handleDragOver = (event: any) => {
-    const { data } = event.active;
+  // const handleDragOver = (event: any) => {
+  //   const { data } = event.active;
 
-    if (data.current.source == 'TierList') {
-      console.log('TEST');
-    }
-  };
+  //   if (data.current.source == 'TierList') {
+  //     console.log('TEST');
+  //   }
+  // };
 
   //* HANDLE DRAG CANCEL ----------------------------------- Handle drag cancel
-  const handleDragCancel = useCallback(() => {
-    setActiveId(null);
-  }, []);
+  // const handleDragCancel = useCallback(() => {
+  //   setActiveId(null);
+  // }, []);
+  //TODO - END MOVE ALL DNDCONTEXT LOGIC INTO PAGE.TSX AND CHECK FOR DATA.CURRENT.SOURCE TO DIFFERENTIATE LOGIC BETWEEN TIERLIST/WATCHLIST
 
   //TODO -------------- REMOVE IF NOT NEEDED ---------------------------------------
   // useEffect(() => {
@@ -207,47 +206,44 @@ function WatchList({ activeId, setActiveId, activePoster, activeTitle }: any) {
         onDragCancel={handleDragCancel}
         onDragOver={handleDragOver}
       > */}
-        <SortableContext
-          items={watchListArrayIds}
-          strategy={rectSortingStrategy}
-        >
-          {watchListArray.length === 0 ? (
-            <IconLoader className='animate-spin absolute top-1/2 right-1/2' />
-          ) : (
-            <div className='flex flex-wrap justify-center'>
-              {watchListArray.map((movie: any, i: number) => (
-                <SortableItem
-                  key={movie.id}
-                  id={movie.id}
-                  row={null} //TODO Use this in Row.tsx to determine if movie exists in current row already or not
-                  title={movie.title}
-                  poster={movie.poster_path}
-                  movie={movie}
-                  source='WatchList'
-                />
-              ))}
-            </div>
-          )}
-        </SortableContext>
-        <DragOverlay
-          adjustScale
-          style={{ transformOrigin: '0 0 ' }}
-          dropAnimation={{
-            duration: 100,
-            easing: 'cubic-bezier(0.18, 0.67, 0.6, 1.22)',
-          }}
-          modifiers={[restrictToWindowEdges]}
-        >
-          {activeId ? (
-            <LocalMovie
-              id={activeId}
-              title={activeTitle || 'Missing title'}
-              poster={activePoster || null}
-              source='WatchList'
-              isDragging
-            />
-          ) : null}
-        </DragOverlay>
+      <SortableContext items={watchListArrayIds} strategy={rectSortingStrategy}>
+        {watchListArray.length === 0 ? (
+          <IconLoader className='animate-spin absolute top-1/2 right-1/2' />
+        ) : (
+          <div className='flex flex-wrap justify-center'>
+            {watchListArray.map((movie: any, i: number) => (
+              <SortableItem
+                key={movie.id}
+                id={movie.id}
+                row={null} //TODO Use this in Row.tsx to determine if movie exists in current row already or not
+                title={movie.title}
+                poster={movie.poster_path}
+                movie={movie}
+                source='WatchList'
+              />
+            ))}
+          </div>
+        )}
+      </SortableContext>
+      <DragOverlay
+        adjustScale
+        style={{ transformOrigin: '0 0 ' }}
+        dropAnimation={{
+          duration: 100,
+          easing: 'cubic-bezier(0.18, 0.67, 0.6, 1.22)',
+        }}
+        modifiers={[restrictToWindowEdges]}
+      >
+        {activeId ? (
+          <LocalMovie
+            id={activeId}
+            title={activeTitle || 'Missing title'}
+            poster={activePoster || null}
+            source='WatchList'
+            isDragging
+          />
+        ) : null}
+      </DragOverlay>
       {/* </DndContext> */}
     </div>
   );

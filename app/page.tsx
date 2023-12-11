@@ -30,6 +30,7 @@ import {
   DragCancelEvent,
   DragOverlay,
   useDroppable,
+  closestCorners,
 } from '@dnd-kit/core';
 import { createPortal } from 'react-dom';
 
@@ -51,11 +52,10 @@ export default function HomePage() {
   //* HANDLE DRAG START ----------------------------------- Handle drag start
   const handleDragStart = useCallback(
     (event: any) => {
-      console.log('DRAGGING HI LANCE');
       const { id, data } = event.active;
-      //* Check if movie is being dragged FROM WatchList
+      //* Checks if movie is being dragged FROM WatchList
       if (data.current.source === 'WatchList') {
-        console.log('hi');
+        console.log('handleDragStart data source is WatchList');
 
         const index = watchListArray.findIndex((item) => item.id === id);
 
@@ -68,8 +68,30 @@ export default function HomePage() {
           console.error(`Movie with id ${id} not found in watchListArray`);
         }
       }
+      //* Checks if movie is being dragged FROM TierList
+      if (data.current.source === 'TierList') {
+        console.log('handleDragStart data source is TierList');
+        const row = data.current.row;
+        const getArrayForRow = (tierListObject: any, row: string) => {
+          return tierListObject[row] || [];
+        };
+        const tierListRowArray = getArrayForRow(tierListObject, row);
+        const index = tierListRowArray.findIndex((item: any) => item.id === id);
+
+        if (index !== -1) {
+          console.log('dragging item in tier: ', row.toUpperCase());
+          // console.log(`title: ${tierListRowArray[index].title}`);
+          // console.log(`poster: ${tierListRowArray[index].poster_path}`);
+          setActiveId(id);
+          setActiveTitle(tierListRowArray[index].title);
+          setActivePoster(tierListRowArray[index].poster_path);
+        } else {
+          // Handle the case when the movie with the given id is not found
+          console.error(`Movie with id ${id} not found in tierListRowArray`);
+        }
+      }
     },
-    [watchListArray]
+    [watchListArray, tierListObject]
   );
 
   //* HANDLE DRAG END -------------------------------------- Handle drag end
@@ -105,8 +127,8 @@ export default function HomePage() {
             //over!.id
             const newIndex = newArray.findIndex((item) => item.id === over?.id);
 
-            console.log(`old index: ${oldIndex}`);
-            console.log(`new index: ${newIndex}`);
+            // console.log(`old index: ${oldIndex}`);
+            // console.log(`new index: ${newIndex}`);
 
             // Modify the copied array
             const movedArray = arrayMove(newArray, oldIndex, newIndex);
@@ -125,9 +147,49 @@ export default function HomePage() {
         setActiveId(null);
       }
       //* END logic for dragging over WatchList from WatchList (Reorder...)
+
+      //* Logic for dragging over TierList from WatchList
+      if (
+        active.data.current!.source === 'WatchList' &&
+        over?.data.current!.source === 'TierList'
+      ) {
+        console.log('Item dropped into TierList');
+      }
     },
     [setWatchListArray]
   );
+
+  //TODO Use to test if registering drag from WatchList
+  const handleDragOver = (event: any) => {
+    const { active, over } = event;
+
+    if (
+      active.data.current.source === 'WatchList' &&
+      over.data.current?.source === 'TierList'
+    ) {
+      console.log('Testing drag FROM WatchList TO TierList');
+    }
+    if (
+      active.data.current.source === 'TierList' &&
+      over.data.current?.source === 'WatchList'
+    ) {
+      console.log('Testing drag FROM TierList TO WatchList');
+    }
+    if (
+      (active.data.current.source === 'WatchList' &&
+        over.data.current?.source === 'WatchList') ||
+      (active.data.current.source === 'TierList' &&
+        over.data.current?.source === 'TierList')
+    ) {
+      console.log(
+        `Testing drag within ${active.data.current.source} to ${active.data.current.source}`
+      );
+    }
+  };
+
+  const handleDragCancel = useCallback(() => {
+    setActiveId(null);
+  }, []);
 
   return (
     <>
@@ -138,14 +200,21 @@ export default function HomePage() {
             sensors={sensors}
             onDragStart={handleDragStart}
             onDragEnd={handleDragEnd}
+            onDragOver={handleDragOver}
+            onDragCancel={handleDragCancel}
+            collisionDetection={closestCorners}
           >
             <div className='flex flex-1 justify-center'>
-              <TierList />
+              <TierList
+                activeId={activeId}
+                setActiveId={setActiveId}
+                activeTitle={activeTitle}
+                activePoster={activePoster}
+              />
             </div>
             <div className='flex flex-1 justify-center'>
               <WatchList
                 activeId={activeId}
-                setActiveId={setActiveId}
                 activeTitle={activeTitle}
                 activePoster={activePoster}
               />

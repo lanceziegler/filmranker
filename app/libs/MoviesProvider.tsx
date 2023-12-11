@@ -78,7 +78,7 @@ const MoviesProvider = ({ children }: { children: ReactNode }) => {
   const [array, setArray] = useState<any>([]);
   const [watchListArray, setWatchListArray] = useState<any>([]);
   const [tierListObject, setTierListObject] = useState<TierListObjectType>({
-    s: [],
+    s: [testMovie],
     a: [],
     b: [],
     c: [],
@@ -90,7 +90,7 @@ const MoviesProvider = ({ children }: { children: ReactNode }) => {
     //@ts-ignore
     const parsedArray = JSON.parse(localStorage.getItem('myArray2')) || [];
     setArray(parsedArray);
-    console.log('array: ', parsedArray);
+    // console.log('array: ', parsedArray);
     //@ts-ignore
     const parsedLocalWatchListArray =
       //@ts-ignore
@@ -108,7 +108,7 @@ const MoviesProvider = ({ children }: { children: ReactNode }) => {
         d: [],
         f: [],
       };
-    setTierListObject(parsedLocalTierListObject);
+    // setTierListObject(parsedLocalTierListObject);
     console.log('tierListObject: ', tierListObject);
   }, []);
 

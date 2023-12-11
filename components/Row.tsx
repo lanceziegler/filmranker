@@ -34,17 +34,32 @@ interface propTypes {
   bgColor: string;
   textColor: string;
   color: string;
+  activeId: any;
+  activeTitle: string;
+  activePoster: string;
+  setActiveId: any;
 }
 
-const Row = ({ id, row, bgColor, textColor, color }: propTypes) => {
+const Row = ({
+  id,
+  row,
+  bgColor,
+  textColor,
+  color,
+  activeId,
+  activeTitle,
+  activePoster,
+  setActiveId,
+}: propTypes) => {
   // Droppable ZOne Ref
   const { setNodeRef, isOver } = useDroppable({
     id: `${id}-${row}`,
+    data: { row: row },
   });
-  const sensors = useSensors(useSensor(MouseSensor), useSensor(TouchSensor));
-  const [activeId, setActiveId] = useState<string | null>(null);
-  const [activeTitle, setActiveTitle] = useState<string | null>(null);
-  const [activePoster, setActivePoster] = useState<string | null>(null);
+  // const sensors = useSensors(useSensor(MouseSensor), useSensor(TouchSensor));
+  // const [activeId, setActiveId] = useState<string | null>(null);
+  // const [activeTitle, setActiveTitle] = useState<string | null>(null);
+  // const [activePoster, setActivePoster] = useState<string | null>(null);
   const {
     array,
     setArray,
@@ -55,6 +70,7 @@ const Row = ({ id, row, bgColor, textColor, color }: propTypes) => {
   } = useContext(SavedMoviesContext)!;
 
   // Function to retrieve array from relevant {row}
+  //TODO We will instead use the row PROP of the SortableItem to determine which row we need
   const getArrayForRow = (tierListObject: any, row: string) => {
     return tierListObject[row] || [];
   };
@@ -69,23 +85,23 @@ const Row = ({ id, row, bgColor, textColor, color }: propTypes) => {
   // const [dragOver, setDragOver] = useState(false);
 
   //* HANDLE DRAG START ----------------------------------- Handle drag start
-  const handleDragStart = useCallback(
-    (event: any) => {
-      const { id, data } = event.active;
-      const index = tierListRowArray.findIndex((item: any) => item.id === id);
+  // const handleDragStart = useCallback(
+  //   (event: any) => {
+  //     const { id, data } = event.active;
+  //     const index = tierListRowArray.findIndex((item: any) => item.id === id);
 
-      if (index !== -1) {
-        console.log('dragging item in tier: ', row.toUpperCase());
-        setActiveId(id);
-        setActiveTitle(tierListRowArray[index].title);
-        setActivePoster(tierListRowArray[index].poster_path);
-      } else {
-        // Handle the case when the movie with the given id is not found
-        console.error(`Movie with id ${id} not found in tierListRowArray`);
-      }
-    },
-    [tierListRowArray, row]
-  );
+  //     if (index !== -1) {
+  //       console.log('dragging item in tier: ', row.toUpperCase());
+  //       setActiveId(id);
+  //       setActiveTitle(tierListRowArray[index].title);
+  //       setActivePoster(tierListRowArray[index].poster_path);
+  //     } else {
+  //       // Handle the case when the movie with the given id is not found
+  //       console.error(`Movie with id ${id} not found in tierListRowArray`);
+  //     }
+  //   },
+  //   [tierListRowArray, row]
+  // );
 
   //TODO ->
   //* HANDLE DRAG END -------------------------------------- Handle drag end
@@ -133,18 +149,18 @@ const Row = ({ id, row, bgColor, textColor, color }: propTypes) => {
 
       setActiveId(null);
     },
-    [setWatchListArray]
+    [setWatchListArray, setActiveId]
   );
 
-  //! Not logging anything currently
-  const handleDragOver = (event: any) => {
-    console.log(event.active.data.current.source);
-  };
+  // //! Not logging anything currently
+  // const handleDragOver = (event: any) => {
+  //   console.log(event.active.data.current.source);
+  // };
 
-  //* HANDLE DRAG Cancel ----------------------------------- Handle drag cancel
-  const handleDragCancel = useCallback(() => {
-    setActiveId(null);
-  }, []);
+  // //* HANDLE DRAG Cancel ----------------------------------- Handle drag cancel
+  // const handleDragCancel = useCallback(() => {
+  //   setActiveId(null);
+  // }, []);
 
   //TODO -------------- REMOVE IF NOT NEEDED ---------------------------------------
   // function handleDrop(e: React.DragEvent) {
@@ -247,8 +263,8 @@ const Row = ({ id, row, bgColor, textColor, color }: propTypes) => {
   //TODO Make it so that when a movie is dropped into the row, it has a border that is the color of the row for 500ms
   return (
     <div
-      ref={setNodeRef}
       className={`h-24 flex flex-col justify-center ${textColor} relative`}
+      ref={setNodeRef}
     >
       {isOver ? (
         <div className='w-24 h-24 bg-blue-500 absolute top-0 right-0'>
@@ -261,54 +277,51 @@ const Row = ({ id, row, bgColor, textColor, color }: propTypes) => {
             {row.toUpperCase()}
           </div>
           <Divider orientation='vertical' size='md' />
-          <DndContext
+          {/* <DndContext
             sensors={sensors}
             collisionDetection={closestCenter}
-            onDragStart={handleDragStart}
+            // onDragStart={handleDragStart}
             onDragEnd={handleDragEnd}
             onDragCancel={handleDragCancel}
             onDragOver={handleDragOver}
+          > */}
+          <SortableContext
+            items={tierListRowArrayIds}
+            strategy={rectSortingStrategy}
           >
-            <SortableContext
-              items={tierListRowArrayIds}
-              strategy={rectSortingStrategy}
-            >
-              {/**@ts-ignore */}
-              {tierListObject[row].map((movie: any, i: number) => {
-                return (
-                  <div
-                    key={i}
-                    className={`hover:scale-105 transition-transform`}
-                  >
-                    <SortableItem
-                      key={movie.id}
-                      id={movie.id}
-                      row={row}
-                      title={movie.title}
-                      poster={movie.poster_path}
-                      movie={movie}
-                      source='TierList'
-                    />
-                  </div>
-                );
-              })}
-            </SortableContext>
-            <DragOverlay
-              adjustScale
-              style={{ transformOrigin: '0 0 ' }}
-              modifiers={[restrictToWindowEdges]}
-            >
-              {activeId ? (
-                <LocalMovie
-                  id={activeId}
-                  title={activeTitle || 'Missing title'}
-                  poster={activePoster || null}
-                  source='TierList'
-                  isDragging
-                />
-              ) : null}
-            </DragOverlay>
-          </DndContext>
+            {/**@ts-ignore */}
+            {tierListObject[row].map((movie: any, i: number) => {
+              return (
+                <div key={i} className={`hover:scale-105 transition-transform`}>
+                  <SortableItem
+                    key={movie.id}
+                    id={movie.id}
+                    row={row}
+                    title={movie.title}
+                    poster={movie.poster_path}
+                    movie={movie}
+                    source='TierList'
+                  />
+                </div>
+              );
+            })}
+          </SortableContext>
+          <DragOverlay
+            adjustScale
+            style={{ transformOrigin: '0 0 ' }}
+            modifiers={[restrictToWindowEdges]}
+          >
+            {activeId ? (
+              <LocalMovie
+                id={activeId}
+                title={activeTitle || 'Missing title'}
+                poster={activePoster || null}
+                source='TierList'
+                isDragging
+              />
+            ) : null}
+          </DragOverlay>
+          {/* </DndContext> */}
         </Group>
       </div>
     </div>
