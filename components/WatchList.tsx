@@ -26,6 +26,7 @@ import {
   useDroppable,
 } from '@dnd-kit/core';
 import { IconLoader } from '@tabler/icons-react';
+import { createPortal } from 'react-dom';
 
 // DnDKit STAGGER IMPORT
 function WatchList({ activeId, activePoster, activeTitle }: any) {
@@ -225,9 +226,10 @@ function WatchList({ activeId, activePoster, activeTitle }: any) {
           </div>
         )}
       </SortableContext>
-      <DragOverlay
+      {/* {createPortal} */}
+      {/* <DragOverlay
         adjustScale
-        style={{ transformOrigin: '0 0 ' }}
+        style={{ transformOrigin: '0 0 '}}
         dropAnimation={{
           duration: 100,
           easing: 'cubic-bezier(0.18, 0.67, 0.6, 1.22)',
@@ -243,7 +245,7 @@ function WatchList({ activeId, activePoster, activeTitle }: any) {
             isDragging
           />
         ) : null}
-      </DragOverlay>
+      </DragOverlay> */}
       {/* </DndContext> */}
     </div>
   );

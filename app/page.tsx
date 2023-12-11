@@ -33,6 +33,7 @@ import {
   closestCorners,
 } from '@dnd-kit/core';
 import { createPortal } from 'react-dom';
+import LocalMovie from '@/components/LocalMovie';
 
 export default function HomePage() {
   const {
@@ -185,8 +186,14 @@ export default function HomePage() {
         `Testing drag within ${active.data.current.source} to ${active.data.current.source}`
       );
     }
+    // Testing accessing row data
     if (active.data.current.source === 'WatchList' && over.data.current.row) {
       console.log(over.data.current.row);
+    }
+    //! Not working
+    if (active.data.current.source === 'WatchList' && over.data.current.trash) {
+      // console.log(over.data.current.trash);
+      console.log('OVER TRASH');
     }
   };
 
@@ -223,8 +230,27 @@ export default function HomePage() {
                 activePoster={activePoster}
               />
             </div>
+            <DragOverlay
+              adjustScale
+              style={{ transformOrigin: '0 0 ' }}
+              dropAnimation={{
+                duration: 100,
+                easing: 'cubic-bezier(0.18, 0.67, 0.6, 1.22)',
+              }}
+              modifiers={[restrictToWindowEdges]}
+            >
+              {activeId ? (
+                <LocalMovie
+                  id={activeId}
+                  title={activeTitle || 'Missing title'}
+                  poster={activePoster || null}
+                  // source='WatchList'
+                  isDragging
+                />
+              ) : null}
+            </DragOverlay>
+            <Trash />
           </DndContext>
-          <Trash />
         </div>
       </main>
     </>

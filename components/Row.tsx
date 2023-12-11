@@ -97,6 +97,7 @@ const Row = ({
 
   // const [dragOver, setDragOver] = useState(false);
 
+  //TODO remove if not needed
   //* HANDLE DRAG START ----------------------------------- Handle drag start
   // const handleDragStart = useCallback(
   //   (event: any) => {
@@ -115,8 +116,9 @@ const Row = ({
   //   },
   //   [tierListRowArray, row]
   // );
+  //TODO END Remove if not needed
 
-  //TODO ->
+  //TODO -> (Don't use this logic for Row... it's for WatchList)
   //* HANDLE DRAG END -------------------------------------- Handle drag end
   const handleDragEnd = useCallback(
     (event: DragEndEvent) => {
@@ -284,13 +286,13 @@ const Row = ({
           IS OVER
         </div>
       ) : null}
-      <div>
-        <Group>
-          <div className={`pl-4 font-montserrat text-xl font-semibold flex`}>
-            {row.toUpperCase()}
-          </div>
-          <Divider orientation='vertical' size='md' />
-          {/* <DndContext
+
+      <Group>
+        <div className={`pl-4 font-montserrat text-xl font-semibold flex`}>
+          {row.toUpperCase()}
+        </div>
+        <Divider orientation='vertical' size='md' />
+        {/* <DndContext
             sensors={sensors}
             collisionDetection={closestCenter}
             // onDragStart={handleDragStart}
@@ -298,45 +300,29 @@ const Row = ({
             onDragCancel={handleDragCancel}
             onDragOver={handleDragOver}
           > */}
-          <SortableContext
-            items={tierListRowArrayIds}
-            strategy={rectSortingStrategy}
-          >
-            {/**@ts-ignore */}
-            {tierListObject[row].map((movie: any, i: number) => {
-              return (
-                <div key={i} className={`hover:scale-105 transition-transform`}>
-                  <SortableItem
-                    key={movie.id}
-                    id={movie.id}
-                    row={row}
-                    title={movie.title}
-                    poster={movie.poster_path}
-                    movie={movie}
-                    source='TierList'
-                  />
-                </div>
-              );
-            })}
-          </SortableContext>
-          <DragOverlay
-            adjustScale
-            style={{ transformOrigin: '0 0 ' }}
-            modifiers={[restrictToWindowEdges]}
-          >
-            {activeId ? (
-              <LocalMovie
-                id={activeId}
-                title={activeTitle || 'Missing title'}
-                poster={activePoster || null}
-                source='TierList'
-                isDragging
-              />
-            ) : null}
-          </DragOverlay>
-          {/* </DndContext> */}
-        </Group>
-      </div>
+        <SortableContext
+          items={tierListRowArrayIds}
+          strategy={rectSortingStrategy}
+        >
+          {/**@ts-ignore */}
+          {tierListObject[row].map((movie: any, i: number) => {
+            return (
+              <div key={i} className={`hover:scale-105 transition-transform`}>
+                <SortableItem
+                  key={movie.id}
+                  id={movie.id}
+                  row={row}
+                  title={movie.title}
+                  poster={movie.poster_path}
+                  movie={movie}
+                  source='TierList'
+                />
+              </div>
+            );
+          })}
+        </SortableContext>
+        {/* </DndContext> */}
+      </Group>
     </div>
   );
 };

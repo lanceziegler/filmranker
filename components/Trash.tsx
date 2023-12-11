@@ -17,6 +17,7 @@ const Trash = () => {
   } = useContext(SavedMoviesContext)!;
   const { setNodeRef, isOver } = useDroppable({
     id: `trash`,
+    data: { trash: true },
   });
 
   // function handledrop(e: React.DragEvent) {}
@@ -40,20 +41,20 @@ const Trash = () => {
       // onDrop={handledrop}
       // onDragOver={handleDragOver}
       // onDragLeave={handleDragLeave}
-      className='absolute bottom-5 right-5 scale-150'
+      className='absolute bottom-5 right-5 scale-150 z-60'
     >
-      {/* {toolTip ? (
+      {toolTip ? (
         <Tooltip label='Remove movie from profile' withArrow>
           <IconTrash />
         </Tooltip>
       ) : (
-        <Tooltip label='test'>
+        <Tooltip label='Trash'>
           <IconTrash />
         </Tooltip>
-      )} */}
-      <Tooltip label='Trash'>
+      )}
+      {/* <Tooltip label='Trash'>
         <IconTrash />
-      </Tooltip>
+      </Tooltip> */}
     </div>
   );
 };
