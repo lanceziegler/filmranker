@@ -63,7 +63,7 @@ const Row = ({
   // Droppable ZOne Ref
   const { setNodeRef, isOver } = useDroppable({
     id: id,
-    data: { row: row },
+    data: { rowComponent: row },
   });
   // const sensors = useSensors(useSensor(MouseSensor), useSensor(TouchSensor));
   // const [activeId, setActiveId] = useState<string | null>(null);

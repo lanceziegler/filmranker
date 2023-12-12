@@ -57,6 +57,7 @@ export default function HomePage() {
       const { id, data } = event.active;
       //* Checks if movie is being dragged FROM WatchList
       if (data.current.source === 'WatchList') {
+        console.log('ACTIVE: ', event.active);
         console.log('handleDragStart data source is WatchList');
 
         const index = watchListArray.findIndex((item) => item.id === id);
@@ -100,11 +101,12 @@ export default function HomePage() {
   const handleDragEnd = useCallback(
     (event: DragEndEvent) => {
       const { active, over } = event;
+      const watchListArrayCopy = [...watchListArray];
 
       console.log(`active id: ${active.id}`);
       console.log(`over id: ${over?.id}`);
 
-      //* Logic for dragging over WatchList from WatchList (Reorder...)
+      //***********************************! Logic for dropping over WatchList from WatchList (AKA Reorder and implement arrayMove)
       if (
         active.data.current!.source === 'WatchList' &&
         over?.data.current!.source === 'WatchList'
@@ -113,27 +115,29 @@ export default function HomePage() {
         if (active.id !== over?.id) {
           setWatchListArray((watchListArray) => {
             // Create a new copy of the array before modifying it
-            const newArray = [...watchListArray];
 
-            const localStorageWatchList = localStorage.getItem(
-              'localStorageWatchList'
-            );
-            const existingWatchListArray = localStorageWatchList
-              ? JSON.parse(localStorageWatchList)
-              : [];
+            // const localStorageWatchList = localStorage.getItem(
+            //   'localStorageWatchList'
+            // );
+            // const existingWatchListArray = localStorageWatchList
+            //   ? JSON.parse(localStorageWatchList)
+            //   : [];
 
             // Find the indices in the copied array
-            const oldIndex = newArray.findIndex(
+            const oldIndex = watchListArrayCopy.findIndex(
               (item) => item.id === active.id
             );
             //over!.id
-            const newIndex = newArray.findIndex((item) => item.id === over?.id);
-
-            // console.log(`old index: ${oldIndex}`);
-            // console.log(`new index: ${newIndex}`);
+            const newIndex = watchListArrayCopy.findIndex(
+              (item) => item.id === over?.id
+            );
 
             // Modify the copied array
-            const movedArray = arrayMove(newArray, oldIndex, newIndex);
+            const movedArray = arrayMove(
+              watchListArrayCopy,
+              oldIndex,
+              newIndex
+            );
 
             //* Setting local Storage to new order of movedArray
             localStorage.setItem(
@@ -148,13 +152,61 @@ export default function HomePage() {
 
         setActiveId(null);
       }
-      //* END logic for dragging over WatchList from WatchList (Reorder...)
 
-      //* Logic for dragging over TierList from WatchList
-      //! HOW WILL I KNOW IF IT IS DRAGGING OVER EMPTY ROW....
-      // if (active.data.current!.source === 'WatchList') {
-      //   console.log('Item dropped into TierList');
-      // }
+      //TODO To determine which row an item is dragging over, use active.data.current.rowComponent or over.data.current.rowComponent
+      //TODO To determine row item is FROM which row, use active.data.current.row or over.data.current.row
+      //*************************************************! Logic for dropping over WatchList from TierList Row (any)
+      if (
+        active.data.current!.source === 'TierList' &&
+        over?.data.current!.source === 'WatchList'
+      ) {
+        //TODO 1: Get index of active TierList Row item
+        // @ts-ignore
+        const tierListItemIndex = tierListObject[
+          active.data.current?.row
+        ].findIndex((item: any) => item.id === active.id);
+
+        //TODO 2: Push Item to COPIED watchListArray
+        watchListArrayCopy.push(active);
+
+        //TODO 3: Remove item from Row
+        // const localStorageTierList = localStorage.getItem(
+        //         'localStorageTierList'
+        //       );
+        // const existingTierList = localStorageTierList
+        // ? JSON.parse(localStorageTierList)
+        // : [];
+        // const existingTierListRowArray = existingTierList
+        //@ts-ignore
+        const rowArray = tierListObject[active.data.current?.row];
+        rowArray.splice(tierListItemIndex, 1);
+
+        //TODO 4: Update localStorage tierList AND watchList
+      }
+      //*************************************************! Logic for dropping over TierList Row from SAME Row (Reorder and implement arrayMove)
+      //TODO 1:
+      //TODO 2:
+      //TODO 3:
+
+      //*************************************************! Logic for dropping over TierList Row from DIFFERENT Row
+      //TODO 1:
+      //TODO 2:
+      //TODO 3:
+
+      //*************************************************! Logic for dropping over TierList Row from WatchList
+      //TODO 1:
+      //TODO 2:
+      //TODO 3:
+
+      //*************************************************! Logic for dropping over TRASH from WatchList
+      //TODO 1:
+      //TODO 2:
+      //TODO 3:
+
+      //*************************************************! Logic for dropping over TRASH from TierList Row
+      //TODO 1:
+      //TODO 2:
+      //TODO 3:
     },
     [setWatchListArray]
   );
@@ -187,8 +239,11 @@ export default function HomePage() {
       );
     }
     // Testing accessing row data
-    if (active.data.current.source === 'WatchList' && over.data.current.row) {
-      console.log(over.data.current.row);
+    if (
+      active.data.current.source === 'WatchList' &&
+      over.data.current.rowComponent
+    ) {
+      console.log(over.data.current.rowComponent);
     }
     //! Not working
     if (active.data.current.source === 'WatchList' && over.data.current.trash) {
@@ -231,7 +286,6 @@ export default function HomePage() {
               />
             </div>
             <DragOverlay
-              adjustScale
               style={{ transformOrigin: '0 0 ' }}
               dropAnimation={{
                 duration: 100,
