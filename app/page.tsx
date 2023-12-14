@@ -113,7 +113,7 @@ export default function HomePage() {
       ) {
         // Checking if the ID of the current movie is different than the one it's over
         if (active.id !== over?.id) {
-          setWatchListArray((watchListArray) => {
+          setWatchListArray((watchListArrayCopy) => {
             // Create a new copy of the array before modifying it
 
             // const localStorageWatchList = localStorage.getItem(
