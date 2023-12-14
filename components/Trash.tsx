@@ -1,8 +1,9 @@
 'use client';
-import { useState, useContext } from 'react';
-import { IconTrash } from '@tabler/icons-react';
+import { useState, useContext, useEffect } from 'react';
+import { IconTrash, Icon24Hours } from '@tabler/icons-react';
 import { Tooltip } from '@mantine/core';
 import { SavedMoviesContext } from '@/app/libs/MoviesProvider';
+import { useDroppable } from '@dnd-kit/core';
 
 const Trash = () => {
   const [toolTip, setToolTip] = useState(false);
@@ -14,41 +15,46 @@ const Trash = () => {
     tierListObject,
     setTierListObject,
   } = useContext(SavedMoviesContext)!;
+  const { setNodeRef, isOver } = useDroppable({
+    id: `trash`,
+    data: { trash: true },
+  });
 
-  function handledrop(e: React.DragEvent) {}
+  // function handledrop(e: React.DragEvent) {}
 
-  //TODO: Figure out if there is a way to activate tooltip on dragover
+  // //TODO: Figure out if there is a way to activate tooltip on dragover
 
-  function handleDragOver(e: React.DragEvent) {
-    e.preventDefault();
-    setToolTip(true);
-    console.log('dragging over Trash Can');
-  }
+  // function handleDragOver(e: React.DragEvent) {
+  //   e.preventDefault();
+  //   setToolTip(true);
+  //   console.log('dragging over Trash Can');
+  // }
 
-  function handleDragLeave(e: React.DragEvent) {
-    e.preventDefault();
-    setToolTip(false);
-  }
+  // function handleDragLeave(e: React.DragEvent) {
+  //   e.preventDefault();
+  //   setToolTip(false);
+  // }
 
   return (
     <div
-      onDrop={handledrop}
-      onDragOver={handleDragOver}
-      onDragLeave={handleDragLeave}
-      className='absolute bottom-5 right-5 scale-150'
+      ref={setNodeRef}
+      // onDrop={handledrop}
+      // onDragOver={handleDragOver}
+      // onDragLeave={handleDragLeave}
+      className='absolute bottom-5 right-5 scale-150 z-60'
     >
-      {/* {toolTip ? (
+      {toolTip ? (
         <Tooltip label='Remove movie from profile' withArrow>
           <IconTrash />
         </Tooltip>
       ) : (
-        <Tooltip label='test'>
+        <Tooltip label='Trash'>
           <IconTrash />
         </Tooltip>
-      )} */}
-      <Tooltip label='Trash'>
+      )}
+      {/* <Tooltip label='Trash'>
         <IconTrash />
-      </Tooltip>
+      </Tooltip> */}
     </div>
   );
 };

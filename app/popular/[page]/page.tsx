@@ -11,6 +11,7 @@ import { SavedMoviesContext } from '@/app/libs/MoviesProvider';
 import { IconChevronUp, IconLoader } from '@tabler/icons-react';
 import { Skeleton } from '@mantine/core';
 
+//! When Overview takes up entire container, text becomes blurry... something to do with
 interface pageProps {
   params: { page: number };
 }
@@ -191,7 +192,7 @@ function MoreMovies({ params: { page } }: pageProps) {
             {arbitraryArray.map((_, index) => {
               return (
                 <div key={index}>
-                  <Skeleton height={425} width='230px' />
+                  <Skeleton height={410} width='228px' radius={10} />
                 </div>
               );
             })}
@@ -243,8 +244,10 @@ function MoreMovies({ params: { page } }: pageProps) {
               onLoad={() => setImageLoaded(true)}
               // className='fadeIn'
             />
-            <div className='movie-info flex text-center m-auto'>
-              <h3 className='font-inter tracking-wider'>{movie.title}</h3>
+            <div className='m-auto'>
+              <h3 className='font-inter tracking-wider titleText flex content-center items-center text-center'>
+                {movie.title}
+              </h3>
               {/* <span className= {`vote ${this.props.imdbColor}`}>{this.props.vote}</span> */}
             </div>
             <div className='overview no-scrollbar'>

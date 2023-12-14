@@ -84,8 +84,8 @@
 
 .movie-info {
   font-family: 'Cabin', sans-serif;
-  display: flex;
-  align-items: center;
+  /* display: flex; */
+  /* align-items: center; */
   /* justify-content: space-between; */
   padding: 0.2rem 0.5rem;
   letter-spacing: 0.5px;
@@ -101,4 +101,8 @@
   border-bottom-right-radius: 10px;
   font-weight: bold;
   padding: 0.25rem 0.5rem;
+}
+
+.titleText {
+  min-height: 4rem;
 }
