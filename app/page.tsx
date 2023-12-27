@@ -184,9 +184,10 @@ export default function HomePage() {
         //TODO 4: Update localStorage tierList AND watchList
       }
       //*************************************************! Logic for dropping over TierList Row from SAME Row (Reorder and implement arrayMove)
-      //TODO 1:
-      //TODO 2:
-      //TODO 3:
+      //TODO 1: Check if active + over ROW are the same AND that the SOURCE of active and over are BOTH 'TierList'
+      //TODO 2: Find old index and new index and implement arraymove
+      //TODO 3: Update entire tierListObject with the moved array in the respective row
+      //TODO 4: Update localStorageTierList
 
       //*************************************************! Logic for dropping over TierList Row from DIFFERENT Row
       //TODO 1:
